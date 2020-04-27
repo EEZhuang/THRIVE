@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # thrive
 
 A new Flutter application.
