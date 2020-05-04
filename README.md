@@ -16,4 +16,5 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-Tutorial used to set up Firestore + Login: https://www.youtube.com/watch?v=mZYuuGAIwe4&list=PL4cUxeGkcC9j--TKIdkb3ISfRbJeJYQwC&index=4
+Tutorial used to set up Firestore + Login: 
+https://www.youtube.com/watch?v=mZYuuGAIwe4&list=PL4cUxeGkcC9j--TKIdkb3ISfRbJeJYQwC&index=4
