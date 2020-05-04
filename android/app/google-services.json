@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "510696103720",
+    "firebase_url": "https://flutterappv2.firebaseio.com",
+    "project_id": "flutterappv2",
+    "storage_bucket": "flutterappv2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510696103720:android:dc83b1782225af3e0dba1d",
+        "android_client_info": {
+          "package_name": "com.thrive.isabel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510696103720-d04keai0284s36vf6djeqa8pk9hetlhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFDnUBIcLMGzZ4Gk__19mFNcYkj4XrG_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510696103720-d04keai0284s36vf6djeqa8pk9hetlhq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
