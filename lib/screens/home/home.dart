@@ -1,57 +1,94 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
-import 'package:provider/provider.dart';
-import  'package:thrive/services/database.dart';
-import 'package:thrive/models/goal.dart';
-import 'goal_form.dart';
-import 'goal_list.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Home extends StatelessWidget {
+// "User home page", screen useer sees after successful login
+class Home extends StatefulWidget {
+  final Function toggleHome;
+  Home({this.toggleHome});
+  @override
+  _HomeState createState() => _HomeState();
 
+}
+
+//TODO: use numerical values to indicate screen
+// TODO: add form key validation
+
+class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+
+  //String
+  String goal = '';
+
+  // Makes HTTP request passing uid and goal in body
+  void postUserGoal(String uid, String goal) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/goals',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'uid': uid,
+        'goal': goal,
+      }),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
-    void _showSettingsPanel(){
-      showModalBottomSheet(context: context, builder: (conext) {
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
-          child: GoalForm(),
-        );
-      });
-    }
-
-
-
-
-    return StreamProvider<List<Goal>>.value(
-      value: DatabaseService().goals,
-      child: Scaffold(
-        backgroundColor: Colors.green[50],
-        appBar: AppBar(
-          title: Text('Thrive'),
-          backgroundColor: Colors.green[400],
-          elevation: 0.0  ,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person),
-              onPressed: () async{
-                await _auth.signOut();
-              },
-              label: Text('logout')
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Thrive Test"),
+      ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+                height: 20.0
             ),
+            TextFormField(
+              onChanged: (val) {
+                setState(() {
+                  goal = val;
+                });
+              },
 
-            FlatButton.icon(
-              icon: Icon(Icons.beenhere),
-              label: Text('Goal'),
-              onPressed:() => _showSettingsPanel()
+            ),
+            RaisedButton(
+              child: Text('submit goal'),
+              onPressed: () async {
+
+                // TODO: pass user as parameter from Wrapper()
+                FirebaseUser result = await _auth.getCurrentUser();
+
+                // If there is a current user logged in, make HTTP request
+                if (result != null){
+                  print(result.uid);
+                  postUserGoal(result.uid, goal);
+                }
+                print(goal);
+
+              },
             )
 
-          ]
+          ],
         ),
+      ),
 
-        body: GoalList(),
+
+      // Button to signout and return to signin page
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _auth.signOut();
+          widget.toggleHome();
+          //print(_auth.getCurrentUser());
+        },
 
       ),
     );
