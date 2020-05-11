@@ -1,20 +1,55 @@
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/services/auth.dart';
 
-class Wrapper extends StatelessWidget {
+
+
+// Handles which screen to show based on status of current user
+class Wrapper extends StatefulWidget {
+  @override
+  _WrapperState createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
+
+  AuthService _auth = AuthService();
+  FirebaseUser currUser;
+  bool showHome = false;
+
+  // Grabs current user logged into system
+  Future getCurrentUser() async {
+    FirebaseUser user = await _auth.getCurrentUser();
+    currUser = user;
+    print("getCurrUseer finished");
+  }
+
+  //Fires state change
+  void toggleHome() {
+    setState(() {
+      showHome = !showHome;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
+        future: getCurrentUser(),
+        builder: (context, snapshot) {
 
-    final user = Provider.of<User>(context);
-    print(user);
-    // TODO: implement build
-    if (user == null) {
-      return Authenticate();
-    }else {
-      return Home();
-    }
+          // Shows home if current user is logged in
+          // Shows login page otherwise
+          if (currUser != null) {
+            return Home(toggleHome: toggleHome);
+          } else {
+            return Authenticate(toggleHome: toggleHome);
+          }
+        }
+    );
   }
 }
+
+
