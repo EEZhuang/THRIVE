@@ -98,6 +98,10 @@ class _HomeState extends State<Home> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Search'),
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
             title: Text('Add Goal'),
           ),
@@ -109,6 +113,7 @@ class _HomeState extends State<Home> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
       ),
 
       // Button to signout and return to signin page
