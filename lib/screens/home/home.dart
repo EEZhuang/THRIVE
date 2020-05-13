@@ -44,6 +44,17 @@ class _HomeState extends State<Home> {
     setState(() {
       _selectedIndex = index;
     });
+
+    // Redirects to different screen.
+    if (_selectedIndex == 0) {
+
+    } else if (_selectedIndex == 1) {
+
+    } else if (_selectedIndex == 2) {
+
+    } else if (_selectedIndex == 3) {
+
+    }
   }
 
   @override
