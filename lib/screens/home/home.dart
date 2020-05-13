@@ -23,6 +23,9 @@ class _HomeState extends State<Home> {
   //String
   String goal = '';
 
+  // Indicated which screen is selected
+  int _selectedIndex = 0;
+
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
     http.Response response = await http.post(
@@ -37,6 +40,11 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +83,33 @@ class _HomeState extends State<Home> {
                 print(goal);
 
               },
-            )
+            ),
+
 
           ],
         ),
       ),
 
+      // Bottom Navigation Bar
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline),
+            title: Text('Add Goal'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text('Profile'),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
 
       // Button to signout and return to signin page
       floatingActionButton: FloatingActionButton(
