@@ -5,19 +5,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // "User home page", screen useer sees after successful login
-class Home extends StatefulWidget {
+class Delete extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Home({this.toggleHome, this.toggleState});
+  Delete({this.toggleHome, this.toggleState});
   @override
-  _HomeState createState() => _HomeState();
+  _DeleteState createState() => _DeleteState();
 
 }
 
 //TODO: use numerical values to indicate screen
 // TODO: add form key validation
 
-class _HomeState extends State<Home> {
+class _DeleteState extends State<Delete> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
   String goal = '';
 
   // Indicated which screen is selected
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
@@ -48,9 +48,9 @@ class _HomeState extends State<Home> {
 
     // Redirects to different screen.
     if (_selectedIndex == 0) {
-
+      widget.toggleState(1);
     } else if (_selectedIndex == 1) {
-      widget.toggleState(2);
+
     } else if (_selectedIndex == 2) {
 
     } else if (_selectedIndex == 3) {
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thrive Test"),
+        title: Text("Delete Account"),
       ),
       body: Form(
         key: _formKey,

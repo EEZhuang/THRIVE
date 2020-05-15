@@ -4,9 +4,10 @@ import 'package:thrive/screens/authenticate/sign_in.dart';
 
 // Handles which of Register/Login screen to show
 class Authenticate extends StatefulWidget {
-
   final Function toggleHome;
-  Authenticate({this.toggleHome});
+  final Function toggleState;
+  Authenticate({this.toggleHome, this.toggleState});
+
   @override
   _AuthenticateState createState() => _AuthenticateState();
 }
@@ -26,9 +27,9 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn){
-      return SignIn(toggleView: toggleView, toggleHome: widget.toggleHome);
+      return SignIn(toggleView: toggleView, toggleHome: widget.toggleHome, toggleState: widget.toggleState);
     } else {
-      return Register(toggleView: toggleView, toggleHome: widget.toggleHome);
+      return Register(toggleView: toggleView, toggleHome: widget.toggleHome, toggleState: widget.toggleState);
     }
   }
 }
