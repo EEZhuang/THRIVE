@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/home/goal_form.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+//import 'package:thrive/screens/home/goal_list.dart';
 
 // "User home page", screen useer sees after successful login
+
 class Home extends StatefulWidget {
   final Function toggleHome;
   Home({this.toggleHome});
@@ -26,6 +29,20 @@ class _HomeState extends State<Home> {
   // Indicated which screen is selected
   int _selectedIndex = 0;
 
+  final List<Widget> pages = [
+    /*
+    GoalList(
+      key: PageStorageKey('Wall'),
+    ),
+    */
+    GoalForm(
+      key: PageStorageKey('GoalForm'),
+    ),
+
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
+
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
     http.Response response = await http.post(
@@ -44,17 +61,6 @@ class _HomeState extends State<Home> {
     setState(() {
       _selectedIndex = index;
     });
-
-    // Redirects to different screen.
-    if (_selectedIndex == 0) {
-
-    } else if (_selectedIndex == 1) {
-
-    } else if (_selectedIndex == 2) {
-
-    } else if (_selectedIndex == 3) {
-
-    }
   }
 
   @override
@@ -64,6 +70,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Thrive Test"),
       ),
+      /*
       body: Form(
         key: _formKey,
         child: Column(
@@ -95,10 +102,13 @@ class _HomeState extends State<Home> {
 
               },
             ),
-
-
           ],
         ),
+      ),
+      */
+      body: PageStorage(
+          child: pages[_selectedIndex],
+          bucket: bucket,
       ),
 
       // Bottom Navigation Bar
@@ -124,6 +134,7 @@ class _HomeState extends State<Home> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
+        //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
       ),
 
@@ -134,7 +145,6 @@ class _HomeState extends State<Home> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-
       ),
     );
   }
