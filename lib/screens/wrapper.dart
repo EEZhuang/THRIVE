@@ -6,6 +6,7 @@ import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:thrive/screens/DeleteAcc/delete.dart';
+import 'package:thrive/screens/profile/profile.dart';
 
 
 
@@ -55,6 +56,8 @@ class _WrapperState extends State<Wrapper> {
             return Delete(toggleHome: toggleHome, toggleState: toggleState);
           } else if (currState == 1) {
             return Home(toggleHome: toggleHome, toggleState: toggleState);
+          } else if (currState == 4) {
+            return Profile(toggleHome: toggleHome, toggleState: toggleState);
           } else {
             return Authenticate(toggleHome: toggleHome, toggleState: toggleState);
           }

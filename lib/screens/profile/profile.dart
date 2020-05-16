@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'profile_goal_list.dart';
 
 // "User home page", screen useer sees after successful login
-class Home extends StatefulWidget {
+class Profile extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Home({this.toggleHome, this.toggleState});
+  Profile({this.toggleHome, this.toggleState});
   @override
-  _HomeState createState() => _HomeState();
+  _ProfileState createState() => _ProfileState();
 
 }
 
 //TODO: use numerical values to indicate screen
 // TODO: add form key validation
 
-class _HomeState extends State<Home> {
+class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -25,7 +26,7 @@ class _HomeState extends State<Home> {
   String goal = '';
 
   // Indicated which screen is selected
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
 
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
@@ -48,9 +49,9 @@ class _HomeState extends State<Home> {
 
     // Redirects to different screen.
     if (_selectedIndex == 0) {
-
+      widget.toggleState(1);
     } else if (_selectedIndex == 1) {
-      widget.toggleState(2);
+
     } else if (_selectedIndex == 2) {
 
     } else if (_selectedIndex == 3) {
@@ -63,44 +64,9 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thrive Test"),
+        title: Text("My Profile"),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-                height: 20.0
-            ),
-            TextFormField(
-              onChanged: (val) {
-                setState(() {
-                  goal = val;
-                });
-              },
-
-            ),
-            RaisedButton(
-              child: Text('submit goal'),
-              onPressed: () async {
-
-                // TODO: pass user as parameter from Wrapper()
-                FirebaseUser result = await _auth.getCurrentUser();
-
-                // If there is a current user logged in, make HTTP request
-                if (result != null){
-                  print(result.uid);
-                  postUserGoal(result.uid, goal);
-                }
-                print(goal);
-
-              },
-            ),
-
-
-          ],
-        ),
-      ),
+      body: GoalList(),
 
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
