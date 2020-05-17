@@ -51,7 +51,9 @@ class _WrapperState extends State<Wrapper> {
 
           // Shows home if current user is logged in
           // Shows login page otherwise
-          if (currState == 2) {
+          if (currState == 3) {
+            return Search()
+          } else if (currState == 2) {
             return Delete(toggleHome: toggleHome, toggleState: toggleState);
           } else if (currState == 1) {
             return Home(toggleHome: toggleHome, toggleState: toggleState);
