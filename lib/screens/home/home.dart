@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:thrive/screens/home/goal_form.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-//import 'package:thrive/screens/home/goal_list.dart';
 
 // "User home page", screen useer sees after successful login
 
@@ -13,35 +11,41 @@ class Home extends StatefulWidget {
   Home({this.toggleHome});
   @override
   _HomeState createState() => _HomeState();
-
 }
 
-//TODO: use numerical values to indicate screen
-// TODO: add form key validation
+class FirstPage extends StatelessWidget {
+  const FirstPage({Key key}) : super(key: key);
 
-class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Wall Placeholder"),
+      ),
+      body: ListView.builder(itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('Goal'),
+          subtitle: Text('$index'),
+        );
+      }),
+    );
+  }
+}
+
+class SecondPage extends StatefulWidget {
+  SecondPage({Key key}) : super(key: key);
+
+  @override
+  _SecondPageState createState() => _SecondPageState();
+}
+
+class _SecondPageState extends State<SecondPage> {
+
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   //String
   String goal = '';
-
-  // Indicated which screen is selected
-  int _selectedIndex = 0;
-
-  final List<Widget> pages = [
-    /*
-    GoalList(
-      key: PageStorageKey('Wall'),
-    ),
-    */
-    GoalForm(
-      key: PageStorageKey('GoalForm'),
-    ),
-
-  ];
-
-  final PageStorageBucket bucket = PageStorageBucket();
 
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
@@ -57,20 +61,20 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  /*
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return null;
   }
+   */
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thrive Test"),
+        title: Text("Goal Input Tester"),
       ),
-      /*
       body: Form(
         key: _formKey,
         child: Column(
@@ -105,7 +109,46 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-      */
+    );
+  }
+
+}
+
+//TODO: use numerical values to indicate screen
+// TODO: add form key validation
+class _HomeState extends State<Home> {
+  final AuthService _auth = AuthService();
+
+  // Indicated which screen is selected
+  int _selectedIndex = 0;
+
+  final List<Widget> pages = [
+    FirstPage(
+      key: PageStorageKey('Page1'),
+    ),
+    SecondPage(
+      key: PageStorageKey('Page2'),
+    ),
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      /*
+      appBar: AppBar(
+        title: Text("Thrive Test"),
+      ),
+
+       */
       body: PageStorage(
           child: pages[_selectedIndex],
           bucket: bucket,
