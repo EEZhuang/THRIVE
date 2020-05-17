@@ -33,7 +33,7 @@ class _CreateCollabState extends State<Collaborators> {
               return ListTile(
                 title: new FlatButton(
                   onPressed: () {
-                    Navigator.pop(context, friend.getName(context));
+                    Navigator.pop(context, friend.name);
                   },
                   child: friend.getName(context),
                 )

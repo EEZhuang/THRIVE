@@ -19,6 +19,8 @@ class _CreateGoalState extends State<CreateGoal> {
   var repeatText = TextEditingController();
   String _selectedRepeat = "Don't Repeat";
   String collab;
+  //List<String> collabList;
+  var collabText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -139,16 +141,14 @@ class _CreateGoalState extends State<CreateGoal> {
               SizedBox(height: 20.0),
               InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Collaborators()),
-                    );
+                    _getCollaborators(context);
                   },
                   child: IgnorePointer(
                       child: new TextFormField(
                         decoration: new InputDecoration(
                             hintText: "Collaborators(Optional)"
                         ),
+                        controller: collabText,
                       ),
                   )
               ),
@@ -168,5 +168,16 @@ class _CreateGoalState extends State<CreateGoal> {
         ),
       )
     );
+  }
+
+  _getCollaborators(BuildContext context) async {
+    collab = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Collaborators()),
+    );
+
+    collabText.text = collab;
+    //collabList.add(collab);
+
   }
 }
