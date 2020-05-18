@@ -4,14 +4,13 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// "User home page", screen useer sees after successful login
+// "User home page", screen user sees after successful login
 class Delete extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
   Delete({this.toggleHome, this.toggleState});
   @override
   _DeleteState createState() => _DeleteState();
-
 }
 
 //TODO: use numerical values to indicate screen
@@ -25,7 +24,7 @@ class _DeleteState extends State<Delete> {
   String goal = '';
 
   // Indicated which screen is selected
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
 
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
@@ -50,17 +49,16 @@ class _DeleteState extends State<Delete> {
     if (_selectedIndex == 0) {
       widget.toggleState(1);
     } else if (_selectedIndex == 1) {
-
+      widget.toggleState(2);
     } else if (_selectedIndex == 2) {
-
+      widget.toggleState(3);
     } else if (_selectedIndex == 3) {
-
+      widget.toggleState(4);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Delete Account"),
@@ -69,35 +67,28 @@ class _DeleteState extends State<Delete> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(
-                height: 20.0
-            ),
+            SizedBox(height: 20.0),
             TextFormField(
               onChanged: (val) {
                 setState(() {
                   goal = val;
                 });
               },
-
             ),
             RaisedButton(
               child: Text('submit goal'),
               onPressed: () async {
-
                 // TODO: pass user as parameter from Wrapper()
                 FirebaseUser result = await _auth.getCurrentUser();
 
                 // If there is a current user logged in, make HTTP request
-                if (result != null){
+                if (result != null) {
                   print(result.uid);
                   postUserGoal(result.uid, goal);
                 }
                 print(goal);
-
               },
             ),
-
-
           ],
         ),
       ),
@@ -112,7 +103,6 @@ class _DeleteState extends State<Delete> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text('Search'),
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
@@ -136,7 +126,6 @@ class _DeleteState extends State<Delete> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-
       ),
     );
   }
