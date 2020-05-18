@@ -5,6 +5,8 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'avatar.dart';
+
 // "User home page", screen useer sees after successful login
 class Home extends StatefulWidget {
   final Function toggleHome;
@@ -57,7 +59,10 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(builder: (context) => CreateGoal()),
       );
     } else if (_selectedIndex == 3) {
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Avatar()),
+      );
     }
   }
 
