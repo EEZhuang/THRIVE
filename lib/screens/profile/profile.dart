@@ -9,7 +9,8 @@ import 'profile_goal_list.dart';
 class Profile extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Profile({this.toggleHome, this.toggleState});
+  final FirebaseUser currUser;
+  Profile({this.toggleHome, this.toggleState, this.currUser});
   @override
   _ProfileState createState() => _ProfileState();
 
@@ -66,7 +67,7 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         title: Text("My Profile"),
       ),
-      body: GoalList(),
+      body: GoalList(currUser: widget.currUser),
 
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(

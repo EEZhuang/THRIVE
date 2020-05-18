@@ -57,7 +57,7 @@ class _WrapperState extends State<Wrapper> {
           } else if (currState == 1) {
             return Home(toggleHome: toggleHome, toggleState: toggleState);
           } else if (currState == 4) {
-            return Profile(toggleHome: toggleHome, toggleState: toggleState);
+            return Profile(toggleHome: toggleHome, toggleState: toggleState, currUser: currUser);
           } else {
             return Authenticate(toggleHome: toggleHome, toggleState: toggleState);
           }

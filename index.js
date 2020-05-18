@@ -23,4 +23,14 @@ app.post('/goals', function(req, res) {
         })
 })
 
+app.get('/goals', function(req, res) {
+  var goal = db.collection('goals').doc(req.header("uid")).get().then(querySnapshot => {
+    console.log(querySnapshot.data().goal)
+    res.send(JSON.stringify({userGoal: querySnapshot.data().goal}))
+  })
+  //console.log(goal)
+  //res.end(JSON.stringify({userGoal: 'test'}))
+
+})
+
 app.listen(3000)
