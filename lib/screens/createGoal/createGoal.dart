@@ -45,12 +45,6 @@ class _CreateGoalState extends State<CreateGoal> {
 
   @override
   Widget build(BuildContext context) {
-    /*
-    return new WillPopScope(
-      onWillPop: _onWillPop,
-        child: null,
-        onWillPop: null
-    )*/
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -155,7 +149,6 @@ class _CreateGoalState extends State<CreateGoal> {
                     RaisedButton(
                       onPressed: () {
                         if(_formKey.currentState.validate()) {
-
                           showDialog(
                             context: context,
                             builder: (context) => new AlertDialog(
@@ -174,7 +167,6 @@ class _CreateGoalState extends State<CreateGoal> {
                               ],
                             ),
                           );
-
                         }
                       },
                       child: Text("Create Goal"),
@@ -193,8 +185,8 @@ class _CreateGoalState extends State<CreateGoal> {
       MaterialPageRoute(builder: (context) => Collaborators(collabs)),
     );
 
-    collabText.text = collabs.returnString;
-    //collabList.add(collab);
-
+    if(collabs.returnString != null) {
+      collabText.text = collabs.returnString;
+    }
   }
 }

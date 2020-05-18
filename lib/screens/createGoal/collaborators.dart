@@ -10,10 +10,11 @@ import 'FriendReturn.dart';
 class Collaborators extends StatefulWidget {
   final FriendReturn collabs;
   Collaborators(this.collabs);
+
   @override
   _CreateCollabState createState() => _CreateCollabState(collabs.returnString, collabs.returnBool);
-
 }
+
 class _CreateCollabState extends State<Collaborators> {
   final List<Friend> friends = [Friend("Steve"), Friend("Bob"), Friend("Dude")];
   String friendList;
@@ -21,10 +22,17 @@ class _CreateCollabState extends State<Collaborators> {
 
   _CreateCollabState(this.friendList, this.friendToggle);
 
+  Future<bool> _onWillPop() {
+    FriendReturn fReturn = new FriendReturn(friendList, friendToggle);
+    Navigator.pop(context, fReturn);
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return new WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
         appBar: AppBar(
           title: Text("Add Collaborators"),
         ),
@@ -39,28 +47,27 @@ class _CreateCollabState extends State<Collaborators> {
               final friend = friends[index];
 
               return ListTile(
-                title: new FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      friendToggle[index] = !friendToggle[index];
-                    });
+                  title: new FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        friendToggle[index] = !friendToggle[index];
+                      });
 
-                    friendList = "";
-                    for (var i = 0; i < friendToggle.length; i++) {
-                      if(friendToggle[i]) {
-                        if (friendList == "") {
-                          friendList += friends[i].name;
-                        } else {
-                          friendList += ", " + friends[i].name;
+                      friendList = "";
+                      for (var i = 0; i < friendToggle.length; i++) {
+                        if(friendToggle[i]) {
+                          if (friendList == "") {
+                            friendList += friends[i].name;
+                          } else {
+                            friendList += ", " + friends[i].name;
+                          }
                         }
-                      }
 
-                    }
-                  },
-                  child: friend.getName(context),
-                  //borderSide: BorderSide(color: Colors.blue),
-                  color: friendToggle[index] ? Colors.blue : Colors.grey,
-                )
+                      }
+                    },
+                    child: friend.getName(context),
+                    color: friendToggle[index] ? Colors.blue : Colors.grey,
+                  )
               );
             },
           ),
@@ -72,7 +79,9 @@ class _CreateCollabState extends State<Collaborators> {
           },
           child: Icon(Icons.check_circle),
         ),
+      ),
     );
+
   }
 }
 
