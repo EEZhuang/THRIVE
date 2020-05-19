@@ -16,17 +16,19 @@ app.use(bodyParser.json())
 
 
 app.post('/goals', function(req, res) {
-  db.collection("goals")
+  db.collection("users")
     .doc(req.body.uid)
+    .collection("user_goals")
+    .doc(req.body.goalID)
         .set({
-            goal: (req.body.goal)
+            goal_name: (req.body.goal)
         })
 })
 
 app.get('/goals', function(req, res) {
-  var goal = db.collection('goals').doc(req.header("uid")).get().then(querySnapshot => {
-    console.log(querySnapshot.data().goal)
-    res.send(JSON.stringify({userGoal: querySnapshot.data().goal}))
+  var goal = db.collection('users').doc(req.header("uid")).collection('user_goals').doc(req.header("goalID")).get().then(querySnapshot => {
+    console.log(querySnapshot.data().goal_name)
+    res.send(JSON.stringify({userGoal: querySnapshot.data().goal_name}))
   })
   //console.log(goal)
   //res.end(JSON.stringify({userGoal: 'test'}))

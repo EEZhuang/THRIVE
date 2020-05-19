@@ -4,6 +4,8 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:thrive/services/database.dart';
+
 // "User home page", screen useer sees after successful login
 class Home extends StatefulWidget {
   final Function toggleHome;
@@ -20,26 +22,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  final DatabaseService _db = DatabaseService();
 
   //String
   String goal = '';
+  String goalID = '';
 
   // Indicated which screen is selected
   int _selectedIndex = 0;
 
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
-      }),
-    );
-  }
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -80,6 +72,14 @@ class _HomeState extends State<Home> {
               },
 
             ),
+            SizedBox(height: 20),
+            TextFormField(
+              onChanged:(val){
+                setState((){
+                  goalID = val;
+                });
+              }
+            ),
             RaisedButton(
               child: Text('submit goal'),
               onPressed: () async {
@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
                 // If there is a current user logged in, make HTTP request
                 if (result != null){
                   print(result.uid);
-                  postUserGoal(result.uid, goal);
+                  _db.postUserGoal(result.uid, goal, goalID );
                 }
                 print(goal);
 

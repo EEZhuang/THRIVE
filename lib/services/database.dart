@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class DatabaseService {
   // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
+  void postUserGoal(String uid, String goal, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/goals',
       headers: <String, String>{
@@ -15,16 +15,18 @@ class DatabaseService {
       body: jsonEncode(<String, String>{
         'uid': uid,
         'goal': goal,
+        'goalID': goalID
       }),
     );
   }
 
-  Future<String> getUserGoal(String uid) async {
+  Future<String> getUserGoal(String uid, String goalID) async {
     http.Response response = await http.get(
       'http://10.0.2.2:3000/goals',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'uid': uid
+        'uid': uid,
+        'goalID' : goalID,
       },
     );
     /*

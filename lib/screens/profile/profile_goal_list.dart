@@ -5,6 +5,7 @@ import 'package:thrive/models/goal.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:thrive/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:thrive/shared/loading.dart';
 
 
 import 'profile_goal_tile.dart';
@@ -23,10 +24,40 @@ class GoalList extends StatefulWidget {
 class _GoalListState extends State<GoalList> {
   AuthService _auth = AuthService();
   DatabaseService _db = DatabaseService();
-  
+  final goals = [];
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<dynamic>(
+        future: _db.getUserGoal(widget.currUser.uid, "goal1"),
+        builder: (context, snapshot) {
+          var goal1 = new Goal();
+          if (snapshot.hasData) {
+            goal1.name = snapshot.data;
+            goal1.goal = "Complete by: 5/18/2020";
+            goal1.days = "1";
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          } else {
+            print("Here");
+            return Loading();
+          }
+
+          final goals = [goal1];
+
+          return ListView.builder(
+            itemCount: goals.length,
+            itemBuilder: (context, index){
+              return GoalTile(goal: goals[index]);
+            },
+          );
+        }
+    );
+  }
+}
+
+    /**
+    dynamic goal = await _db.getUserGoal(widget.currUser.uid);
 
     var goal1 = new Goal();
     goal1.name = "Goal 1";
@@ -56,3 +87,4 @@ class _GoalListState extends State<GoalList> {
     );
   }
 }
+        */
