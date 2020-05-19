@@ -5,6 +5,8 @@ import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
+import 'package:thrive/screens/DeleteAcc/delete.dart';
+import 'package:thrive/screens/profile/profile.dart';
 
 
 
@@ -18,19 +20,27 @@ class _WrapperState extends State<Wrapper> {
 
   AuthService _auth = AuthService();
   FirebaseUser currUser;
+  int currState = 0;
   bool showHome = false;
 
   // Grabs current user logged into system
   Future getCurrentUser() async {
     FirebaseUser user = await _auth.getCurrentUser();
     currUser = user;
-    print("getCurrUseer finished");
+    print("getCurrUser finished");
   }
 
   //Fires state change
-  void toggleHome() {
+  void toggleHome(int state) {
     setState(() {
       showHome = !showHome;
+    });
+  }
+
+  //new state change
+  void toggleState(int state) {
+    setState(() {
+      currState = state;
     });
   }
 
@@ -42,10 +52,14 @@ class _WrapperState extends State<Wrapper> {
 
           // Shows home if current user is logged in
           // Shows login page otherwise
-          if (currUser != null) {
-            return Home(toggleHome: toggleHome);
+          if (currState == 2) {
+            return Delete(toggleHome: toggleHome, toggleState: toggleState);
+          } else if (currState == 1) {
+            return Home(toggleHome: toggleHome, toggleState: toggleState);
+          } else if (currState == 4) {
+            return Profile(toggleHome: toggleHome, toggleState: toggleState, currUser: currUser);
           } else {
-            return Authenticate(toggleHome: toggleHome);
+            return Authenticate(toggleHome: toggleHome, toggleState: toggleState);
           }
         }
     );

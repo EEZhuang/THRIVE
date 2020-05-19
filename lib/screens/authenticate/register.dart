@@ -8,10 +8,11 @@ import 'package:thrive/shared/loading.dart';
 class Register extends StatefulWidget{
   final Function toggleView;
   final Function toggleHome;
+  final Function toggleState;
 
   //Constructor receives toggleView&toggleHome functions which set state of
   //authenticate/wrapper respectively
-  Register({this.toggleView, this.toggleHome});
+  Register({this.toggleView, this.toggleHome, this.toggleState});
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -97,7 +98,7 @@ class _RegisterState extends State<Register>{
                                 error = 'please supply a valid email';
                               });
                             } else {
-                              widget.toggleHome();
+                              widget.toggleState(1);
                             }
                           }
                         }
