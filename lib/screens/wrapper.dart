@@ -8,10 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:thrive/screens/DeleteAcc/delete.dart';
-
 import 'package:thrive/screens/Password/password.dart';
 import 'package:thrive/screens/Password/changepass.dart';
-
 import 'package:thrive/screens/profile/profile.dart';
 
 
@@ -55,27 +53,13 @@ class _WrapperState extends State<Wrapper> {
         builder: (context, snapshot) {
 
 
-            //return ChangePass(toggleHome: toggleHome, toggleState: toggleState);
-            //return Password(toggleHome: toggleHome, toggleState: toggleState);
-
           // Shows home if current user is logged in
           // Shows login page otherwise
-          if (currState == 2) {
-
-            return Delete(toggleHome: toggleHome, toggleState: toggleState);
-          } else if (currState == 1) {
-            return Home(toggleHome: toggleHome, toggleState: toggleState);
-          } else if (currState == 4) {
-            return Profile(
-                toggleHome: toggleHome,
-                toggleState: toggleState,
-                currUser: currUser);
-          } else if (currState == 3) {
-            return SocialWall(toggleHome: toggleHome, toggleState: toggleState);
+          if (currUser != null) {
+            return Home(toggleHome: toggleHome);
           } else {
-            return Authenticate(
-                toggleHome: toggleHome, toggleState: toggleState);
+            return Authenticate(toggleHome: toggleHome);
           }
-        });
+    });
   }
 }
