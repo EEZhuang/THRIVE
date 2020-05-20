@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
     } else if (_selectedIndex == 1) {
       widget.toggleState(2);
     } else if (_selectedIndex == 2) {
-
+      widget.toggleState(3);
     } else if (_selectedIndex == 3) {
 
     }
@@ -133,7 +133,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleHome();
+          widget.toggleState(0);
           //print(_auth.getCurrentUser());
         },
 
