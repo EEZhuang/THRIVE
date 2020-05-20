@@ -5,17 +5,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // "User home page", screen useer sees after successful login
-class Delete extends StatefulWidget {
+class Password extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Delete({this.toggleHome, this.toggleState});
+  Password({this.toggleHome, this.toggleState});
   @override
-  _DeleteState createState() => _DeleteState();
+  _PasswordState createState() => _PasswordState();
 
 }
 
 
-class _DeleteState extends State<Delete> {
+class _PasswordState extends State<Password> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -66,70 +66,60 @@ class _DeleteState extends State<Delete> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Delete Account"),
+        title: Text("Change Password"),
       ),
       body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-                height: 20.0
-            ),
-            TextFormField(
-              onChanged: (val1) {
-                setState(() {
-                  email = val1;
-                });
-              },
+          key: _formKey,
+          child: Column(
+              children: <Widget>[
+                SizedBox(
+                    height: 20.0
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blueAccent, width: 5.0),
+                      ),
+                      hintText: 'Enter Old Password'
+                  ),
+                  onChanged: (val) {
+                    setState(() {
+                      password = val;
+                    });
+                  },
 
-            ),
-            SizedBox(
-                height: 20.0
-            ),
-            TextFormField(
-              onChanged: (val2) {
-                setState(() {
-                  password = val2;
-                });
-              },
+                ),
+                RaisedButton(
+                  child: Text('Confirm Password'),
+                  onPressed: () async {
 
-            ),
-            RaisedButton(
-              child: Text('Delete account'),
-              onPressed: () async {
+                    // TODO: pass user as parameter from Wrapper()
+                    FirebaseUser user = await _auth.getCurrentUser();
 
-                // TODO: pass user as parameter from Wrapper()
-                FirebaseUser user = await _auth.getCurrentUser();
-
-                // If there is a current user logged in, make HTTP request
-                if (user != null) {
-                  if (_formKey.currentState.validate()) {
-                    setState(() => loading = true);
-                    dynamic result = await _auth.signInWithEmailAndPassword(
-                        email, password);
-                    //print("result here" + result);
-                    if (result == null) {
-                      setState(() {
-                        loading = false;
-                        error = 'Credentials do not match, try again';
-                      });
-                    } else {
-                      FirebaseUser user2 = await _auth.getCurrentUser();
-                      if (user2.uid == user.uid) {
-                        user.delete();
-                        await _auth.signOut();
-                      } else {
-                        error = 'Credentials do not match, try again';
+                    // If there is a current user logged in, make HTTP request
+                    if (user != null) {
+                      if (_formKey.currentState.validate()) {
+                        setState(() => loading = true);
+                        dynamic result = await _auth.signInWithEmailAndPassword(
+                            user.email, password);
+                        //print("result here" + result);
+                        if (result == null) {
+                          setState(() {
+                            loading = false;
+                            error = 'incorrect password';
+                          });
+                        } else {
+                            // password confirmed go to change password page
+                            widget.toggleState(4);
+                        }
                       }
                     }
-                  }
-                }
 
-              },
-        ),
-        SizedBox(height: 12.0),
-        Text( error, style: TextStyle(color: Colors.red) ),
-      ])),
+                  },
+                ),
+                SizedBox(height: 12.0),
+                Text( error, style: TextStyle(color: Colors.red) ),
+              ])),
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

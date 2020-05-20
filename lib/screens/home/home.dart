@@ -41,6 +41,9 @@ class _HomeState extends State<Home> {
     } else if (_selectedIndex == 1) {
       widget.toggleState(2);
     } else if (_selectedIndex == 2) {
+      // Ethan
+      widget.toggleState(3);
+
       // Vas
       widget.toggleState(3);
       
@@ -49,6 +52,7 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(builder: (context) => CreateGoal()),
       );
+
     } else if (_selectedIndex == 3) {
       widget.toggleState(4);
     }
@@ -126,7 +130,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleHome();
+          widget.toggleState(0);
           //print(_auth.getCurrentUser());
         },
       ),
