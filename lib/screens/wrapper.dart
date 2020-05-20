@@ -1,17 +1,10 @@
 //import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/models/user.dart';
-import 'package:thrive/screens/Password/changepass.dart';
 import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
-import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
-import 'package:thrive/screens/DeleteAcc/delete.dart';
-import 'package:thrive/screens/Password/password.dart';
-import 'package:thrive/screens/Password/changepass.dart';
-import 'package:thrive/screens/profile/profile.dart';
-
 
 // Handles which screen to show based on status of current user
 class Wrapper extends StatefulWidget {
@@ -51,9 +44,9 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<dynamic>(
         future: getCurrentUser(),
         builder: (context, snapshot) {
-
           // Shows home if current user is logged in
           // Shows login page otherwise
+
           if (currUser != null) {
             return Home(toggleHome: toggleHome);
           } else {
