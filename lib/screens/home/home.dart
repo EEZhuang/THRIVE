@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -40,7 +41,14 @@ class _HomeState extends State<Home> {
     } else if (_selectedIndex == 1) {
       widget.toggleState(2);
     } else if (_selectedIndex == 2) {
+      // Vas
       widget.toggleState(3);
+      
+      // Ed
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CreateGoal()),
+      );
     } else if (_selectedIndex == 3) {
       widget.toggleState(4);
     }
