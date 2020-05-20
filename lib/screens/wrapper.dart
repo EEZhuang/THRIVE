@@ -52,7 +52,6 @@ class _WrapperState extends State<Wrapper> {
         future: getCurrentUser(),
         builder: (context, snapshot) {
 
-
           // Shows home if current user is logged in
           // Shows login page otherwise
           if (currUser != null) {
