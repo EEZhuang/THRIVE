@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/createGoal/createGoal.dart';
+import 'package:thrive/screens/profile/profile.dart';
+import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:thrive/services/database.dart';
 
-// "User home page", screen useer sees after successful login
+// "User home page", screen user sees after successful login
 class Home extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
@@ -13,84 +17,80 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-//TODO: use numerical values to indicate screen
-// TODO: add form key validation
+/* Temporary test screen */
+class FirstPage extends StatelessWidget {
+  const FirstPage({Key key}) : super(key: key);
 
-class _HomeState extends State<Home> {
-  final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
-
-  //String
-  String goal = '';
-
-  // Indicated which screen is selected
-  int _selectedIndex = 0;
-
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Wall Placeholder"),
+      ),
+      body: ListView.builder(itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('Goal'),
+          subtitle: Text('$index'),
+        );
       }),
     );
   }
+}
+
+/* Maintains the navigation of all the screens */
+class _HomeState extends State<Home> {
+  final AuthService _auth = AuthService();
+
+  // Indicated which screen is selected
+  // Starts app on the social wall
+  int _selectedIndex = 0;
+
+  // Array of different pages for NavBar
+  final List<Widget> pages = [
+    /*
+    SecondPage(
+      key: PageStorageKey('Page2'),
+    ),
+     */
+
+    SocialWall(
+
+    ),
+    FirstPage(
+      key: PageStorageKey('Page1'),
+    ),
+    CreateGoal (
+
+    ),
+    Profile (
+
+    ),
+  ];
+
+  final PageStorageBucket bucket = PageStorageBucket();
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
 
-    // Redirects to different screen.
-    if (_selectedIndex == 0) {
-      widget.toggleState(1);
-    } else if (_selectedIndex == 1) {
-      widget.toggleState(2);
-    } else if (_selectedIndex == 2) {
-      widget.toggleState(3);
-    } else if (_selectedIndex == 3) {
-      widget.toggleState(4);
+    // If "add goal" is selected, we push the create goal screen
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CreateGoal()),
+      );
+    } else {
+      // Otherwise reset state
+      setState(() {
+        _selectedIndex = index;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Thrive Test"),
-      ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 20.0),
-            TextFormField(
-              onChanged: (val) {
-                setState(() {
-                  goal = val;
-                });
-              },
-            ),
-            RaisedButton(
-              child: Text('submit goal'),
-              onPressed: () async {
-                // TODO: pass user as parameter from Wrapper()
-                FirebaseUser result = await _auth.getCurrentUser();
-
-                // If there is a current user logged in, make HTTP request
-                if (result != null) {
-                  print(result.uid);
-                  postUserGoal(result.uid, goal);
-                }
-                print(goal);
-              },
-            ),
-          ],
-        ),
+      body: PageStorage(
+          child: pages[_selectedIndex],
+          bucket: bucket,
       ),
 
       // Bottom Navigation Bar
@@ -116,6 +116,7 @@ class _HomeState extends State<Home> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
+        //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
       ),
 
@@ -123,7 +124,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleHome();
+          widget.toggleState(0);
           //print(_auth.getCurrentUser());
         },
       ),

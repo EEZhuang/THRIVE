@@ -5,8 +5,6 @@ import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
-import 'package:thrive/screens/DeleteAcc/delete.dart';
-import 'package:thrive/screens/friendSearch/friend_search.dart';
 
 // Handles which screen to show based on status of current user
 class Wrapper extends StatefulWidget {
@@ -48,16 +46,12 @@ class _WrapperState extends State<Wrapper> {
         builder: (context, snapshot) {
           // Shows home if current user is logged in
           // Shows login page otherwise
-          if (currState == 3) {
-            return Delete(toggleHome: toggleHome, toggleState: toggleState);
-          } else if (currState == 2) {
-            return Search(toggleHome: toggleHome, toggleState: toggleState);
-          } else if (currState == 1) {
-            return Home(toggleHome: toggleHome, toggleState: toggleState);
+
+          if (currUser != null) {
+            return Home(toggleHome: toggleHome);
           } else {
-            return Authenticate(
-                toggleHome: toggleHome, toggleState: toggleState);
+            return Authenticate(toggleHome: toggleHome);
           }
-        });
+    });
   }
 }
