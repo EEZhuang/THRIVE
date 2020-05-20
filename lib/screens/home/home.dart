@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
   Home({this.toggleHome, this.toggleState});
   @override
   _HomeState createState() => _HomeState();
-
 }
 
 //TODO: use numerical values to indicate screen
@@ -31,8 +30,6 @@ class _HomeState extends State<Home> {
   // Indicated which screen is selected
   int _selectedIndex = 0;
 
-
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -40,11 +37,10 @@ class _HomeState extends State<Home> {
 
     // Redirects to different screen.
     if (_selectedIndex == 0) {
-
     } else if (_selectedIndex == 1) {
       widget.toggleState(2);
     } else if (_selectedIndex == 2) {
-
+      widget.toggleState(3);
     } else if (_selectedIndex == 3) {
       widget.toggleState(4);
     }
@@ -52,7 +48,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Thrive Test"),
@@ -61,43 +56,34 @@ class _HomeState extends State<Home> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(
-                height: 20.0
-            ),
+            SizedBox(height: 20.0),
             TextFormField(
               onChanged: (val) {
                 setState(() {
                   goal = val;
                 });
               },
-
             ),
             SizedBox(height: 20),
-            TextFormField(
-              onChanged:(val){
-                setState((){
-                  goalID = val;
-                });
-              }
-            ),
+            TextFormField(onChanged: (val) {
+              setState(() {
+                goalID = val;
+              });
+            }),
             RaisedButton(
               child: Text('submit goal'),
               onPressed: () async {
-
                 // TODO: pass user as parameter from Wrapper()
                 FirebaseUser result = await _auth.getCurrentUser();
 
                 // If there is a current user logged in, make HTTP request
-                if (result != null){
+                if (result != null) {
                   print(result.uid);
-                  _db.postUserGoal(result.uid, goal, goalID );
+                  _db.postUserGoal(result.uid, goal, goalID);
                 }
                 print(goal);
-
               },
             ),
-
-
           ],
         ),
       ),
@@ -112,7 +98,6 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text('Search'),
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
@@ -136,7 +121,6 @@ class _HomeState extends State<Home> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-
       ),
     );
   }

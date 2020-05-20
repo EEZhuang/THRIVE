@@ -1,24 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/social_wall/social_list.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'profile_goal_list.dart';
 
 // "User home page", screen useer sees after successful login
-class Profile extends StatefulWidget {
+class SocialWall extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  final FirebaseUser currUser;
-  Profile({this.toggleHome, this.toggleState, this.currUser});
+  SocialWall({this.toggleHome, this.toggleState});
   @override
-  _ProfileState createState() => _ProfileState();
+  _SocialWallState createState() => _SocialWallState();
 }
 
 //TODO: use numerical values to indicate screen
 // TODO: add form key validation
 
-class _ProfileState extends State<Profile> {
+class _SocialWallState extends State<SocialWall> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -26,7 +25,7 @@ class _ProfileState extends State<Profile> {
   String goal = '';
 
   // Indicated which screen is selected
-  int _selectedIndex = 3;
+  int _selectedIndex = 2;
 
   // Makes HTTP request passing uid and goal in body
   void postUserGoal(String uid, String goal) async {
@@ -62,9 +61,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Profile"),
+        title: Text("Thrive Wall"),
       ),
-      body: GoalList(currUser: widget.currUser),
+      body: social_list(),
 
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
@@ -93,6 +92,7 @@ class _ProfileState extends State<Profile> {
       ),
 
       // Button to signout and return to signin page
+      /**
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
@@ -100,6 +100,7 @@ class _ProfileState extends State<Profile> {
           //print(_auth.getCurrentUser());
         },
       ),
+          **/
     );
   }
 }

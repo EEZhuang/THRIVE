@@ -4,11 +4,10 @@ import 'package:thrive/models/user.dart';
 import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:thrive/screens/DeleteAcc/delete.dart';
 import 'package:thrive/screens/profile/profile.dart';
-
-
 
 // Handles which screen to show based on status of current user
 class Wrapper extends StatefulWidget {
@@ -17,7 +16,6 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-
   AuthService _auth = AuthService();
   FirebaseUser currUser;
   int currState = 0;
@@ -49,7 +47,6 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<dynamic>(
         future: getCurrentUser(),
         builder: (context, snapshot) {
-
           // Shows home if current user is logged in
           // Shows login page otherwise
           if (currState == 2) {
@@ -57,13 +54,16 @@ class _WrapperState extends State<Wrapper> {
           } else if (currState == 1) {
             return Home(toggleHome: toggleHome, toggleState: toggleState);
           } else if (currState == 4) {
-            return Profile(toggleHome: toggleHome, toggleState: toggleState, currUser: currUser);
+            return Profile(
+                toggleHome: toggleHome,
+                toggleState: toggleState,
+                currUser: currUser);
+          } else if (currState == 3) {
+            return SocialWall(toggleHome: toggleHome, toggleState: toggleState);
           } else {
-            return Authenticate(toggleHome: toggleHome, toggleState: toggleState);
+            return Authenticate(
+                toggleHome: toggleHome, toggleState: toggleState);
           }
-        }
-    );
+        });
   }
 }
-
-
