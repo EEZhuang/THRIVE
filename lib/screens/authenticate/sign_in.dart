@@ -7,7 +7,8 @@ class SignIn extends StatefulWidget {
 
   final Function toggleView;
   final Function toggleHome;
-  SignIn({this.toggleView, this.toggleHome});
+  final Function toggleState;
+  SignIn({this.toggleView, this.toggleHome, this.toggleState});
 
 
   @override
@@ -105,7 +106,7 @@ class _SignInState extends State<SignIn>{
                               });
                             } else {
                               print("here");
-                              widget.toggleHome();
+                              widget.toggleState(1);
                               print("home toggled");
                             }
                           }

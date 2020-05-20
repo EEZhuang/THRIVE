@@ -1,14 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// "User home page", screen useer sees after successful login
+import 'package:thrive/services/database.dart';
+
+// "User home page", screen user sees after successful login
 
 class Home extends StatefulWidget {
   final Function toggleHome;
-  Home({this.toggleHome});
+  final Function toggleState;
+  Home({this.toggleHome, this.toggleState});
   @override
   _HomeState createState() => _HomeState();
 }
@@ -43,22 +47,43 @@ class _SecondPageState extends State<SecondPage> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  final DatabaseService _db = DatabaseService();
 
   //String
   String goal = '';
+  String goalID = '';
 
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
-      }),
-    );
+  // Indicated which screen is selected
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    /*
+    // Redirects to different screen.
+    if (_selectedIndex == 0) {
+    } else if (_selectedIndex == 1) {
+      widget.toggleState(2);
+    } else if (_selectedIndex == 2) {
+      // Ethan
+      widget.toggleState(3);
+
+      // Vas
+      widget.toggleState(3);
+      
+      // Ed
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CreateGoal()),
+      );
+
+    } else if (_selectedIndex == 3) {
+      widget.toggleState(4);
+    }
+
+     */
   }
 
   /*
@@ -79,31 +104,32 @@ class _SecondPageState extends State<SecondPage> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            SizedBox(
-                height: 20.0
-            ),
+            SizedBox(height: 20.0),
             TextFormField(
               onChanged: (val) {
                 setState(() {
                   goal = val;
                 });
               },
-
             ),
+            SizedBox(height: 20),
+            TextFormField(onChanged: (val) {
+              setState(() {
+                goalID = val;
+              });
+            }),
             RaisedButton(
               child: Text('submit goal'),
               onPressed: () async {
-
                 // TODO: pass user as parameter from Wrapper()
                 FirebaseUser result = await _auth.getCurrentUser();
 
                 // If there is a current user logged in, make HTTP request
-                if (result != null){
+                if (result != null) {
                   print(result.uid);
-                  postUserGoal(result.uid, goal);
+                  _db.postUserGoal(result.uid, goal, goalID);
                 }
                 print(goal);
-
               },
             ),
           ],
@@ -185,7 +211,7 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleHome();
+          widget.toggleState(0);
           //print(_auth.getCurrentUser());
         },
       ),
