@@ -76,3 +76,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: proxima
+      fonts:
+        - asset: fonts/proxima_nova.ttf
+    - family: montserrat
+      fonts:
+        - asset: fonts/Monterrat-Regular.ttf

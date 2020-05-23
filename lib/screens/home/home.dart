@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/screens/createGoal/createGoal.dart';
+import 'package:thrive/screens/friendSearch/friend_search.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
@@ -47,24 +48,12 @@ class _HomeState extends State<Home> {
 
   // Array of different pages for NavBar
   final List<Widget> pages = [
-    /*
-    SecondPage(
-      key: PageStorageKey('Page2'),
-    ),
-     */
-
-    SocialWall(
-
-    ),
-    FirstPage(
-      key: PageStorageKey('Page1'),
-    ),
-    CreateGoal (
-
-    ),
-    Profile (
-
-    ),
+    SocialWall(),
+    //FirstPage(),
+    Profile (),
+    CreateGoal(),
+    Search(),
+    FirstPage(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -73,10 +62,17 @@ class _HomeState extends State<Home> {
 
     // If "add goal" is selected, we push the create goal screen
     if (index == 2) {
+      /*
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CreateGoal()),
+        MaterialPageRoute(builder: (context) { return CreateGoal(); }),
       );
+
+       */
+
+      setState(() {
+        _selectedIndex = index;
+      });
     } else {
       // Otherwise reset state
       setState(() {
@@ -98,24 +94,32 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home, size: 30.0),
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
+            icon: Icon(Icons.person, size: 30.0),
+            title: Text('Profile'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
+            icon: Icon(Icons.add_circle_outline, size: 30.0),
             title: Text('Add Goal'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
+            icon: Icon(Icons.search, size: 30.0),
+            title: Text('Search'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings, size: 30.0),
+            title: Text('Settings'),
           ),
         ],
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color(0xFFfe752b),
+        backgroundColor: Color(0xF0080F0F),
+        unselectedItemColor: Color(0xFFffd6ba),
         onTap: _onItemTapped,
         //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,

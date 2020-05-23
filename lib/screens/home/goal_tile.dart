@@ -10,19 +10,31 @@ class GoalTile extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Padding(
-      padding: EdgeInsets.only(top: 8.0),
-      child: Card(
-        margin: EdgeInsets.fromLTRB(20, 6, 20, 0),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.green[100],
+      padding: EdgeInsets.only(top: 1.0),
+      child: ClipRRect(
+        //borderRadius: BorderRadius.circular(30.0),
+        child: Card(
+          /*
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40.0),
 
           ),
-          title: Text(goal.name),
-          subtitle: Text(goal.goal),
+
+           */
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Container(
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.green[100],
+                ),
+                title: Text(goal.name),
+                subtitle: Text(goal.goal),
+            ),
+            color: Color(0xFFf0ffed),
+          ),
         ),
-      )
+      ),
     );
   }
 }

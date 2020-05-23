@@ -5,14 +5,6 @@ import 'package:thrive/screens/home/home.dart';
 import 'package:thrive/screens/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
-<<<<<<< HEAD
-import 'package:thrive/screens/DeleteAcc/delete.dart';
-import 'package:thrive/screens/Password/password.dart';
-import 'package:thrive/screens/Password/changepass.dart';
-import 'package:thrive/screens/profile/profile.dart';
-
-=======
->>>>>>> 99bf58c858d6a05e408b4cad792ef0bbe80540e9
 
 // Handles which screen to show based on status of current user
 class Wrapper extends StatefulWidget {

@@ -49,7 +49,7 @@ class _CreateGoalState extends State<CreateGoal> {
       onWillPop: _onWillPop,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Create a Goal"),
+            title: Text("Create a Goal", style: TextStyle(fontFamily: 'COMIC_SANS'),),
           ),
           body: Container(
             padding: EdgeInsets.symmetric(
