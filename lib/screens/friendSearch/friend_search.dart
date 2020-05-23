@@ -6,7 +6,6 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// "User home page", screen useer sees after successful login
 class Search extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
@@ -16,16 +15,13 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-//
+// Screen for searching friends
 class _SearchState extends State<Search> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   //String
   String query = '';
-
-  // Indicated which screen is selected
-  int _selectedIndex = 1;
 
   TextEditingController searchTextEditingController = TextEditingController();
   Future<QuerySnapshot> futureSearchResults;
@@ -41,23 +37,6 @@ class _SearchState extends State<Search> {
     setState(() {
       futureSearchResults = allUsers;
     });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    // Redirects to different screen.
-    if (_selectedIndex == 0) {
-      widget.toggleState(1);
-    } else if (_selectedIndex == 1) {
-      widget.toggleState(2);
-    } else if (_selectedIndex == 2) {
-      widget.toggleState(3);
-    } else if (_selectedIndex == 3) {
-      widget.toggleState(4);
-    }
   }
 
   AppBar searchPageHeader() {
@@ -133,33 +112,6 @@ class _SearchState extends State<Search> {
       body: futureSearchResults == null
           ? displayNoSearchResultsScreen()
           : displayUsersFoundScreen(),
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            title: Text('Add Goal'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-      ),
-
       // Button to signout and return to signin page
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

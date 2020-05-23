@@ -65,7 +65,7 @@ class social_list extends StatelessWidget {
                       ),
                       new Text(
                         "Spongebob Squarepants",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
                       )
                     ],
                   ),
@@ -76,7 +76,7 @@ class social_list extends StatelessWidget {
                 ],
               ),
             ),
-            Flexible(fit: FlexFit.loose, child: new GoalTile(goal: goals[index])
+            Flexible(fit: FlexFit.loose, child: new GoalTile(goal: goals[0])
                 /**
               Image.network(
                 "https://images.pexels.com/photos/672657/pexels-photo-672657.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -94,20 +94,28 @@ class social_list extends StatelessWidget {
                     children: <Widget>[
                       new Icon(
                         FontAwesomeIcons.heart,
+                        color: Color(0xFFFAF9F9)
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
                       new Icon(
                         FontAwesomeIcons.comment,
+                        color: Color(0xFFFAF9F9)
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
-                      new Icon(FontAwesomeIcons.paperPlane),
+                      new Icon(
+                          FontAwesomeIcons.paperPlane,
+                          color: Color(0xFFFAF9F9)
+                      ),
                     ],
                   ),
-                  new Icon(FontAwesomeIcons.bookmark)
+                  new Icon(
+                      FontAwesomeIcons.bookmark,
+                      color: Color(0xFFFAF9F9)
+                  )
                 ],
               ),
             ),
@@ -115,7 +123,7 @@ class social_list extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 "Liked by Patrick Star, Mr. Krabs, and 528,331 others",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
               ),
             ),
             Padding(
@@ -124,7 +132,7 @@ class social_list extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   new Container(
-                    height: 40.0,
+                    height: 30.0,
                     width: 40.0,
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
@@ -145,7 +153,9 @@ class social_list extends StatelessWidget {
                       decoration: new InputDecoration(
                         border: InputBorder.none,
                         hintText: "Add a comment...",
+                        //hintStyle: Color(0xFFFAF9F9),
                       ),
+                      cursorColor: Color(0xFFFAF9F9),
                     ),
                   ),
                 ],

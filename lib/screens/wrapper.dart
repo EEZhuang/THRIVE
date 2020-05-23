@@ -44,9 +44,9 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<dynamic>(
         future: getCurrentUser(),
         builder: (context, snapshot) {
+
           // Shows home if current user is logged in
           // Shows login page otherwise
-
           if (currUser != null) {
             return Home(toggleHome: toggleHome);
           } else {

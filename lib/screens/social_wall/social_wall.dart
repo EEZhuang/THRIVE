@@ -40,9 +40,14 @@ class _SocialWallState extends State<SocialWall> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thrive Wall"),
+        title: Text("Thrive Wall", style: TextStyle(fontFamily: 'proxima', fontWeight: FontWeight.bold, fontSize: 30)),
+        //title: Text("Thrive Wall", style: TextStyle(fontFamily: 'montserrat', fontSize: 30)),
+        centerTitle: true,
+        backgroundColor: Color(0xFF69A297),
       ),
       body: social_list(),
+      backgroundColor: Color(0xF0080F0F),
+      //backgroundColor: Color(0xFF273534),
       // Button to signout and return to signin page
       /**
       floatingActionButton: FloatingActionButton(
