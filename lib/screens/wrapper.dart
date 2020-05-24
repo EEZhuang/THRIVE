@@ -26,7 +26,7 @@ class _WrapperState extends State<Wrapper> {
   }
 
   //Fires state change
-  void toggleHome(int state) {
+  void toggleHome() {
     setState(() {
       showHome = !showHome;
     });
