@@ -131,7 +131,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleState(0);
+          //widget.toggleState(0);
+          widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
       ),

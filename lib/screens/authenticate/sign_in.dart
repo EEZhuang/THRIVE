@@ -98,6 +98,7 @@ class _SignInState extends State<SignIn>{
                           if(_formKey.currentState.validate()){
                             setState(() => loading = true);
                             dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                            //print('finished geetting result');
                             //print("result here" + result);
                             if(result == null) {
                               setState(() {
@@ -105,9 +106,10 @@ class _SignInState extends State<SignIn>{
                                 error = 'Could not sign in with those credentials';
                               });
                             } else {
-                              print("here");
-                              widget.toggleState(1);
-                              print("home toggled");
+                              //print("here");
+                              //widget.toggleState(1);
+                              widget.toggleHome();
+                              //print("home toggled");
                             }
                           }
                         }
