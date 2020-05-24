@@ -29,13 +29,19 @@ class _GoalListState extends State<GoalList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
-        future: _db.getUserGoal(widget.currUser.uid, "goal1"),
-        builder: (context, snapshot) {
-          var goal1 = new Goal();
+        future: _db.getAllUserGoals(widget.currUser.uid),
+        builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            goal1.name = snapshot.data;
-            goal1.goal = "Complete by: 5/18/2020";
-            goal1.days = "1";
+            final goals =  snapshot.data;
+            print(widget.currUser);
+            return ListView.builder(
+              itemCount: goals.length,
+              itemBuilder: (context, index){
+                print(goals.length);
+                print(goals[index]);
+                return GoalTile(goal: goals[index]);
+              },
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           } else {
@@ -43,14 +49,9 @@ class _GoalListState extends State<GoalList> {
             return Loading();
           }
 
-          final goals = [goal1];
 
-          return ListView.builder(
-            itemCount: goals.length,
-            itemBuilder: (context, index){
-              return GoalTile(goal: goals[index]);
-            },
-          );
+
+
         }
     );
   }

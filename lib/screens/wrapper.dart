@@ -48,7 +48,7 @@ class _WrapperState extends State<Wrapper> {
           // Shows home if current user is logged in
           // Shows login page otherwise
           if (currUser != null) {
-            return Home(toggleHome: toggleHome);
+            return Home(toggleHome: toggleHome, currUser: currUser);
           } else {
             return Authenticate(toggleHome: toggleHome);
           }

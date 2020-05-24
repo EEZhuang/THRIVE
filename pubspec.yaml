@@ -80,6 +80,3 @@ flutter:
     - family: proxima
       fonts:
         - asset: fonts/proxima_nova.ttf
-    - family: montserrat
-      fonts:
-        - asset: fonts/Monterrat-Regular.ttf
