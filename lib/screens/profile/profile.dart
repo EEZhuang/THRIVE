@@ -7,10 +7,9 @@ import 'profile_goal_list.dart';
 
 // "User home page", screen useer sees after successful login
 class Profile extends StatefulWidget {
-  final Function toggleHome;
-  final Function toggleState;
+
   final FirebaseUser currUser;
-  Profile({this.toggleHome, this.toggleState, this.currUser});
+  Profile({this.currUser});
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -49,7 +48,7 @@ class _ProfileState extends State<Profile> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleHome();
+          //widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
       ),
