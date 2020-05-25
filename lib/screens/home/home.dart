@@ -13,7 +13,8 @@ import 'package:thrive/services/database.dart';
 class Home extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Home({this.toggleHome, this.toggleState});
+  final FirebaseUser currUser;
+  Home({this.toggleHome, this.toggleState, this.currUser});
   @override
   _HomeState createState() => _HomeState();
 }
@@ -42,19 +43,12 @@ class FirstPage extends StatelessWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
+
   // Indicated which screen is selected
   // Starts app on the social wall
   int _selectedIndex = 0;
-
   // Array of different pages for NavBar
-  final List<Widget> pages = [
-    SocialWall(),
-    //FirstPage(),
-    Profile (),
-    CreateGoal(),
-    Search(),
-    FirstPage(),
-  ];
+
 
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -83,6 +77,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> pages = [
+      SocialWall(),
+      //FirstPage(),
+      Profile(currUser: widget.currUser),
+      CreateGoal(),
+      Search(),
+      FirstPage(),
+    ];
 
     return Scaffold(
       body: PageStorage(
@@ -129,7 +131,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleState(0);
+          //widget.toggleState(0);
+          widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
       ),

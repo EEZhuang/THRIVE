@@ -12,24 +12,26 @@ class social_list extends StatelessWidget {
 
     // Added to help with hard coding
     var goal1 = new Goal();
-    goal1.name = "Making more Krabby Patties";
-    goal1.goal = "Streak: 1";
-    goal1.days = "1";
+    goal1.goal = "Making more Krabby Patties";
+    goal1.goalDate = "Streak: 1";
+    goal1.goalUnits = "1";
 
     var goal2 = new Goal();
-    goal2.name = "Eating Healthy";
-    goal2.goal = "Streak: 2";
-    goal2.days = "2";
+    goal2.goal = "Eating Healthy";
+    goal2.goalDate = "Streak: 2";
+    goal2.goalUnits = "2";
 
     final goals = [goal1, goal2];
     //print(goals);
 
     //print(goals.length);
+    /**
     goals.forEach((goal) {
       print(goal.name);
       print(goal.goal);
       print(goal.days);
-    });
+    }
+         ); **/
 
     return ListView.builder(
       itemCount: 5,

@@ -19,8 +19,8 @@ class GoalTile extends StatelessWidget{
             backgroundColor: Colors.green[100],
 
           ),
-          title: Text(goal.name),
-          subtitle: Text(goal.goal),
+          title: Text(goal.goal),
+          subtitle: Text(goal.goalDate),
         ),
       )
     );

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/models/user.dart';
+import 'package:flutter/material.dart';
 
 
 // Handles all user authentication methods such that no direct Auth calls are
