@@ -36,6 +36,24 @@ app.post('/post_goal', function(req, res) {
         })
 })
 
+app.post('/set_user_info', function(req, res) {
+  db.collection("users")
+    .doc(req.body.uid)
+        .set({
+            username: req.body.username,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            birthDate: req.body.birthDate
+        })
+})
+
+app.post('/set_public_uid', function(req, res) {
+  db.collection("usernames")
+    .doc(req.body.username)
+        .set({
+        })
+})
+
 app.get('/get_goal', function(req, res) {
   var goal = db.collection('goals').doc(req.header("goalID")).get().then(querySnapshot => {
     //console.log(querySnapshot.data().goal_name)

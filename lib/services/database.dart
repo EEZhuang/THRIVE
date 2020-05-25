@@ -36,6 +36,36 @@ class DatabaseService {
     );
   }
 
+  void setUserInfo(String uid, String username, String firstName, String lastName, String birthDate) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/set_user_info',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'uid': uid,
+        'username': username,
+        'firstName': firstName,
+        'lastName': lastName,
+        'birthDate': birthDate
+
+      }),
+    );
+  }
+
+  void setPublicUid(String username) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/set_public_uid',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username
+
+      }),
+    );
+  }
+
   Future <List<Goal>> getAllUserGoals(String uid) async {
     //get user doc ids
     http.Response response = await http.get(
