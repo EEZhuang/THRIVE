@@ -81,5 +81,20 @@ app.get('/get_all_goal_ids', function(req, res) {
     })
 })
 
+app.get('/get_all_usernames', function(req, res) {
+  var usernames = [];
+  //console.log(db.collection('usernames').get());
+  var goal = db.collection('usernames').get().then(querySnapshot => {
+       querySnapshot.forEach((doc) => {
+            usernames.push(doc.id);
+            //console.log(doc.id);
+       })
+       console.log(usernames);
+       res.send(JSON.stringify({users: usernames}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
 
 app.listen(3000)

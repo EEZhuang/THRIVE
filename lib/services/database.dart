@@ -66,10 +66,30 @@ class DatabaseService {
     );
   }
 
+  Future <List<String>> getAllUsernames(String uid) async {
+    //get user doc ids
+    print("yes");
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_all_usernames',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'uid': uid
+      },
+    );
+
+
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    print(json);
+    //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
+    List<String> usernames = json['users'].cast<String>();
+    print(usernames);
+    return usernames;
+  }
+
   Future <List<Goal>> getAllUserGoals(String uid) async {
     //get user doc ids
     http.Response response = await http.get(
-      'http://10.0.2.2:3000/get_all_goal_ids',
+      'http://10.0.2.2:3000/get_all_usernames',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'uid' : uid,
