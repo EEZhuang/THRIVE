@@ -3,6 +3,11 @@ import 'package:thrive/services/auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:thrive/shared/constants.dart';
 import 'package:thrive/shared/loading.dart';
+import '../../formats/colors.dart';
+import 'package:intl/intl.dart';
+import 'package:thrive/services/database.dart';
+
+
 
 // Register page
 class Register extends StatefulWidget{
@@ -23,10 +28,19 @@ class _RegisterState extends State<Register>{
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  var dateText = TextEditingController();
+  String _birthdate = "";
+  final DatabaseService _db = DatabaseService();
+
 
   //Holds state elements
   String email = '';
   String password = '';
+  String password2 = '';
+  String username = "";
+  String firstname = '';
+  String lastname = '';
+  String birthdate = "";
   String error = '';
 
   @override
@@ -61,8 +75,14 @@ class _RegisterState extends State<Register>{
               key:_formKey,
               child: Column(
                   children: <Widget> [
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 10.0),
                     TextFormField(
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                            ),
+                            hintText: 'Enter an email'
+                        ),
                       //decoration:textInputDecoration.copyWith(hintText:  'Email'),
                         validator: (val) => val.isEmpty ? 'Enter an email' : null,
                         onChanged: (val){
@@ -71,10 +91,16 @@ class _RegisterState extends State<Register>{
                           });
                         }
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 10.0),
                     TextFormField(
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                          ),
+                          hintText: 'Enter a password'
+                      ),
                       //decoration:textInputDecoration.copyWith(hintText: 'Password'),
-                      validator: (val) => val.length < 6 ? 'Enter a password 6+ cahrs long' : null,
+                      validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
                       onChanged: (val){
                         setState(() {
                           password = val;
@@ -82,12 +108,108 @@ class _RegisterState extends State<Register>{
                       },
                       obscureText: true ,
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                          ),
+                          hintText: 'Confirm your password'
+                      ),
+                      //decoration:textInputDecoration.copyWith(hintText: 'Password'),
+                      validator: (val) => (val != password) ? 'password does not match' : null,
+                      onChanged: (val){
+                        setState(() {
+                          password2 = val;
+                        });
+                      },
+                      obscureText: true ,
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                            ),
+                            hintText: 'Enter a username'
+                        ),
+                      //decoration:textInputDecoration.copyWith(hintText:  'Email'),
+                        validator: (val) => val.isEmpty ? 'Enter a username' : null,
+                        onChanged: (val){
+                          setState(() {
+                            username = val;
+                          });
+                        }
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                            ),
+                            hintText: 'Enter your first name'
+                        ),
+                      //decoration:textInputDecoration.copyWith(hintText:  'Email'),
+                        validator: (val) => val.isEmpty ? 'Enter your first name' : null,
+                        onChanged: (val){
+                          setState(() {
+                            firstname = val;
+                          });
+                        }
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: DARK_GREEN, width: 5.0),
+                            ),
+                            hintText: 'Enter your last name'
+                        ),
+                      //decoration:textInputDecoration.copyWith(hintText:  'Email'),
+                        validator: (val) => val.isEmpty ? 'Enter your last name' : null,
+                        onChanged: (val){
+                          setState(() {
+                            lastname = val;
+                          });
+                        }
+                    ),
+                    InkWell(
+                        onTap: () {
+                          showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now().add(Duration(days: 365))
+                          ).then((date) {
+                            setState(() {
+                              _birthdate =
+                                  DateFormat('MM-dd-yyyy').format(date);
+                              dateText.text = _birthdate;
+                            });
+                          });
+                        },
+                        child: IgnorePointer(
+                            child: new TextFormField(
+                                decoration: new InputDecoration(
+                                    hintText: "Enter your birth date"
+                                ),
+                                controller: dateText,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter your birth date";
+                                  }
+                                  birthdate = value;
+                                  return null;
+                                }
+                            )
+                        )
+                    ),
                     RaisedButton(
                         color: Colors.white,
                         child: Text('Register'),
                         onPressed: () async {
-                          if(_formKey.currentState.validate()){
+                          if(_formKey.currentState.validate() && (username != "") && (firstname != "")
+                             && (lastname != "") && (password != "") && (password2 != "") && (birthdate != "")){
                             setState(() {
                               loading = true;
                             });
@@ -98,13 +220,17 @@ class _RegisterState extends State<Register>{
                                 error = 'please supply a valid email';
                               });
                             } else {
+                              //http the username, first name, last name, and birth date of user into UID
+                              print(username + firstname + lastname + birthdate);
+                              _db.setUserInfo(result.uid, username, firstname, lastname, birthdate);
+                              _db.setPublicUid(username);
                               widget.toggleState(1);
                             }
                           }
                         }
                     ),
                     SizedBox(height: 12.0),
-                    Text( error, style: TextStyle(color: Colors.red) ),
+                    Text( error, style: TextStyle(color: Colors.red) )
                   ]
               )
           )

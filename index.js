@@ -13,6 +13,16 @@ var auth = require("firebase/auth");
 var app = express()
 app.use(bodyParser.json())
 
+//Linking Users Friends
+app.post('/link_friends', function(req, res) {
+  db.collection("connections")
+    .doc(req.body.requestingUID + ' ' + req.body.requestedUID )
+        .set({
+            friendRequesting: req.body.requestingUID,
+            friendRequested: req.body.requestedUID,
+            accepted: false
+        })
+})
 
 //linking goal to user
 app.post('/link_user_goal', function(req, res) {
@@ -33,6 +43,24 @@ app.post('/post_goal', function(req, res) {
             goal_dates: req.body.goalDates,
             goal_units: req.body.goalUnits,
             goal_repeat: req.body.goalRepeat
+        })
+})
+
+app.post('/set_user_info', function(req, res) {
+  db.collection("users")
+    .doc(req.body.uid)
+        .set({
+            username: req.body.username,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            birthDate: req.body.birthDate
+        })
+})
+
+app.post('/set_public_uid', function(req, res) {
+  db.collection("usernames")
+    .doc(req.body.username)
+        .set({
         })
 })
 
@@ -58,6 +86,35 @@ app.get('/get_all_goal_ids', function(req, res) {
        })
        console.log(ids);
        res.send(JSON.stringify({goal_ids: ids}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
+app.get('/get_all_usernames', function(req, res) {
+  var usernames = [];
+  //console.log(db.collection('usernames').get());
+  var goal = db.collection('usernames').get().then(querySnapshot => {
+       querySnapshot.forEach((doc) => {
+            usernames.push(doc.id);
+            //console.log(doc.id);
+       })
+       console.log(usernames);
+       res.send(JSON.stringify({users: usernames}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
+app.get('/get_username', function(req, res) {
+
+  var usernames = "";
+  //console.log(db.collection('usernames').get());
+  var goal = db.collection('users').doc(req.header("uid")).get().then(querySnapshot => {
+       console.log(querySnapshot.data())
+       usernames = querySnapshot.data().username
+       console.log(usernames);
+       res.send(JSON.stringify({user: usernames}));
 
       //console.log(querySnapshot.data().goal_name)
     })

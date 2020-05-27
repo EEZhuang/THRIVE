@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'dart:convert';import 'package:thrive/services/database.dart';
+
 
 class Search extends StatefulWidget {
   final Function toggleHome;
@@ -19,6 +20,8 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  final DatabaseService _db = DatabaseService();
+
 
   //String
   String query = '';
@@ -96,8 +99,16 @@ class _SearchState extends State<Search> {
   }
 
   // condition to search for uid for each user
-  controlSearching(String str) {
-    // TODO: Future<QuerySnapshot> allUsers;
+  controlSearching(String str) async {
+    print("hi");
+    FirebaseUser result = await _auth.getCurrentUser();
+    List<String> usernames = await _db.getAllUsernames(result.uid);
+    print("hello");
+
+    for( int i = 0; i < usernames.length; i++) {
+      tempUsers[i] = TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg");
+    }
+
     List<TempUser> queryTempUsers = [];
     for (int i = 0; i < tempUsers.length; i++) {
       TempUser tempUser = tempUsers[i];
@@ -232,7 +243,38 @@ class UserResult extends StatelessWidget {
         child: Column(
           children: <Widget>[
             GestureDetector(
-              onTap: () => print("tapped"), // TODO: profile page can go here
+              onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) =>
+                  new AlertDialog(
+                    title: new Text('Add Friend'),
+                    content: new Text(
+                        'Do you want to send a friend request to this user?'),
+                    actions: <Widget>[
+                      new FlatButton(
+                        onPressed: () =>
+                            Navigator.of(context).pop(false),
+                        child: new Text('No'),
+                      ),
+                      new FlatButton(
+                        onPressed: () async {
+                          final AuthService _auth = AuthService();
+                          final DatabaseService _db = DatabaseService();
+                          // TODO: pass user as parameter from Wrapper()
+                          FirebaseUser result = await _auth.getCurrentUser();
+                          String requestingUID = await _db.getUsername(result.uid);
+
+                          _db.linkFriends(requestingUID, eachUser.name, "false");
+
+                          Navigator.of(context).pop(false);
+                        },
+                        child: new Text('Yes'),
+                      ),
+                    ],
+                  )
+                );
+              }, // TODO: profile page can go here
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.black,
@@ -266,3 +308,4 @@ class TempUser {
     );
   }
 }
+
