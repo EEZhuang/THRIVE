@@ -94,8 +94,6 @@ class _SearchState extends State<Search> {
         "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg")
   ];
 
-
-
   emptyTheTextFormField() {
     searchTextEditingController.clear();
   }
@@ -110,7 +108,6 @@ class _SearchState extends State<Search> {
     for( int i = 0; i < usernames.length; i++) {
       tempUsers[i] = TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg");
     }
-
 
     List<TempUser> queryTempUsers = [];
     for (int i = 0; i < tempUsers.length; i++) {
@@ -311,3 +308,4 @@ class TempUser {
     );
   }
 }
+
