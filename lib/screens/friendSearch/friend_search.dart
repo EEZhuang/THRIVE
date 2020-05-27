@@ -94,6 +94,8 @@ class _SearchState extends State<Search> {
         "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg")
   ];
 
+
+
   emptyTheTextFormField() {
     searchTextEditingController.clear();
   }
@@ -244,7 +246,38 @@ class UserResult extends StatelessWidget {
         child: Column(
           children: <Widget>[
             GestureDetector(
-              onTap: () => print("tapped"), // TODO: profile page can go here
+              onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) =>
+                  new AlertDialog(
+                    title: new Text('Add Friend'),
+                    content: new Text(
+                        'Do you want to send a friend request to this user?'),
+                    actions: <Widget>[
+                      new FlatButton(
+                        onPressed: () =>
+                            Navigator.of(context).pop(false),
+                        child: new Text('No'),
+                      ),
+                      new FlatButton(
+                        onPressed: () async {
+                          final AuthService _auth = AuthService();
+                          final DatabaseService _db = DatabaseService();
+                          // TODO: pass user as parameter from Wrapper()
+                          FirebaseUser result = await _auth.getCurrentUser();
+                          String requestingUID = await _db.getUsername(result.uid);
+
+                          _db.linkFriends(requestingUID, eachUser.name, "false");
+
+                          Navigator.of(context).pop(false);
+                        },
+                        child: new Text('Yes'),
+                      ),
+                    ],
+                  )
+                );
+              }, // TODO: profile page can go here
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.black,

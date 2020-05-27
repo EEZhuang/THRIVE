@@ -13,6 +13,16 @@ var auth = require("firebase/auth");
 var app = express()
 app.use(bodyParser.json())
 
+//Linking Users Friends
+app.post('/link_friends', function(req, res) {
+  db.collection("connections")
+    .doc(req.body.requestingUID + ' ' + req.body.requestedUID )
+        .set({
+            friendRequesting: req.body.requestingUID,
+            friendRequested: req.body.requestedUID,
+            accepted: false
+        })
+})
 
 //linking goal to user
 app.post('/link_user_goal', function(req, res) {
@@ -91,6 +101,20 @@ app.get('/get_all_usernames', function(req, res) {
        })
        console.log(usernames);
        res.send(JSON.stringify({users: usernames}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
+app.get('/get_username', function(req, res) {
+
+  var usernames = "";
+  //console.log(db.collection('usernames').get());
+  var goal = db.collection('users').doc(req.header("uid")).get().then(querySnapshot => {
+       console.log(querySnapshot.data())
+       usernames = querySnapshot.data().username
+       console.log(usernames);
+       res.send(JSON.stringify({user: usernames}));
 
       //console.log(querySnapshot.data().goal_name)
     })

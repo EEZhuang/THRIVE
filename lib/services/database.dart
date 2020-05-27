@@ -5,6 +5,22 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DatabaseService {
+
+  //HTTP Request to Add Friends
+  void linkFriends(String requestingUID, String requestedUID, String accepted) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/link_friends',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'requestingUID': requestingUID,
+        'requestedUID': requestedUID,
+        'accepted': accepted
+      }),
+    );
+  }
+
   // Makes HTTP request passing uid and goal in body
   void linkUserGoal(String uid, String goalID) async {
     http.Response response = await http.post(
@@ -79,7 +95,7 @@ class DatabaseService {
 
 
     Map<String, dynamic> json = await jsonDecode(response.body);
-    print(json);
+    //print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> usernames = json['users'].cast<String>();
     print(usernames);
@@ -108,6 +124,26 @@ class DatabaseService {
     }
     return goalList;
   }
+
+  Future<String> getUsername(String uid) async {
+    //get user doc ids
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_username',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'uid' : uid,
+      },
+    );
+
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    print(json);
+    //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
+    String username = json['user'];
+    print(username);
+
+    return username;
+  }
+
   // helper method
   Future <Goal> getGoal(String goalID) async {
     http.Response response = await http.get(
