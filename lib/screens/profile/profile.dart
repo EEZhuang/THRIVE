@@ -4,6 +4,7 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'profile_goal_list.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 // "User home page", screen useer sees after successful login
 class Profile extends StatefulWidget {
@@ -25,11 +26,18 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Profile"),
+        title: Text("My Profile",
+            style: TextStyle(
+                fontFamily: 'proxima',
+                fontWeight: FontWeight.bold,
+                fontSize: 30)),
+        centerTitle: true,
+        backgroundColor: ThriveColors.DARK_GREEN,
       ),
       body: GoalList(currUser: widget.currUser),
 
       // Button to signout and return to signin page
+      /**
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
@@ -37,6 +45,7 @@ class _ProfileState extends State<Profile> {
           //print(_auth.getCurrentUser());
         },
       ),
+          **/
     );
   }
 }

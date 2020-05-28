@@ -6,6 +6,7 @@ import 'package:thrive/services/auth.dart';
 import 'package:thrive/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/shared/loading.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 import 'profile_goal_tile.dart';
 
@@ -39,37 +40,38 @@ class _GoalListState extends State<GoalList> {
     var goals = [];
     var ids = [];
     var goalMap = {};
-    return FutureBuilder<dynamic>(
-        future: _db.getAllUserGoals(widget.currUser.uid),
-        builder: (context, AsyncSnapshot snapshot) {
-          goals = [];
-          ids = [];
-          goalMap = {};
-          if (snapshot.hasData) {
-            goalMap = snapshot.data;
-            goalMap.forEach((k, v) => goals.add(v));
-            goalMap.forEach((k, v) => ids.add(k));
-            print(goals[0].goal);
-            print("oop we here");
-            return ListView.builder(
-              itemCount: goals.length,
-              itemBuilder: (context, index) {
-                print(goals.length);
-                print(goals[index]);
-                return GoalTile(
-                  goal: goals[index],
-                  id: ids[index],
-                  updateTile: updateTile,
+    double width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        body: FutureBuilder<dynamic>(
+            future: _db.getAllUserGoals(widget.currUser.uid),
+            builder: (context, AsyncSnapshot snapshot) {
+              goals = [];
+              ids = [];
+              goalMap = {};
+              if (snapshot.hasData) {
+                goalMap = snapshot.data;
+                goalMap.forEach((k, v) => goals.add(v));
+                goalMap.forEach((k, v) => ids.add(k));
+                return ListView.builder(
+                  itemCount: goals.length,
+                  itemBuilder: (context, index) {
+                    print(goals.length);
+                    print(goals[index]);
+                    return GoalTile(
+                      goal: goals[index],
+                      id: ids[index],
+                      updateTile: updateTile,
+                    );
+                  },
                 );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
-            print("Here");
-            return Loading();
-          }
-        });
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              } else {
+                print("Here");
+                return Loading();
+              }
+            }));
   }
 }
 

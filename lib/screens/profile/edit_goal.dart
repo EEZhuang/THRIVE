@@ -232,6 +232,9 @@ class _EditGoalState extends State<EditGoal> {
                                               }
 
                                               Navigator.of(context).pop(true);
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop('dialog');
                                             },
                                             child: new Text('Yes'),
                                           ),
