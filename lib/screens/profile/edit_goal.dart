@@ -149,7 +149,7 @@ class _EditGoalState extends State<EditGoal> {
                                       });
                                     },
                                   ),
-                                  SizedBox(height: 100),
+                                  SizedBox(height: 20),
                                   RaisedButton(
                                     child: Text("Submit changes"),
                                     onPressed:(){
@@ -191,6 +191,15 @@ class _EditGoalState extends State<EditGoal> {
                                       }
 
                                     }
+                                  ),
+                                  SizedBox(height: 100.0),
+
+                                  RaisedButton(
+                                    child: Text('Delete goal'),
+                                    onPressed: () async{
+
+                                     },
+                                    color: Colors.red,
                                   )
 
 
