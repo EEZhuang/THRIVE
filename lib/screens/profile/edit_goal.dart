@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:thrive/models/goal.dart';
+import 'package:thrive/services/database.dart';
+import 'package:thrive/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditGoal extends StatefulWidget {
   final Goal goal;
+  final String id;
 
-  EditGoal({this.goal});
+  EditGoal({this.goal, this.id});
 
   @override
   _EditGoalState createState() => _EditGoalState();
@@ -26,6 +30,8 @@ class _EditGoalState extends State<EditGoal> {
   String _goalDeadline = '';
 
   final _formkey = GlobalKey<FormState>();
+  final AuthService _auth = AuthService();
+  final DatabaseService _db = DatabaseService();
 
 
   @override
@@ -62,12 +68,23 @@ class _EditGoalState extends State<EditGoal> {
                                   SizedBox(height: 20),
                                   TextFormField(
                                     initialValue: goal_name,
+                                    validator: (value) {
+                                        if (value.isEmpty){
+                                          return "Please set a name for your goal";
+                                        }
+                                        goal_name = value;
+                                        return null;
+                                        },
                                     decoration: new InputDecoration(
                                         hintText: "Goal Name"),
                                   ),
                                   SizedBox(height: 20.0),
                                   TextFormField(
                                     initialValue: goalUnits,
+                                      validator: (value) {
+                                        goalUnits = value;
+                                        return null;
+                                      },
                                     decoration: new InputDecoration(
                                         hintText: "How Many Units(Optional)"),
                                   ),
@@ -100,7 +117,6 @@ class _EditGoalState extends State<EditGoal> {
                                               validator: (value) {
                                                 if (value.isEmpty){
                                                   return "Please set a deadline for your goal";
-
                                                 }
                                                 goalDate = value;
                                                 _goalDeadline = value;
@@ -144,7 +160,7 @@ class _EditGoalState extends State<EditGoal> {
                                           new AlertDialog(
                                             title: new Text('Create Goal'),
                                             content: new Text(
-                                                'Do you want to create this goal?'),
+                                                'Do you want to edit this goal?'),
                                             actions: <Widget>[
                                               new FlatButton(
                                                 onPressed: () =>
@@ -155,6 +171,15 @@ class _EditGoalState extends State<EditGoal> {
                                                 // TODO: Process data and make http request
                                                 onPressed: () async {
                                                   //hashing
+                                                  FirebaseUser result = await _auth.getCurrentUser();
+
+                                                  // If there is a current user logged in, make HTTP request
+                                                  if (result != null) {
+                                                    print(result.uid);
+                                                    print(goal_name);
+                                                    print(goalUnits);
+                                                    _db.postGoal(goal_name, widget.id, goalUnits, goalDate, goalRepeat);
+                                                  }
 
                                                   Navigator.of(context).pop(true);
                                                 },

@@ -25,6 +25,7 @@ class _GoalListState extends State<GoalList> {
   AuthService _auth = AuthService();
   DatabaseService _db = DatabaseService();
   var goals = [];
+  var ids = [];
   var goalMap = {};
 
   @override
@@ -35,13 +36,14 @@ class _GoalListState extends State<GoalList> {
           if (snapshot.hasData) {
             goalMap =  snapshot.data;
             goalMap.forEach((k,v) => goals.add(v));
+            goalMap.forEach((k,v) => ids.add(k));
             print(widget.currUser);
             return ListView.builder(
               itemCount: goals.length,
               itemBuilder: (context, index){
                 print(goals.length);
                 print(goals[index]);
-                return GoalTile(goal: goals[index]);
+                return GoalTile(goal: goals[index], id: ids[index]);
               },
             );
           } else if (snapshot.hasError) {
