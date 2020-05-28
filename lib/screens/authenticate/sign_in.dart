@@ -37,10 +37,10 @@ class _SignInState extends State<SignIn>{
       body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [const Color(0xFFC2EAC6), const Color(0xFF69A297), const Color(0xFF080F0F)],
+              colors: [const Color(0xFF69A297), const Color(0xFF27353F)],
               begin: Alignment.topCenter,
-              end: Alignment(.7, -.7),
-              //end: Alignment.bottomCenter,
+              end: Alignment.bottomCenter,
+              //end: Alignment(.7, -.7),
               //end: Alignment(-.7, -.7)
               //end: Alignment(-1.05, -.5)
               //end: Alignment(1.05, -.5),
@@ -100,66 +100,68 @@ class _SignInState extends State<SignIn>{
                               )),
                         ],
                       ),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: <Widget> [
-                            SizedBox(height: 20.0),
-                            TextFormField(
-                                decoration:textInputDecoration.copyWith(hintText:  'Email'),
-                                validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget> [
+                              SizedBox(height: 20.0),
+                              TextFormField(
+                                  decoration:textInputDecoration.copyWith(hintText:  'Email'),
+                                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                                  onChanged: (val){
+                                    setState(() {
+                                      email = val;
+                                    });
+                                  }
+                              ),
+                              SizedBox(height: 20.0),
+                              TextFormField(
+                                decoration:textInputDecoration.copyWith(hintText: 'Password'),
+                                validator: (val) => val.length < 6 ? 'Enter a password (6+ characters long)' : null,
                                 onChanged: (val){
                                   setState(() {
-                                    email = val;
+                                    password = val;
                                   });
-                                }
-                            ),
-                            SizedBox(height: 20.0),
-                            TextFormField(
-                              decoration:textInputDecoration.copyWith(hintText: 'Password'),
-                              validator: (val) => val.length < 6 ? 'Enter a password 6+ characters long' : null,
-                              onChanged: (val){
-                                setState(() {
-                                  password = val;
-                                });
-                              },
-                              obscureText: true ,
-                            ),
-                            SizedBox(height: 20.0),
-                            RaisedButton(
-                                color: ThriveColors.WHITE,
-                                splashColor: ThriveColors.DARK_ORANGE,
-                                child: Text('Sign in'),
-                                onPressed: () async {
-                                  if(_formKey.currentState.validate()){
-                                    setState(() => loading = true);
-                                    dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                                    //print("result here" + result);
-                                    if(result == null) {
-                                      setState(() {
-                                        loading = false;
-                                        error = 'Could not sign in with those credentials';
-                                      });
-                                    } else {
-                                      print("here");
-                                      widget.toggleState(1);
-                                      print("home toggled");
+                                },
+                                obscureText: true ,
+                              ),
+                              SizedBox(height: 20.0),
+                              RaisedButton(
+                                  color: ThriveColors.WHITE,
+                                  splashColor: ThriveColors.DARK_ORANGE,
+                                  child: Text('Sign in'),
+                                  onPressed: () async {
+                                    if(_formKey.currentState.validate()){
+                                      setState(() => loading = true);
+                                      dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                                      //print("result here" + result);
+                                      if(result == null) {
+                                        setState(() {
+                                          loading = false;
+                                          error = 'Could not sign in with those credentials';
+                                        });
+                                      } else {
+                                        print("here");
+                                        widget.toggleState(1);
+                                        print("home toggled");
+                                      }
                                     }
                                   }
-                                }
-                            ),
-                            FlatButton(onPressed: (){
-                              widget.toggleView();
-                            },
-                                child: Text('Forgot Password?',
-                                  style: TextStyle(
-                                    color: ThriveColors.WHITE,
-                                    fontSize: 15,
-                                    fontFamily: 'Proxima',
-                                  ),
-                                )),
-                            SizedBox(height: 12.0),
-                            Text( error, style: TextStyle(color: Colors.red) ),
-                          ],
+                              ),
+                              FlatButton(onPressed: (){
+                                widget.toggleView();
+                              },
+                                  child: Text('Forgot Password?',
+                                    style: TextStyle(
+                                      color: ThriveColors.WHITE,
+                                      fontSize: 15,
+                                      fontFamily: 'Proxima',
+                                    ),
+                                  )),
+                              SizedBox(height: 12.0),
+                              Text( error, style: TextStyle(color: Colors.red) ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
