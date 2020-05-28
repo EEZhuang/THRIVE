@@ -105,7 +105,7 @@ class DatabaseService {
   Future <List<Goal>> getAllUserGoals(String uid) async {
     //get user doc ids
     http.Response response = await http.get(
-      'http://10.0.2.2:3000/get_all_usernames',
+      'http://10.0.2.2:3000/get_all_goal_ids',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'uid' : uid,

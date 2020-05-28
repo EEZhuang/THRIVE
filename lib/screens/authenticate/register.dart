@@ -224,7 +224,7 @@ class _RegisterState extends State<Register>{
                               print(username + firstname + lastname + birthdate);
                               _db.setUserInfo(result.uid, username, firstname, lastname, birthdate);
                               _db.setPublicUid(username);
-                              widget.toggleState(1);
+                              widget.toggleHome();
                             }
                           }
                         }
