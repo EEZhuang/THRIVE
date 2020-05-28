@@ -41,7 +41,7 @@ class _GoalListState extends State<GoalList> {
     var goals = [];
     var ids = [];
     var goalMap = {};
-    var repeatGoals = {};
+
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: ThriveColors.TRANSPARENT_BLACK,
