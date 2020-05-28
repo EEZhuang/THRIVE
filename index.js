@@ -53,7 +53,8 @@ app.post('/post_goal', function(req, res) {
             goal_name: req.body.goal,
             goal_dates: req.body.goalDates,
             goal_units: req.body.goalUnits,
-            goal_repeat: req.body.goalRepeat
+            goal_repeat: req.body.goalRepeat,
+            goal_progress: req.body.goalProgress
         })
 })
 
@@ -81,7 +82,8 @@ app.get('/get_goal', function(req, res) {
     res.send(JSON.stringify({goal_name: querySnapshot.data().goal_name,
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,
-                             goal_repeat: querySnapshot.data().goal_repeat}))
+                             goal_repeat: querySnapshot.data().goal_repeat,
+                             goal_progress: querySnapshot.data().goal_progress}))
   })
   //console.log(goal)
   //res.end(JSON.stringify({userGoal: 'test'}))

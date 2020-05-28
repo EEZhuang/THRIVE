@@ -10,12 +10,9 @@ import 'FriendReturn.dart';
 import 'collaborators.dart';
 import 'dart:math';
 
-
-
 class CreateGoal extends StatefulWidget {
   @override
   _CreateGoalState createState() => _CreateGoalState();
-
 }
 
 class _CreateGoalState extends State<CreateGoal> {
@@ -33,30 +30,31 @@ class _CreateGoalState extends State<CreateGoal> {
   String goalID = '';
   String goalUnits = '';
   String goalDate = '';
-  String goalRepeat =  "Don't Repeat";
+  String goalRepeat = "Don't Repeat";
+  String goalProgress = "0";
 
   //List<String> collabList;
   var collabText = TextEditingController();
 
   Future<bool> _onWillPop() {
     return (showDialog(
-      context: context,
-      builder: (context) =>
-      new AlertDialog(
-        title: new Text('Discard Goal'),
-        content: new Text('Do you want to delete this goal?'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Discard Goal'),
+            content: new Text('Do you want to delete this goal?'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: new Text('Yes'),
+              ),
+            ],
           ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    )) ?? false;
+        )) ??
+        false;
   }
 
   @override
@@ -66,22 +64,19 @@ class _CreateGoalState extends State<CreateGoal> {
       child: Scaffold(
           appBar: AppBar(
             title: Text(
-              "Create a Goal", style: TextStyle(fontFamily: 'COMIC_SANS'),),
+              "Create a Goal",
+              style: TextStyle(fontFamily: 'COMIC_SANS'),
+            ),
           ),
           body: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 50
-            ),
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
             child: Form(
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
                     SizedBox(height: 20.0),
                     TextFormField(
-                      decoration: new InputDecoration(
-                          hintText: "Goal Name"
-                      ),
+                      decoration: new InputDecoration(hintText: "Goal Name"),
                       validator: (value) {
                         if (value.isEmpty) {
                           return "Please enter a name for your goal";
@@ -93,8 +88,7 @@ class _CreateGoalState extends State<CreateGoal> {
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration: new InputDecoration(
-                          hintText: "How Many Units(Optional)"
-                      ),
+                          hintText: "How Many Units(Optional)"),
                       validator: (value) {
                         if (value.isEmpty) {
                           goalUnits = '0'; //goal has no units
@@ -108,11 +102,12 @@ class _CreateGoalState extends State<CreateGoal> {
                     InkWell(
                         onTap: () {
                           showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2018),
-                              lastDate: DateTime.now().add(Duration(days: 365))
-                          ).then((date) {
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2018),
+                                  lastDate:
+                                      DateTime.now().add(Duration(days: 365)))
+                              .then((date) {
                             setState(() {
                               _goalDeadline =
                                   DateFormat('yyyy-MM-dd').format(date);
@@ -123,8 +118,7 @@ class _CreateGoalState extends State<CreateGoal> {
                         child: IgnorePointer(
                             child: new TextFormField(
                                 decoration: new InputDecoration(
-                                    hintText: "Goal Deadline"
-                                ),
+                                    hintText: "Goal Deadline"),
                                 controller: dateText,
                                 validator: (value) {
                                   if (value.isEmpty) {
@@ -132,10 +126,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                   }
                                   goalDate = value;
                                   return null;
-                                }
-                            )
-                        )
-                    ),
+                                }))),
                     SizedBox(height: 20.0),
                     DropdownButton<String>(
                       hint: Text("Repeat"),
@@ -167,24 +158,20 @@ class _CreateGoalState extends State<CreateGoal> {
                         child: IgnorePointer(
                           child: new TextFormField(
                             decoration: new InputDecoration(
-                                hintText: "Collaborators(Optional)"
-                            ),
+                                hintText: "Collaborators(Optional)"),
                             controller: collabText,
                           ),
-                        )
-                    ),
-
+                        )),
                     SizedBox(height: 20.0),
                     RaisedButton(
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                            new AlertDialog(
+                            builder: (context) => new AlertDialog(
                               title: new Text('Create Goal'),
-                              content: new Text(
-                                  'Do you want to create this goal?'),
+                              content:
+                                  new Text('Do you want to create this goal?'),
                               actions: <Widget>[
                                 new FlatButton(
                                   onPressed: () =>
@@ -200,13 +187,15 @@ class _CreateGoalState extends State<CreateGoal> {
                                     goalID = goal + rand.toString();
 
                                     // TODO: pass user as parameter from Wrapper()
-                                    FirebaseUser result = await _auth.getCurrentUser();
+                                    FirebaseUser result =
+                                        await _auth.getCurrentUser();
 
                                     // If there is a current user logged in, make HTTP request
                                     if (result != null) {
                                       print(result.uid);
                                       _db.linkUserGoal(result.uid, goalID);
-                                      _db.postGoal(goal, goalID, goalUnits, goalDate, goalRepeat);
+                                      _db.postGoal(goal, goalID, goalUnits,
+                                          goalDate, goalRepeat, goalProgress);
                                     }
                                     print(goal);
                                     Navigator.of(context).pop(true);
@@ -221,10 +210,8 @@ class _CreateGoalState extends State<CreateGoal> {
                       child: Text("Create Goal"),
                     )
                   ],
-                )
-            ),
-          )
-      ),
+                )),
+          )),
     );
   }
 

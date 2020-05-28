@@ -7,7 +7,6 @@ import 'package:thrive/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/shared/loading.dart';
 
-
 import 'profile_goal_tile.dart';
 
 class GoalList extends StatefulWidget {
@@ -17,11 +16,18 @@ class GoalList extends StatefulWidget {
 
   @override
   _GoalListState createState() => _GoalListState();
-
-
 }
 
 class _GoalListState extends State<GoalList> {
+  bool updateVal = false;
+
+  void updateTile() {
+    setState(() {
+      //_db.getAllUserGoals(widget.currUser.uid);
+      updateVal = !updateVal;
+    });
+  }
+
   AuthService _auth = AuthService();
   DatabaseService _db = DatabaseService();
   var goals = [];
@@ -30,20 +36,31 @@ class _GoalListState extends State<GoalList> {
 
   @override
   Widget build(BuildContext context) {
+    var goals = [];
+    var ids = [];
+    var goalMap = {};
     return FutureBuilder<dynamic>(
         future: _db.getAllUserGoals(widget.currUser.uid),
         builder: (context, AsyncSnapshot snapshot) {
+          goals = [];
+          ids = [];
+          goalMap = {};
           if (snapshot.hasData) {
-            goalMap =  snapshot.data;
-            goalMap.forEach((k,v) => goals.add(v));
-            goalMap.forEach((k,v) => ids.add(k));
-            print(widget.currUser);
+            goalMap = snapshot.data;
+            goalMap.forEach((k, v) => goals.add(v));
+            goalMap.forEach((k, v) => ids.add(k));
+            print(goals[0].goal);
+            print("oop we here");
             return ListView.builder(
               itemCount: goals.length,
-              itemBuilder: (context, index){
+              itemBuilder: (context, index) {
                 print(goals.length);
                 print(goals[index]);
-                return GoalTile(goal: goals[index], id: ids[index]);
+                return GoalTile(
+                  goal: goals[index],
+                  id: ids[index],
+                  updateTile: updateTile,
+                );
               },
             );
           } else if (snapshot.hasError) {
@@ -52,16 +69,11 @@ class _GoalListState extends State<GoalList> {
             print("Here");
             return Loading();
           }
-
-
-
-
-        }
-    );
+        });
   }
 }
 
-    /**
+/**
     dynamic goal = await _db.getUserGoal(widget.currUser.uid);
 
     var goal1 = new Goal();

@@ -7,7 +7,6 @@ import 'profile_goal_list.dart';
 
 // "User home page", screen useer sees after successful login
 class Profile extends StatefulWidget {
-
   final FirebaseUser currUser;
   Profile({this.currUser});
   @override
@@ -21,20 +20,6 @@ class _ProfileState extends State<Profile> {
 
   //String
   String goal = '';
-
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
-      }),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
