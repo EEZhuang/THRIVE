@@ -24,7 +24,8 @@ class GoalList extends StatefulWidget {
 class _GoalListState extends State<GoalList> {
   AuthService _auth = AuthService();
   DatabaseService _db = DatabaseService();
-  final goals = [];
+  var goals = [];
+  var goalMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,8 @@ class _GoalListState extends State<GoalList> {
         future: _db.getAllUserGoals(widget.currUser.uid),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            final goals =  snapshot.data;
+            goalMap =  snapshot.data;
+            goalMap.forEach((k,v) => goals.add(v));
             print(widget.currUser);
             return ListView.builder(
               itemCount: goals.length,

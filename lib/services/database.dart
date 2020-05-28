@@ -102,7 +102,7 @@ class DatabaseService {
     return usernames;
   }
 
-  Future <List<Goal>> getAllUserGoals(String uid) async {
+  Future <Map<String,Goal>> getAllUserGoals(String uid) async {
     //get user doc ids
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_all_goal_ids',
@@ -112,7 +112,7 @@ class DatabaseService {
       },
     );
 
-    List<Goal> goalList = List<Goal>();
+    Map<String,Goal> goalList = Map<String,Goal>();
     Map<String, dynamic> json = await jsonDecode(response.body);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> goal_ids = json['goal_ids'].cast<String>();
@@ -120,7 +120,7 @@ class DatabaseService {
     for (var id in goal_ids){
       Goal temp = await getGoal(id);
       print(temp.goalUnits);
-      goalList.add(temp);
+      goalList[id] = temp;
     }
     return goalList;
   }
