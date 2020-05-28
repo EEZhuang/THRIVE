@@ -49,7 +49,7 @@ class _EditGoalState extends State<EditGoal> {
               return StatefulBuilder(
                   builder: (context, setState) {
                     return new AlertDialog(
-                        title: new Text('Edit Goal'),
+                        title: Center(child: new Text('Edit Goal')),
                         content: new Container(
                           width: 400,
                           padding: EdgeInsets.symmetric(
@@ -133,6 +133,40 @@ class _EditGoalState extends State<EditGoal> {
                                       });
                                     },
                                   ),
+                                  SizedBox(height: 100),
+                                  RaisedButton(
+                                    child: Text("Submit changes"),
+                                    onPressed:(){
+                                      if (_formkey.currentState.validate()){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                          new AlertDialog(
+                                            title: new Text('Create Goal'),
+                                            content: new Text(
+                                                'Do you want to create this goal?'),
+                                            actions: <Widget>[
+                                              new FlatButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(false),
+                                                child: new Text('No'),
+                                              ),
+                                              new FlatButton(
+                                                // TODO: Process data and make http request
+                                                onPressed: () async {
+                                                  //hashing
+
+                                                  Navigator.of(context).pop(true);
+                                                },
+                                                child: new Text('Yes'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+
+                                    }
+                                  )
 
 
                                 ],
