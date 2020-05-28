@@ -29,7 +29,7 @@ class GoalTile extends StatelessWidget{
                   radius: 25,
                   backgroundColor: Colors.green[100],
                 ),
-                title: Text(goal.name),
+                title: Text(goal.goal),
                 subtitle: Text(goal.goal),
             ),
             //color: Color(0xFFf0ffed),

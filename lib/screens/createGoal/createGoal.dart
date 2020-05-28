@@ -4,12 +4,9 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
-<<<<<<< HEAD
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
-=======
 import 'package:thrive/services/database.dart';
->>>>>>> f0b9aac97e72ac179ff3defe9c1bbb011b10fd14
 
 import 'FriendReturn.dart';
 import 'collaborators.dart';
