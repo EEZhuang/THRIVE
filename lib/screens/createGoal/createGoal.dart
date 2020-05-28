@@ -66,436 +66,224 @@ class _CreateGoalState extends State<CreateGoal> {
       resizeToAvoidBottomPadding: false,
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
-              decoration: BoxDecoration(
-                  color: ThriveColors.DARK_GREEN,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(40.0),
-                    bottomLeft: Radius.circular(40.0),
-                  )),
-              height: 275,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              child: Column(
-                children: <Widget>[
-                  //MyBackButton(),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Create new goal',
-                        style: ThriveFonts.HEADING,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          MyTextField(label: 'Goal'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Expanded(
-                                child: Theme(
-                                  data: Theme.of(context).copyWith(
-                                    textTheme: TextTheme(
-                                      subhead: ThriveFonts.BODY_WHITE,
-                                    ),
-                                  ),
-                                  child: InkWell(
-                                      onTap: () {
-                                        showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2018),
-                                            lastDate: DateTime.now()
-                                                .add(Duration(days: 365)))
-                                            .then((date) {
-                                          setState(() {
-                                            _goalDeadline =
-                                                DateFormat('yyyy-MM-dd')
-                                                    .format(date);
-                                            dateText.text = _goalDeadline;
-                                          });
-                                        });
-                                      },
-                                      child: IgnorePointer(
-                                          child: new TextFormField(
-                                              decoration: InputDecoration(
-                                                  labelText: "Goal Deadline",
-                                                  labelStyle: ThriveFonts
-                                                      .SUBHEADING_WHITE,
-                                                  suffixIcon: IconButton(
-                                                    icon: Icon(
-                                                      Icons.calendar_today,
-                                                      color: ThriveColors
-                                                          .DARK_GRAY,
-                                                    ),
-                                                  ),
-                                                  focusedBorder:
-                                                  UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: ThriveColors
-                                                              .LIGHT_GREEN)),
-                                                  enabledBorder:
-                                                  UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: ThriveColors
-                                                              .LIGHT_GREEN)),
-                                                  border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color:
-                                                          ThriveColors.WHITE))),
-                                              controller: dateText,
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return "Please set a deadline for your goal";
-                                                }
-                                                return null;
-                                              }))),
-                                ),
-                              ),
-                              //HomePage.calendarIcon(),
-                            ],
-                          )
-                        ],
-                      ))
-                ],
-              ),
-            ),
-            Expanded(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                              child: MyTextField(
-                                label: 'Units',
-                                //icon: downwardIcon,
-                              )),
-                          SizedBox(width: 40),
-                          Theme(
-                            data: Theme.of(context).copyWith(
-                              canvasColor: ThriveColors.DARK_GREEN,
-                            ),
-                            child: DropdownButton<String>(
-                              itemHeight: 72,
-                              style: ThriveFonts.SUBHEADING_WHITE,
-                              hint: Text("Repeat"),
-                              focusColor: ThriveColors.LIGHT_GREEN,
-                              value: _selectedRepeat,
-                              items: <String>[
-                                "Don't Repeat",
-                                "Repeat Every Day",
-                                "Repeat Every Week",
-                                "Repeat Every Month",
-                                "Repeat Every Year"
-                              ].map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedRepeat = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        alignment: Alignment.topLeft,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+                decoration: BoxDecoration(
+                    color: ThriveColors.DARK_GREEN,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(40.0),
+                      bottomLeft: Radius.circular(40.0),
+                    )),
+                height: 275,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                child: Column(
+                  children: <Widget>[
+                    //MyBackButton(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Create new goal',
+                          style: ThriveFonts.HEADING,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              'Collaborators',
-                              style: ThriveFonts.SUBHEADING_WHITE,
-                            ),
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              //direction: Axis.vertical,
-                              alignment: WrapAlignment.start,
-                              verticalDirection: VerticalDirection.down,
-                              runSpacing: 0,
-                              //textDirection: TextDirection.rtl,
-                              spacing: 10.0,
-                              children: collabWidgets,
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.add_circle),
-                              iconSize: 35,
-                              color: ThriveColors.DARK_ORANGE,
-                              tooltip: 'Add friends as collaborators',
-                              onPressed: () {
-                                //print(collabText.text);
-                                //print(collabList);
-
-                                collabWidgets.clear();
-
-                                _getCollaborators(context);
-
-                                setState(() {
-
-                                });
-                              },
-                            ),
-
-                            /*
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              //direction: Axis.vertical,
-                              alignment: WrapAlignment.start,
-                              verticalDirection: VerticalDirection.down,
-                              runSpacing: 0,
-                              //textDirection: TextDirection.rtl,
-                              spacing: 10.0,
+                            MyTextField(label: 'Goal'),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
-                                Chip(
-                                  label: Text("Vas"),
-                                  backgroundColor: ThriveColors.WHITE,
-                                  labelStyle: ThriveFonts.BODY_DARK_GRAY,
+                                Expanded(
+                                  child: Theme(
+                                    data: Theme.of(context).copyWith(
+                                      textTheme: TextTheme(
+                                        subhead: ThriveFonts.BODY_WHITE,
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                        onTap: () {
+                                          showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2018),
+                                              lastDate: DateTime.now()
+                                                  .add(Duration(days: 365)))
+                                              .then((date) {
+                                            setState(() {
+                                              _goalDeadline =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(date);
+                                              dateText.text = _goalDeadline;
+                                            });
+                                          });
+                                        },
+                                        child: IgnorePointer(
+                                            child: new TextFormField(
+                                                decoration: InputDecoration(
+                                                    labelText: "Goal Deadline",
+                                                    labelStyle: ThriveFonts
+                                                        .SUBHEADING_WHITE,
+                                                    suffixIcon: IconButton(
+                                                      icon: Icon(
+                                                        Icons.calendar_today,
+                                                        color: ThriveColors
+                                                            .DARK_GRAY,
+                                                      ),
+                                                    ),
+                                                    focusedBorder:
+                                                    UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: ThriveColors
+                                                                .LIGHT_GREEN)),
+                                                    enabledBorder:
+                                                    UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: ThriveColors
+                                                                .LIGHT_GREEN)),
+                                                    border: UnderlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                            ThriveColors.WHITE))),
+                                                controller: dateText,
+                                                validator: (value) {
+                                                  if (value.isEmpty) {
+                                                    return "Please set a deadline for your goal";
+                                                  }
+                                                  return null;
+                                                }))),
+                                  ),
                                 ),
-                                Chip(
-                                  label: Text("Steve"),
-                                  backgroundColor: ThriveColors.DARK_ORANGE,
-                                  labelStyle: ThriveFonts.BODY_WHITE,
-                                ),
-                                Chip(
-                                  label: Text("Ed"),
-                                  backgroundColor: ThriveColors.WHITE,
-                                  labelStyle: ThriveFonts.BODY_DARK_GRAY,
-                                ),
-                                Chip(
-                                  label: Text("Is"),
-                                  backgroundColor: ThriveColors.WHITE,
-                                  labelStyle: ThriveFonts.BODY_DARK_GRAY,
-                                ),
-                                Chip(
-                                  label: Text("Sumi"),
-                                  backgroundColor: ThriveColors.WHITE,
-                                  labelStyle: ThriveFonts.BODY_DARK_GRAY,
-                                ),
+                                //HomePage.calendarIcon(),
                               ],
+                            )
+                          ],
+                        ))
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                                child: MyTextField(
+                                  label: 'Units',
+                                  //icon: downwardIcon,
+                                )),
+                            SizedBox(width: 40),
+                            Theme(
+                              data: Theme.of(context).copyWith(
+                                canvasColor: ThriveColors.DARK_GREEN,
+                              ),
+                              child: DropdownButton<String>(
+                                itemHeight: 72,
+                                style: ThriveFonts.SUBHEADING_WHITE,
+                                hint: Text("Repeat"),
+                                focusColor: ThriveColors.LIGHT_GREEN,
+                                value: _selectedRepeat,
+                                items: <String>[
+                                  "Don't Repeat",
+                                  "Repeat Every Day",
+                                  "Repeat Every Week",
+                                  "Repeat Every Month",
+                                  "Repeat Every Year"
+                                ].map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedRepeat = value;
+                                  });
+                                },
+                              ),
                             ),
-                            */
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                )),
-            Container(
-              height: 80,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      if (_formKey.currentState.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                          new AlertDialog(
-                            title: new Text('Create Goal'),
-                            content:
-                            new Text('Do you want to create this goal?'),
-                            actions: <Widget>[
-                              new FlatButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: new Text('No'),
+                        SizedBox(height: 20),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Collaborators',
+                                style: ThriveFonts.SUBHEADING_WHITE,
                               ),
-                              new FlatButton(
-                                // TODO: Process data and make http request
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                                child: new Text('Yes'),
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.start,
+                                //direction: Axis.vertical,
+                                alignment: WrapAlignment.start,
+                                verticalDirection: VerticalDirection.down,
+                                runSpacing: 0,
+                                //textDirection: TextDirection.rtl,
+                                spacing: 10.0,
+                                children: collabWidgets,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add_circle),
+                                iconSize: 35,
+                                color: ThriveColors.DARK_ORANGE,
+                                tooltip: 'Add friends as collaborators',
+                                onPressed: () {
+                                  //print(collabText.text);
+                                  //print(collabList);
+
+                                  collabWidgets.clear();
+
+                                  _getCollaborators(context);
+
+                                  setState(() {
+
+                                  });
+                                },
                               ),
                             ],
                           ),
-                        );
-                      }
-                    },
-                    child: Container(
-                      child: Text(
-                        'Create Goal',
-                        //style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18),
-                        style: ThriveFonts.HEADING2,
-                      ),
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 40,
-                      decoration: BoxDecoration(
-                        color: ThriveColors.LIGHT_GREEN,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                        )
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /*
-  Widget build(BuildContext context) {
-    return new WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(200),
-            child: AppBar(
-              title: Text("Create a Goal", style: ThriveFonts.HEADING),
-              backgroundColor: ThriveColors.DARK_GREEN,
-              centerTitle: true,
-            ),
-          ),
-          body: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 50
-            ),
-            child: Form(
-                key: _formKey,
-                child: Column(
+                  )),
+              Container(
+                height: 80,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      decoration: new InputDecoration(
-                          hintText: "Goal Name"
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return "Please enter a name for your goal";
-                        }
-                        goal = value; //assigns goal name for posting
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.0),
-                    TextFormField(
-                      decoration: new InputDecoration(
-                          hintText: "How Many Units(Optional)"
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          goalUnits = '0'; //goal has no units
-                          return null;
-                        }
-                        goalUnits = value; //assigns goal units for posting
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 20.0),
                     InkWell(
-                        onTap: () {
-                          showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2018),
-                              lastDate: DateTime.now().add(Duration(days: 365))
-                          ).then((date) {
-                            setState(() {
-                              _goalDeadline =
-                                  DateFormat('yyyy-MM-dd').format(date);
-                              dateText.text = _goalDeadline;
-                            });
-                          });
-                        },
-                        child: IgnorePointer(
-                            child: new TextFormField(
-                                decoration: new InputDecoration(
-                                    hintText: "Goal Deadline"
-                                ),
-                                controller: dateText,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Please set a deadline for your goal";
-                                  }
-                                  goalDate = value;
-                                  return null;
-                                }
-                            )
-                        )
-                    ),
-                    SizedBox(height: 20.0),
-                    DropdownButton<String>(
-                      hint: Text("Repeat"),
-                      value: _selectedRepeat,
-                      items: <String>[
-                        "Don't Repeat",
-                        "Repeat Every Day",
-                        "Repeat Every Week",
-                        "Repeat Every Month",
-                        "Repeat Every Year"
-                      ].map((String value) {
-                        return new DropdownMenuItem<String>(
-                          value: value,
-                          child: new Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedRepeat = value;
-                          goalRepeat = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 20.0),
-                    InkWell(
-                        onTap: () {
-                          _getCollaborators(context);
-                        },
-                        child: IgnorePointer(
-                          child: new TextFormField(
-                            decoration: new InputDecoration(
-                                hintText: "Collaborators(Optional)"
-                            ),
-                            controller: collabText,
-                          ),
-                        )
-                    ),
-
-                    SizedBox(height: 20.0),
-                    RaisedButton(
-                      onPressed: () {
+                      onTap: () {
                         if (_formKey.currentState.validate()) {
                           showDialog(
                             context: context,
                             builder: (context) =>
                             new AlertDialog(
                               title: new Text('Create Goal'),
-                              content: new Text(
-                                  'Do you want to create this goal?'),
+                              content:
+                              new Text('Do you want to create this goal?'),
                               actions: <Widget>[
                                 new FlatButton(
                                   onPressed: () =>
@@ -504,24 +292,8 @@ class _CreateGoalState extends State<CreateGoal> {
                                 ),
                                 new FlatButton(
                                   // TODO: Process data and make http request
-                                  onPressed: () async {
-                                    //hashing
-                                    final _random = new Random();
-                                    int rand = _random.nextInt(85311);
-                                    goalID = goal + rand.toString();
-
-                                    // TODO: pass user as parameter from Wrapper()
-                                    FirebaseUser result = await _auth.getCurrentUser();
-
-                                    // If there is a current user logged in, make HTTP request
-                                    if (result != null) {
-                                      print(result.uid);
-                                      _db.linkUserGoal(result.uid, goalID);
-                                      _db.postGoal(goal, goalID, goalUnits, goalDate, goalRepeat);
-                                    }
-                                    print(goal);
-                                    Navigator.of(context).pop(true);
-                                  },
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                   child: new Text('Yes'),
                                 ),
                               ],
@@ -529,17 +301,34 @@ class _CreateGoalState extends State<CreateGoal> {
                           );
                         }
                       },
-                      child: Text("Create Goal"),
-                    )
+                      child: Container(
+                        child: Text(
+                          'Create Goal',
+                          //style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18),
+                          style: ThriveFonts.HEADING2,
+                        ),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 40,
+                        decoration: BoxDecoration(
+                          color: ThriveColors.LIGHT_GREEN,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
                   ],
-                )
-            ),
-          )
+                ),
+              ),
+            ],
+          ),
+
+        ),
       ),
     );
   }
-
-   */
 
   _getCollaborators(BuildContext context) async {
     collabs = await Navigator.push(
