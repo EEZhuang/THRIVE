@@ -21,6 +21,9 @@ class GoalTile extends StatefulWidget {
 class _GoalTileState extends State<GoalTile> {
   @override
   Widget build(BuildContext context) {
+    DateTime realDate = DateTime.parse(widget.goal.goalDate);
+    DateTime now = new DateTime.now();
+    DateTime todayDate = new DateTime(now.year, now.month, now.day);
     // TODO: implement build
     return Padding(
         padding: EdgeInsets.only(top: 1.0),
@@ -52,9 +55,16 @@ class _GoalTileState extends State<GoalTile> {
               style: new TextStyle(
                   fontFamily: 'proxima',
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.0),
+                  fontSize: 20.0,
+                  color: realDate.isBefore(todayDate) ? ThriveColors.DARK_ORANGE : Colors.black,
+              ),
             ),
-            subtitle: Text(widget.goal.goalDate),
+            subtitle: Text(
+                widget.goal.goalDate,
+                style: new TextStyle(
+                  color: realDate.isBefore(todayDate) ? ThriveColors.DARK_ORANGE : ThriveColors.DARK_GRAY,
+                ),
+            ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
