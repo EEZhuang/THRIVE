@@ -12,8 +12,6 @@ import 'FriendReturn.dart';
 import 'collaborators.dart';
 import 'dart:math';
 
-
-
 class CreateGoal extends StatefulWidget {
   @override
   _CreateGoalState createState() => _CreateGoalState();
@@ -25,7 +23,7 @@ class _CreateGoalState extends State<CreateGoal> {
   var dateText = TextEditingController();
   var repeatText = TextEditingController();
   String _selectedRepeat = "Don't Repeat";
-  FriendReturn collabs = FriendReturn("", List.filled(3, false));
+  FriendReturn collabs = FriendReturn([], "", List.filled(3, false));
   final AuthService _auth = AuthService();
   final DatabaseService _db = DatabaseService();
 
@@ -34,10 +32,11 @@ class _CreateGoalState extends State<CreateGoal> {
   String goalID = '';
   String goalUnits = '';
   String goalDate = '';
-  String goalRepeat =  "Don't Repeat";
+  String goalRepeat = "Don't Repeat";
 
-  //List<String> collabList;
+  List<String> collabList = [];
   var collabText = TextEditingController();
+  var collabWidgets = List<Widget>();
 
   Future<bool> _onWillPop() {
     return (showDialog(
@@ -57,7 +56,8 @@ class _CreateGoalState extends State<CreateGoal> {
           ),
         ],
       ),
-    )) ?? false;
+    )) ??
+        false;
   }
 
   @override
@@ -77,7 +77,10 @@ class _CreateGoalState extends State<CreateGoal> {
                     bottomLeft: Radius.circular(40.0),
                   )),
               height: 275,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               child: Column(
                 children: <Widget>[
                   //MyBackButton(),
@@ -89,7 +92,6 @@ class _CreateGoalState extends State<CreateGoal> {
                     children: <Widget>[
                       Text(
                         'Create new goal',
-                        //style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w700),
                         style: ThriveFonts.HEADING,
                       ),
                     ],
@@ -105,7 +107,7 @@ class _CreateGoalState extends State<CreateGoal> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Expanded(
-                                child: Theme (
+                                child: Theme(
                                   data: Theme.of(context).copyWith(
                                     textTheme: TextTheme(
                                       subhead: ThriveFonts.BODY_WHITE,
@@ -117,10 +119,13 @@ class _CreateGoalState extends State<CreateGoal> {
                                             context: context,
                                             initialDate: DateTime.now(),
                                             firstDate: DateTime(2018),
-                                            lastDate: DateTime.now().add(Duration(days: 365))
-                                        ).then((date) {
+                                            lastDate: DateTime.now()
+                                                .add(Duration(days: 365)))
+                                            .then((date) {
                                           setState(() {
-                                            _goalDeadline = DateFormat('yyyy-MM-dd').format(date);
+                                            _goalDeadline =
+                                                DateFormat('yyyy-MM-dd')
+                                                    .format(date);
                                             dateText.text = _goalDeadline;
                                           });
                                         });
@@ -128,42 +133,44 @@ class _CreateGoalState extends State<CreateGoal> {
                                       child: IgnorePointer(
                                           child: new TextFormField(
                                               decoration: InputDecoration(
-                                                //suffixIcon: Icons.calendar_today,
                                                   labelText: "Goal Deadline",
-                                                  labelStyle: ThriveFonts.SUBHEADING_WHITE,
-
+                                                  labelStyle: ThriveFonts
+                                                      .SUBHEADING_WHITE,
+                                                  suffixIcon: IconButton(
+                                                    icon: Icon(
+                                                      Icons.calendar_today,
+                                                      color: ThriveColors
+                                                          .DARK_GRAY,
+                                                    ),
+                                                  ),
                                                   focusedBorder:
-                                                  UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
+                                                  UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: ThriveColors
+                                                              .LIGHT_GREEN)),
                                                   enabledBorder:
-                                                  UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
-                                                  border:
-                                                  UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.WHITE))
-                                              ),
-
-                                              /*
-                                            decoration: new InputDecoration(
-                                                hintText: "Goal Deadline",
-                                            ),
-
-                                             */
+                                                  UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: ThriveColors
+                                                              .LIGHT_GREEN)),
+                                                  border: UnderlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color:
+                                                          ThriveColors.WHITE))),
                                               controller: dateText,
                                               validator: (value) {
                                                 if (value.isEmpty) {
                                                   return "Please set a deadline for your goal";
                                                 }
                                                 return null;
-                                              }
-                                          )
-                                      )
-                                  ),
+                                              }))),
                                 ),
                               ),
                               //HomePage.calendarIcon(),
                             ],
                           )
                         ],
-                      )
-                  )
+                      ))
                 ],
               ),
             ),
@@ -230,6 +237,36 @@ class _CreateGoalState extends State<CreateGoal> {
                               runSpacing: 0,
                               //textDirection: TextDirection.rtl,
                               spacing: 10.0,
+                              children: collabWidgets,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.add_circle),
+                              iconSize: 35,
+                              color: ThriveColors.DARK_ORANGE,
+                              tooltip: 'Add friends as collaborators',
+                              onPressed: () {
+                                //print(collabText.text);
+                                //print(collabList);
+
+                                collabWidgets.clear();
+
+                                _getCollaborators(context);
+
+                                setState(() {
+
+                                });
+                              },
+                            ),
+
+                            /*
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.start,
+                              //direction: Axis.vertical,
+                              alignment: WrapAlignment.start,
+                              verticalDirection: VerticalDirection.down,
+                              runSpacing: 0,
+                              //textDirection: TextDirection.rtl,
+                              spacing: 10.0,
                               children: <Widget>[
                                 Chip(
                                   label: Text("Vas"),
@@ -258,6 +295,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                 ),
                               ],
                             ),
+                            */
                           ],
                         ),
                       )
@@ -266,26 +304,33 @@ class _CreateGoalState extends State<CreateGoal> {
                 )),
             Container(
               height: 80,
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   InkWell(
                     onTap: () {
-                      if(_formKey.currentState.validate()) {
+                      if (_formKey.currentState.validate()) {
                         showDialog(
                           context: context,
-                          builder: (context) => new AlertDialog(
+                          builder: (context) =>
+                          new AlertDialog(
                             title: new Text('Create Goal'),
-                            content: new Text('Do you want to create this goal?'),
+                            content:
+                            new Text('Do you want to create this goal?'),
                             actions: <Widget>[
                               new FlatButton(
-                                onPressed: () => Navigator.of(context).pop(false),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
                                 child: new Text('No'),
                               ),
                               new FlatButton(
                                 // TODO: Process data and make http request
-                                onPressed: () => Navigator.of(context).pop(true),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(true),
                                 child: new Text('Yes'),
                               ),
                             ],
@@ -301,13 +346,15 @@ class _CreateGoalState extends State<CreateGoal> {
                       ),
                       alignment: Alignment.center,
                       margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      width: MediaQuery.of(context).size.width - 40,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width - 40,
                       decoration: BoxDecoration(
                         color: ThriveColors.LIGHT_GREEN,
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-
                   ),
                 ],
               ),
@@ -323,7 +370,6 @@ class _CreateGoalState extends State<CreateGoal> {
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-<<<<<<< HEAD
           resizeToAvoidBottomPadding: false,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(200),
@@ -332,11 +378,6 @@ class _CreateGoalState extends State<CreateGoal> {
               backgroundColor: ThriveColors.DARK_GREEN,
               centerTitle: true,
             ),
-=======
-          appBar: AppBar(
-            title: Text(
-              "Create a Goal", style: TextStyle(fontFamily: 'COMIC_SANS'),),
->>>>>>> f0b9aac97e72ac179ff3defe9c1bbb011b10fd14
           ),
           body: Container(
             padding: EdgeInsets.symmetric(
@@ -506,11 +547,24 @@ class _CreateGoalState extends State<CreateGoal> {
       MaterialPageRoute(builder: (context) => Collaborators(collabs)),
     );
 
-    if (collabs.returnString != null) {
+    if (collabs.returnList.isNotEmpty) {
       collabText.text = collabs.returnString;
+      collabList = collabs.returnList;
+    } else {
+      collabList.clear();
+    }
+
+    for (var collab in collabList) {
+      collabWidgets.add(
+          Chip(
+            label: Text(collab),
+            backgroundColor: ThriveColors
+                .LIGHT_ORANGE,
+            labelStyle: ThriveFonts.BODY_DARK_GRAY,
+          )
+      );
     }
   }
-
 }
 
 class MyTextField extends StatelessWidget {
@@ -519,27 +573,29 @@ class MyTextField extends StatelessWidget {
   final int minLines;
   final Icon icon;
   final Color color;
-  MyTextField({this.label, this.maxLines = 1, this.minLines = 1, this.icon, this.color = ThriveColors.WHITE});
+  MyTextField(
+      {this.label,
+        this.maxLines = 1,
+        this.minLines = 1,
+        this.icon,
+        this.color = ThriveColors.WHITE});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
       style: ThriveFonts.BODY_WHITE,
       minLines: minLines,
       maxLines: maxLines,
       decoration: InputDecoration(
-          suffixIcon: icon == null ? null: icon,
+          suffixIcon: icon == null ? null : icon,
           labelText: label,
           labelStyle: ThriveFonts.SUBHEADING_WHITE,
-
-          focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
-          enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
-          border:
-          UnderlineInputBorder(borderSide: BorderSide(color: ThriveColors.WHITE))),
-
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ThriveColors.LIGHT_GREEN)),
+          border: UnderlineInputBorder(
+              borderSide: BorderSide(color: ThriveColors.WHITE))),
       validator: (value) {
         if (value.isEmpty) {
           return "Please fill in mandatory field";

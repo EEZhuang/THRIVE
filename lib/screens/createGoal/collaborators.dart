@@ -12,18 +12,19 @@ class Collaborators extends StatefulWidget {
   Collaborators(this.collabs);
 
   @override
-  _CreateCollabState createState() => _CreateCollabState(collabs.returnString, collabs.returnBool);
+  _CreateCollabState createState() => _CreateCollabState(collabs.returnList, collabs.returnString, collabs.returnBool);
 }
 
 class _CreateCollabState extends State<Collaborators> {
   final List<Friend> friends = [Friend("Steve"), Friend("Bob"), Friend("Dude")];
-  String friendList;
+  List<String> friendList = [];
+  String friendString;
   List<bool> friendToggle;
 
-  _CreateCollabState(this.friendList, this.friendToggle);
+  _CreateCollabState(this.friendList, this.friendString, this.friendToggle);
 
   Future<bool> _onWillPop() {
-    FriendReturn fReturn = new FriendReturn(friendList, friendToggle);
+    FriendReturn fReturn = new FriendReturn(friendList, friendString, friendToggle);
     Navigator.pop(context, fReturn);
   }
 
@@ -53,17 +54,6 @@ class _CreateCollabState extends State<Collaborators> {
                         friendToggle[index] = !friendToggle[index];
                       });
 
-                      friendList = "";
-                      for (var i = 0; i < friendToggle.length; i++) {
-                        if(friendToggle[i]) {
-                          if (friendList == "") {
-                            friendList += friends[i].name;
-                          } else {
-                            friendList += ", " + friends[i].name;
-                          }
-                        }
-
-                      }
                     },
                     child: friend.getName(context),
                     color: friendToggle[index] ? Colors.blue : Colors.grey,
@@ -74,7 +64,24 @@ class _CreateCollabState extends State<Collaborators> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            FriendReturn fReturn = new FriendReturn(friendList, friendToggle);
+
+            friendString = "";
+            friendList.clear();
+            for (var i = 0; i < friendToggle.length; i++) {
+              if(friendToggle[i]) {
+                if (!friendList.contains(friends[i].name)) {
+                  friendList.add(friends[i].name);
+                }
+
+                if (friendString == "") {
+                  friendString += friends[i].name;
+                } else {
+                  friendString += ", " + friends[i].name;
+                }
+              }
+            }
+
+            FriendReturn fReturn = new FriendReturn(friendList, friendString, friendToggle);
             Navigator.pop(context, fReturn);
           },
           child: Icon(Icons.check_circle),
