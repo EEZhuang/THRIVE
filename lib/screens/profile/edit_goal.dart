@@ -196,7 +196,43 @@ class _EditGoalState extends State<EditGoal> {
 
                                   RaisedButton(
                                     child: Text('Delete goal'),
-                                    onPressed: () async{
+                                    onPressed: () {
+                                      if (_formkey.currentState.validate()){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                          new AlertDialog(
+                                            title: new Text('Delete Goal'),
+                                            content: new Text(
+                                                'Are you sure you want to delete this goal?'),
+                                            actions: <Widget>[
+                                              new FlatButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(false),
+                                                child: new Text('No'),
+                                              ),
+                                              new FlatButton(
+                                                // TODO: Process data and make http request
+                                                onPressed: () async {
+                                                  //hashing
+                                                  FirebaseUser result = await _auth.getCurrentUser();
+
+                                                  // If there is a current user logged in, make HTTP request
+                                                  if (result != null) {
+                                                    print(result.uid);
+                                                    print(goal_name);
+                                                    print(goalUnits);
+                                                    _db.deleteGoal(result.uid, widget.id);
+                                                  }
+
+                                                  Navigator.of(context).pop(true);
+                                                },
+                                                child: new Text('Yes'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
 
                                      },
                                     color: Colors.red,

@@ -35,6 +35,19 @@ class DatabaseService {
     );
   }
 
+  void deleteGoal(String uid, String goalID) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/delete_goal',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'uid': uid,
+        'goalID': goalID
+      }),
+    );
+  }
+
   void postGoal(String goal, String goalID, String goalUnits, String goalDates, String goalRepeat) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
