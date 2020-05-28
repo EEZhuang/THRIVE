@@ -26,13 +26,13 @@ app.post('/link_friends', function(req, res) {
 
 //linking goal to user
 app.post('/link_user_goal', function(req, res) {
-  db.collection("users")
-    .doc(req.body.uid)
-    .collection("user_goals")
-    .doc(req.body.goalID)
-        .set({
-
-        })
+  //console.log(req.body('uid'));
+  var username = db.collection('users').doc(req.body.uid).get().then(
+    querySnapshot=>{
+        console.log(querySnapshot.data().username)
+        var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).set({})
+    }
+  )
 })
 
 app.post('/post_goal', function(req, res) {
@@ -79,16 +79,23 @@ app.get('/get_goal', function(req, res) {
 
 app.get('/get_all_goal_ids', function(req, res) {
   var ids = [];
-  var goal = db.collection('users').doc(req.header("uid")).collection('user_goals').get().then(querySnapshot => {
-       querySnapshot.forEach((doc) => {
-            ids.push(doc.id);
-            //console.log(doc.id);
-       })
-       console.log(ids);
-       res.send(JSON.stringify({goal_ids: ids}));
+  console.log(req.header('uid'));
+  var username = db.collection('users').doc(req.header("uid")).get().then(
+      querySnapshot=>{
+          console.log(querySnapshot.data().username)
+          var goal = db.collection('usernames').doc(querySnapshot.data().username).collection('user_goals').get().then(querySnapshot => {
+                 querySnapshot.forEach((doc) => {
+                      ids.push(doc.id);
+                      //console.log(doc.id);
+                 })
+                 console.log(ids);
+                 res.send(JSON.stringify({goal_ids: ids}));
 
-      //console.log(querySnapshot.data().goal_name)
-    })
+                //console.log(querySnapshot.data().goal_name)
+          })
+      }
+    )
+
 })
 
 app.get('/get_all_usernames', function(req, res) {
