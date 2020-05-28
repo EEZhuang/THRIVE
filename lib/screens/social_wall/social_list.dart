@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thrive/models/goal.dart';
 import 'package:thrive/screens/home/goal_tile.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 class social_list extends StatelessWidget {
   @override
@@ -65,7 +66,8 @@ class social_list extends StatelessWidget {
                       ),
                       new Text(
                         "Spongebob Squarepants",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                        //style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: ThriveColors.WHITE),
                       )
                     ],
                   ),
@@ -94,27 +96,27 @@ class social_list extends StatelessWidget {
                     children: <Widget>[
                       new Icon(
                         FontAwesomeIcons.heart,
-                        color: Color(0xFFFAF9F9)
+                        color: ThriveColors.WHITE,
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
                       new Icon(
                         FontAwesomeIcons.comment,
-                        color: Color(0xFFFAF9F9)
+                        color: ThriveColors.WHITE,
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
                       new Icon(
                           FontAwesomeIcons.paperPlane,
-                          color: Color(0xFFFAF9F9)
+                          color: ThriveColors.WHITE,
                       ),
                     ],
                   ),
                   new Icon(
                       FontAwesomeIcons.bookmark,
-                      color: Color(0xFFFAF9F9)
+                      color: ThriveColors.WHITE,
                   )
                 ],
               ),
@@ -123,7 +125,7 @@ class social_list extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 "Liked by Patrick Star, Mr. Krabs, and 528,331 others",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                style: TextStyle(fontWeight: FontWeight.bold, color: ThriveColors.WHITE),
               ),
             ),
             Padding(
@@ -136,7 +138,7 @@ class social_list extends StatelessWidget {
                     width: 40.0,
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xff8c94b6),
+                      color: ThriveColors.LIGHT_ORANGE,
                       /**
                       image: new DecorationImage(
                           fit: BoxFit.fill,
@@ -151,11 +153,10 @@ class social_list extends StatelessWidget {
                   Expanded(
                     child: new TextField(
                       decoration: new InputDecoration(
-                        border: InputBorder.none,
+                        //border: InputBorder.none,
                         hintText: "Add a comment...",
-                        //hintStyle: Color(0xFFFAF9F9),
                       ),
-                      cursorColor: Color(0xFFFAF9F9),
+                      cursorColor: ThriveColors.WHITE,
                     ),
                   ),
                 ],

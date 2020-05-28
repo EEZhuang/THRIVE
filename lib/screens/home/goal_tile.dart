@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thrive/models/goal.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 class GoalTile extends StatelessWidget{
 
@@ -31,7 +32,8 @@ class GoalTile extends StatelessWidget{
                 title: Text(goal.name),
                 subtitle: Text(goal.goal),
             ),
-            color: Color(0xFFf0ffed),
+            //color: Color(0xFFf0ffed),
+            color: ThriveColors.LIGHTEST_GREEN,
           ),
         ),
       ),

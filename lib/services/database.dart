@@ -9,6 +9,7 @@ class DatabaseService {
   void postUserGoal(String uid, String goal, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/goals',
+      //'http://52.42.38.239:3000/goals',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -23,6 +24,7 @@ class DatabaseService {
   Future<String> getUserGoal(String uid, String goalID) async {
     http.Response response = await http.get(
       'http://10.0.2.2:3000/goals',
+      //'http://52.42.38.239:3000/goals',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'uid': uid,

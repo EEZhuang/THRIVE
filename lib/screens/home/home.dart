@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/screens/friendSearch/friend_search.dart';
 import 'package:thrive/screens/profile/profile.dart';
@@ -117,9 +118,9 @@ class _HomeState extends State<Home> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFfe752b),
-        backgroundColor: Color(0xF0080F0F),
-        unselectedItemColor: Color(0xFFffd6ba),
+        selectedItemColor: ThriveColors.DARK_ORANGE,
+        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        unselectedItemColor: ThriveColors.LIGHT_ORANGE,
         onTap: _onItemTapped,
         //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,

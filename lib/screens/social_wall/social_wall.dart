@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/screens/social_wall/social_list.dart';
 import 'package:thrive/services/auth.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -40,14 +42,12 @@ class _SocialWallState extends State<SocialWall> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thrive Wall", style: TextStyle(fontFamily: 'proxima', fontWeight: FontWeight.bold, fontSize: 30)),
-        //title: Text("Thrive Wall", style: TextStyle(fontFamily: 'montserrat', fontSize: 30)),
+        title: Text("Thrive Wall", style: ThriveFonts.HEADING),
         centerTitle: true,
-        backgroundColor: Color(0xFF69A297),
+        backgroundColor: ThriveColors.DARK_GREEN,
       ),
       body: social_list(),
-      backgroundColor: Color(0xF0080F0F),
-      //backgroundColor: Color(0xFF273534),
+      backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       // Button to signout and return to signin page
       /**
       floatingActionButton: FloatingActionButton(
