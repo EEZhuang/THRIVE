@@ -213,18 +213,18 @@ class _RegisterState extends State<Register>{
                               if(_formKey.currentState.validate() && (username != "") && (firstname != "")
                                   && (lastname != "") && (password != "") && (password2 != "") && (birthdate != "")){
                                 setState(() => loading = true);
-                                dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                                //print("result here" + result);
+                                dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                                print("result here" + result);
                                 if(result == null) {
                                   setState(() {
                                     loading = false;
-                                    error = 'Could not sign in with those credentials';
+                                    error = 'Please provide a valid email';
                                   });
                                 } else {
                                   print(username + firstname + lastname + birthdate);
                                   _db.setUserInfo(result.uid, username, firstname, lastname, birthdate);
                                   _db.setPublicUid(username);
-                                  widget.toggleView();
+                                  widget.toggleHome();
                                 }
                               }
                             }
