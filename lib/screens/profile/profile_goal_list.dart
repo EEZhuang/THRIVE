@@ -176,7 +176,7 @@ class _GoalListState extends State<GoalList> {
                                     mini: true,
                                     onPressed: () {
                                       setState(() {
-                                        if (progressList[index] > -10) {
+                                        if ((int.parse(myGoal.goalProgress) + progressList[index]) > 0) {
                                           progressList[index]--;
                                           progressController[index].text = progressList[index].toInt().toString();
                                         }
@@ -192,16 +192,42 @@ class _GoalListState extends State<GoalList> {
                                       decoration: new InputDecoration(labelText: "Change to goal"),
                                       controller: progressController[index],
                                       onChanged: (text) {
-                                        if(int.parse(text) > 10) {
-                                          progressController[index].text = "10";
-                                          progressList[index] = 10;
-                                          text = "10";
+//                                        if(int.parse(text) > 10) {
+//                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) > int.parse(myGoal.goalUnits)) {
+//                                            progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+//                                            progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+//                                          } else {
+//                                            progressController[index].text =
+//                                            "10";
+//                                            progressList[index] = 10;
+//                                          }
+//                                          text = "10";
+//                                        } else
+                                        if((int.parse(myGoal.goalProgress) + int.parse(text)) >= int.parse(myGoal.goalUnits)) {
+                                          progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+                                          progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+                                        } else {
+                                          //progressList[index].text = text;
+                                          progressList[index] = double.parse(text);
                                         }
 
-                                        if(int.parse(text) < -10) {
-                                          progressController[index].text = "-10";
-                                          progressList[index] = -10;
-                                          text = "-10";
+//                                        if(int.parse(text) < -10) {
+//
+//                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) < 0) {
+//                                            progressController[index].text = "-" + myGoal.goalProgress;
+//                                            progressList[index] = -1 * double.parse(myGoal.goalProgress);
+//                                          } else {
+//                                            progressController[index].text = "-10";
+//                                            progressList[index] = -10;
+//                                            //text = "-10";
+//                                          }
+//                                        } else
+                                        if((int.parse(myGoal.goalProgress) + int.parse(text)) <= 0) {
+                                          //print("TRUE");
+                                          progressController[index].text = "-" + myGoal.goalProgress;
+                                          progressList[index] = -1 * double.parse(myGoal.goalProgress);
+                                        } else {
+                                          progressList[index] = double.parse(text);
                                         }
                                       },
                                       //initialValue: "0",
@@ -212,7 +238,7 @@ class _GoalListState extends State<GoalList> {
                                     mini: true,
                                     onPressed: () {
                                       setState(() {
-                                        if (progressList[index] < 10) {
+                                        if ((int.parse(myGoal.goalProgress) + progressList[index]) < int.parse(myGoal.goalUnits)) {
                                           progressList[index]++;
                                           progressController[index].text = progressList[index].toInt().toString();
                                         }
@@ -230,15 +256,22 @@ class _GoalListState extends State<GoalList> {
                                       int tmpProg =
                                       int.parse(myGoal.goalProgress);
                                       tmpProg += progressList[index].toInt();
+
+
+
                                       if (tmpProg >=
                                           int.parse(myGoal.goalUnits)) {
                                         tmpProg =
                                             int.parse(myGoal.goalUnits);
+                                        progressList[index] = 0;
+                                        progressController[index].text = "0";
+                                      } else if (tmpProg <= 0) {
+                                        tmpProg = 0;
+                                        progressList[index] = 0;
+                                        progressController[index].text = "0";
                                       }
 
-                                      if (tmpProg <= 0) {
-                                        tmpProg = 0;
-                                      }
+
                                       myGoal.goalProgress = tmpProg.toString();
                                       if (result != null) {
                                         _db.postGoal(
@@ -250,6 +283,15 @@ class _GoalListState extends State<GoalList> {
                                             myGoal.goalProgress);
                                       }
 
+                                      if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) > int.parse(myGoal.goalUnits)) {
+                                        progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+                                        progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+                                      } else if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) < 0) {
+                                        //print("TRUE");
+                                        progressController[index].text = "-" + myGoal.goalProgress;
+                                        progressList[index] = -1 * double.parse(myGoal.goalProgress);
+                                      }
+                                      
                                       setState(() {
 
                                       });
