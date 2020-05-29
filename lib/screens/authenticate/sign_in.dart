@@ -15,7 +15,6 @@ class SignIn extends StatefulWidget {
 
   @override
   _SignInState createState() => _SignInState();
-
 }
 
 class _SignInState extends State<SignIn>{
@@ -33,8 +32,7 @@ class _SignInState extends State<SignIn>{
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold (
       //child: Text('Sign into THRIVE'),
-
-      body: Container(
+        body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [const Color(0xFF69A297), const Color(0xFF27353F)],
@@ -112,18 +110,18 @@ class _SignInState extends State<SignIn>{
                                     setState(() {
                                       email = val;
                                     });
-                                  }
+                                  },
                               ),
                               SizedBox(height: 20.0),
                               TextFormField(
-                                decoration:textInputDecoration.copyWith(hintText: 'Password'),
-                                validator: (val) => val.length < 6 ? 'Enter a password (6+ characters long)' : null,
-                                onChanged: (val){
-                                  setState(() {
-                                    password = val;
-                                  });
-                                },
-                                obscureText: true ,
+                                  decoration:textInputDecoration.copyWith(hintText: 'Password'),
+                                  validator: (val) => val.length < 6 ? 'Enter a password (6+ characters long)' : null,
+                                  onChanged: (val){
+                                    setState(() {
+                                      password = val;
+                                    });
+                                  },
+                                  obscureText: true ,
                               ),
                               SizedBox(height: 20.0),
                               RaisedButton(
@@ -141,15 +139,16 @@ class _SignInState extends State<SignIn>{
                                           error = 'Could not sign in with those credentials';
                                         });
                                       } else {
-                                        print("here");
-                                        widget.toggleState(1);
-                                        print("home toggled");
+                                        widget.toggleHome();
+                                        //print("here");
+                                        //widget.toggleState(1);
+                                        //print("home toggled");
                                       }
                                     }
                                   }
                               ),
                               FlatButton(onPressed: (){
-                                widget.toggleView();
+                                //widget.toggleView();
                               },
                                   child: Text('Forgot Password?',
                                     style: TextStyle(
@@ -157,7 +156,8 @@ class _SignInState extends State<SignIn>{
                                       fontSize: 15,
                                       fontFamily: 'Proxima',
                                     ),
-                                  )),
+                                  )
+                              ),
                               SizedBox(height: 12.0),
                               Text( error, style: TextStyle(color: Colors.red) ),
                             ],
