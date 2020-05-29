@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thrive/models/goal.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 
 class GoalTile extends StatelessWidget{
 
@@ -19,7 +21,7 @@ class GoalTile extends StatelessWidget{
             backgroundColor: Colors.green[100],
 
           ),
-          title: Text(goal.goal),
+          title: Text(goal.goal, style: ThriveFonts.BODY_DARK_GRAY,),
           subtitle: Text(goal.goalDate),
         ),
       )

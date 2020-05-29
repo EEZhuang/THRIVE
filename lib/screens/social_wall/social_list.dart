@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thrive/models/goal.dart';
 import 'package:thrive/screens/home/goal_tile.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 
 class social_list extends StatelessWidget {
   @override
@@ -87,7 +88,11 @@ class social_list extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
                   **/
-                ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            /*
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -135,6 +140,7 @@ class social_list extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  /*
                   new Container(
                     height: 30.0,
                     width: 40.0,
@@ -162,12 +168,15 @@ class social_list extends StatelessWidget {
                       cursorColor: ThriveColors.WHITE,
                     ),
                   ),
+
+                   */
                 ],
               ),
             ),
+             */
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text("1 Day Ago", style: TextStyle(color: Colors.grey)),
+              child: Text("1 Day Ago", style: ThriveFonts.BODY_WHITE),
             )
           ],
         );

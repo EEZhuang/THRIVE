@@ -78,8 +78,8 @@ class _CreateGoalState extends State<CreateGoal> {
                       bottomRight: Radius.circular(40.0),
                       bottomLeft: Radius.circular(40.0),
                     )),
-                //height: 275,
-                height: 300,
+                height: 275,
+                //height: 300,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: <Widget>[
@@ -101,7 +101,28 @@ class _CreateGoalState extends State<CreateGoal> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        MyTextField(label: 'Goal'),
+                        TextFormField(
+                          style: ThriveFonts.BODY_WHITE,
+                          decoration: InputDecoration(
+                              labelText: "Goal",
+                              labelStyle: ThriveFonts.SUBHEADING_WHITE,
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ThriveColors.LIGHT_GREEN)),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ThriveColors.LIGHT_GREEN)),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: ThriveColors.WHITE))),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Please enter a name for your goal";
+                            }
+                            goal = value; //assigns goal name for posting
+                            return null;
+                          },
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -162,6 +183,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                               if (value.isEmpty) {
                                                 return "Please set a deadline for your goal";
                                               }
+                                              goalDate = value;
                                               return null;
                                             }))),
                               ),
@@ -319,9 +341,26 @@ class _CreateGoalState extends State<CreateGoal> {
                                   child: new Text('No'),
                                 ),
                                 new FlatButton(
-                                  // TODO: Process data and make http request
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
+                                  onPressed: () async {
+                                    //hashing
+                                    final _random = new Random();
+                                    int rand = _random.nextInt(85311);
+                                    goalID = goal + rand.toString();
+
+                                    // TODO: pass user as parameter from Wrapper()
+                                    FirebaseUser result =
+                                        await _auth.getCurrentUser();
+
+                                    // If there is a current user logged in, make HTTP request
+                                    if (result != null) {
+                                      print(result.uid);
+                                      _db.linkUserGoal(result.uid, goalID);
+                                      _db.postGoal(goal, goalID, goalUnits,
+                                          goalDate, goalRepeat);
+                                    }
+                                    print(goal);
+                                    Navigator.of(context).pop(true);
+                                  },
                                   child: new Text('Yes'),
                                 ),
                               ],
