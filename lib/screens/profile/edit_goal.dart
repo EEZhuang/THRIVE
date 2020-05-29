@@ -228,14 +228,10 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
-                                                    print(result.uid);
-                                                    print(goal_name);
-                                                    print(goalUnits);
                                                     bool finished = await _db.deleteGoal(
                                                         result.uid, widget.id);
 
                                                     if (finished){
-                                                      print('do we ever get here');
                                                       widget.updateTile();
                                                     }
                                                   }

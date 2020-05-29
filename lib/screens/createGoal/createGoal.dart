@@ -11,6 +11,9 @@ import 'collaborators.dart';
 import 'dart:math';
 
 class CreateGoal extends StatefulWidget {
+  final Function togglePage;
+
+  CreateGoal({this.togglePage});
   @override
   _CreateGoalState createState() => _CreateGoalState();
 }
@@ -194,8 +197,10 @@ class _CreateGoalState extends State<CreateGoal> {
                                     if (result != null) {
                                       print(result.uid);
                                       _db.linkUserGoal(result.uid, goalID);
-                                      _db.postGoal(goal, goalID, goalUnits,
+                                      bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
+                                      widget.togglePage(1);
+
                                     }
                                     print(goal);
                                     Navigator.of(context).pop(true);

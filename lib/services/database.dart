@@ -44,7 +44,7 @@ class DatabaseService {
     return true;
   }
 
-  void postGoal(String goal, String goalID, String goalUnits, String goalDates,
+  Future<bool> postGoal(String goal, String goalID, String goalUnits, String goalDates,
       String goalRepeat, String goalProgress) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
@@ -60,6 +60,7 @@ class DatabaseService {
         'goalProgress': goalProgress
       }),
     );
+    return true;
   }
 
   void setUserInfo(String uid, String username, String firstName,

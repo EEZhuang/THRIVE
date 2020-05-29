@@ -106,8 +106,8 @@ class _GoalListState extends State<GoalList> {
                 return ListView.builder(
                   itemCount: goals.length,
                   itemBuilder: (context, index) {
-                    print(goals.length);
-                    print(goals[index]);
+                    //print(goals.length);
+                    //print(goals[index]);
                     return GoalTile(
                       goal: goals[index],
                       id: ids[index],
@@ -118,7 +118,7 @@ class _GoalListState extends State<GoalList> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               } else {
-                print("Here");
+                //print("Here");
                 return Loading();
               }
             }));
