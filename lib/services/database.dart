@@ -32,7 +32,7 @@ class DatabaseService {
     );
   }
 
-  void deleteGoal(String uid, String goalID) async {
+  Future<bool> deleteGoal(String uid, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/delete_goal',
       headers: <String, String>{
@@ -40,6 +40,8 @@ class DatabaseService {
       },
       body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
     );
+    print("before returning true");
+    return true;
   }
 
   void postGoal(String goal, String goalID, String goalUnits, String goalDates,

@@ -231,9 +231,13 @@ class _EditGoalState extends State<EditGoal> {
                                                     print(result.uid);
                                                     print(goal_name);
                                                     print(goalUnits);
-                                                    _db.deleteGoal(
+                                                    bool finished = await _db.deleteGoal(
                                                         result.uid, widget.id);
-                                                    widget.updateTile();
+
+                                                    if (finished){
+                                                      print('do we ever get here');
+                                                      widget.updateTile();
+                                                    }
                                                   }
 
                                                   Navigator.of(context)
