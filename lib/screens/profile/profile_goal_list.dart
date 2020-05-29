@@ -291,7 +291,7 @@ class _GoalListState extends State<GoalList> {
                                         progressController[index].text = "-" + myGoal.goalProgress;
                                         progressList[index] = -1 * double.parse(myGoal.goalProgress);
                                       }
-                                      
+
                                       setState(() {
 
                                       });

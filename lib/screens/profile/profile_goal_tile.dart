@@ -35,11 +35,11 @@ class _GoalTileState extends State<GoalTile> {
           percent: (double.parse(widget.goal.goalProgress) /
               double.parse(widget.goal.goalUnits)),
           center: new Text(
-            widget.goal.goalUnits,
+            widget.goal.goalUnits.length >= 3 ? widget.goal.goalProgress + "/\n" + widget.goal.goalUnits : widget.goal.goalProgress + "/" + widget.goal.goalUnits,
             style: new TextStyle(
               fontFamily: 'proxima',
               fontWeight: FontWeight.bold,
-              fontSize: 20.0,
+              fontSize: 13.0,
               color: ThriveColors.DARK_GREEN,
             ),
           ),
