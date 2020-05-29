@@ -32,7 +32,7 @@ class DatabaseService {
     );
   }
 
-  void deleteGoal(String uid, String goalID) async {
+  Future<bool> deleteGoal(String uid, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/delete_goal',
       headers: <String, String>{
@@ -40,9 +40,11 @@ class DatabaseService {
       },
       body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
     );
+    print("before returning true");
+    return true;
   }
 
-  void postGoal(String goal, String goalID, String goalUnits, String goalDates,
+  Future<bool> postGoal(String goal, String goalID, String goalUnits, String goalDates,
       String goalRepeat, String goalProgress) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
@@ -58,6 +60,7 @@ class DatabaseService {
         'goalProgress': goalProgress
       }),
     );
+    return true;
   }
 
   void setUserInfo(String uid, String username, String firstName,

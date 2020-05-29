@@ -42,6 +42,11 @@ app.post('/delete_goal', function(req, res) {
         console.log(querySnapshot.data().username)
         var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
         var goal2 = db.collection('goals').doc(req.body.goalID).delete()
+        res.send(JSON.stringify('done'));
+
+
+        //var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
+        //var goal2 = db.collection('goals').doc(req.body.goalID).delete()
     }
   )
 })
@@ -56,6 +61,7 @@ app.post('/post_goal', function(req, res) {
             goal_repeat: req.body.goalRepeat,
             goal_progress: req.body.goalProgress
         })
+   res.send(JSON.stringify('done'));
 })
 
 app.post('/set_user_info', function(req, res) {

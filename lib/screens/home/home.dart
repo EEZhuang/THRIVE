@@ -52,6 +52,12 @@ class _HomeState extends State<Home> {
 
   final PageStorageBucket bucket = PageStorageBucket();
 
+  void togglePage(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   void _onItemTapped(int index) {
 
     // If "add goal" is selected, we push the create goal screen
@@ -81,7 +87,7 @@ class _HomeState extends State<Home> {
       SocialWall(),
       //FirstPage(),
       Profile(currUser: widget.currUser),
-      CreateGoal(),
+      CreateGoal(togglePage: this.togglePage),
       Search(),
       FirstPage(),
     ];

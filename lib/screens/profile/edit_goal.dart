@@ -228,12 +228,12 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
-                                                    print(result.uid);
-                                                    print(goal_name);
-                                                    print(goalUnits);
-                                                    _db.deleteGoal(
+                                                    bool finished = await _db.deleteGoal(
                                                         result.uid, widget.id);
-                                                    widget.updateTile();
+
+                                                    if (finished){
+                                                      widget.updateTile();
+                                                    }
                                                   }
 
                                                   Navigator.of(context)
