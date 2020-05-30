@@ -7,6 +7,7 @@ import 'package:thrive/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/shared/loading.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:intl/intl.dart';
 
 import 'profile_goal_tile.dart';
@@ -189,7 +190,11 @@ class _GoalListState extends State<GoalList> {
                                   Expanded(
                                     child: TextField(
                                       keyboardType: TextInputType.number,
-                                      decoration: new InputDecoration(labelText: "Change to goal"),
+                                      decoration: new InputDecoration(
+                                          labelText:'Change to goal',
+                                          labelStyle: ThriveFonts.BODY_DARK_GRAY,
+                                      ),
+                                      textAlign: TextAlign.center,
                                       controller: progressController[index],
                                       onChanged: (text) {
 //                                        if(int.parse(text) > 10) {
