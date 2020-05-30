@@ -46,6 +46,10 @@ class _SearchState extends State<Search> {
     List<TempUser> tempUsers = new List();
     print("hello");
 
+    String requestingUID = await _db.getUsername(result.uid);
+
+    usernames.remove(requestingUID);
+
     for( int i = 0; i < usernames.length; i++) {
       tempUsers.add( new TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
     }
