@@ -9,9 +9,8 @@ import 'dart:convert';
 
 // "User home page", screen useer sees after successful login
 class SocialWall extends StatefulWidget {
-  final Function toggleHome;
-  final Function toggleState;
-  SocialWall({this.toggleHome, this.toggleState});
+  final FirebaseUser currUser;
+  SocialWall({this.currUser});
   @override
   _SocialWallState createState() => _SocialWallState();
 }
@@ -24,20 +23,6 @@ class _SocialWallState extends State<SocialWall> {
   //String
   String goal = '';
 
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
-      }),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +31,7 @@ class _SocialWallState extends State<SocialWall> {
         centerTitle: true,
         backgroundColor: ThriveColors.DARK_GREEN,
       ),
-      body: social_list(),
+      body: SocialList(currUser: widget.currUser),
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       // Button to signout and return to signin page
       /**
