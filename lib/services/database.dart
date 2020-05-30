@@ -21,6 +21,8 @@ class DatabaseService {
     );
   }
 
+
+
   // Makes HTTP request passing uid and goal in body
   void linkUserGoal(String uid, String goalID) async {
     http.Response response = await http.post(
@@ -30,6 +32,20 @@ class DatabaseService {
       },
       body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
     );
+  }
+
+  Future<bool> deleteFriend(String myuid, String frienduid) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/delete_connection',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'myuid': myuid, 'frienduid': frienduid}),
+    );
+    print(myuid);
+    print(frienduid);
+    print("before returning true");
+    return true;
   }
 
   Future<bool> deleteGoal(String uid, String goalID) async {
@@ -90,6 +106,16 @@ class DatabaseService {
     );
   }
 
+  void addFriend(String myusername, String otherusername) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/set_friend',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'myusername': myusername, 'otherusername': otherusername }),
+    );
+  }
+
   Future<List<String>> getAllUsernames(String uid) async {
     //get user doc ids
     print("yes");
@@ -147,6 +173,25 @@ class DatabaseService {
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     String username = json['user'];
     print(username);
+
+    return username;
+  }
+
+  Future<List<String>> getRequests(String uid) async {
+    //get user doc ids
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_requests',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'uid': uid
+      },
+    );
+
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    //print(json);
+    //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
+    List<String> username = json['friend'].cast<String>();
+    //print(username);
 
     return username;
   }

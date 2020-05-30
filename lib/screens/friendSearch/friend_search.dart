@@ -5,6 +5,7 @@ import 'package:thrive/models/user.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';import 'package:thrive/services/database.dart';
+import 'package:thrive/screens/friendSearch/friend_requests.dart';
 
 
 class Search extends StatefulWidget {
@@ -21,6 +22,7 @@ class _SearchState extends State<Search> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final DatabaseService _db = DatabaseService();
+  final PageStorageBucket bucket = PageStorageBucket();
 
 
   //String
@@ -29,70 +31,8 @@ class _SearchState extends State<Search> {
   TextEditingController searchTextEditingController = TextEditingController();
   // TODO: Future<QuerySnapshot> futureSearchResults;
   Future<List<TempUser>> futureSearchResults;
-  List<TempUser> tempUsers = [
-    TempUser("Mario",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/0/image/0/large"),
-    TempUser("Donkey Kong",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/1/image/0/large.jpg"),
-    TempUser("Link",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/2/image/0/large.jpg"),
-    TempUser("Samus",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/3/image/0/large.jpg"),
-    TempUser("Kirby",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/5/image/0/large.jpg"),
-    TempUser("Fox",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/6/image/0/large.jpg"),
-    TempUser("Pikachu",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/7/image/0/large.jpg"),
-    TempUser("Ness",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/9/image/0/large.jpg"),
-    TempUser("Captain Falcon",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/10/image/0/large.jpg"),
-    TempUser("Marth",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/20/image/0/large.jpg"),
-    TempUser("Ganondorf",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/23/image/0/large.jpg"),
-    TempUser("Snake",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/32/image/0/large.jpg"),
-    TempUser("Sonic",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/37/image/0/large.jpg"),
-    TempUser("Mega Man",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/45/image/0/large.jpg"),
-    TempUser("Little Mac",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/48/image/0/large.jpg"),
-    TempUser("Palutena",
-        "http://images.nintendolife.com/list/items/palutena/image/0/large.jpg"),
-    TempUser("Pacman",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/53/image/0/large.jpg"),
-    TempUser("Shulk",
-        "http://images.nintendolife.com/list/items/57_shulk/image/0/large.jpg"),
-    TempUser("Ryu",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/57/image/0/large.jpg"),
-    TempUser("Cloud",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/58/image/0/large.jpg"),
-    TempUser("Bayonetta",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/60/image/0/large.jpg"),
-    TempUser("Inkling",
-        "http://images.nintendolife.com/news/2018/06/gallery_super_smash_bros_ultimate_character_artwork/list-item/61/image/0/large.jpg"),
-    TempUser("Richter",
-        "http://images.nintendolife.com/97cdea4d0eaf5/66e-richter.large.jpg"),
-    TempUser("Isabelle",
-        "http://images.nintendolife.com/cf8b935d8bf7a/68-isabelle.large.jpg"),
-    TempUser("Piranha Plant",
-        "http://images.nintendolife.com/3c6e0c96f8418/70-piranha-plant-dlc.large.jpg"),
-    TempUser("Joker",
-        "http://images.nintendolife.com/8edddaab8ef43/71-joker-dlc.large.jpg"),
-    TempUser("Hero",
-        "http://images.nintendolife.com/dc14919720b48/72-hero-dlc.large.jpg"),
-    TempUser("Banjo and Kazooie",
-        "http://images.nintendolife.com/e16d42f0d0a73/73-banjo-and-kazooie-dlc.large.jpg"),
-    TempUser("Terry",
-        "http://images.nintendolife.com/b7132535fd103/74-terry-bogard-dlc.large.jpg"),
-    TempUser("Byleth",
-        "https://cdn.vox-cdn.com/thumbor/dJWWjK73KZdqamf8RZ2RbXiRbdQ=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19605610/EOaIPk4U4AANzxs.jpg"),
-    TempUser("Sans",
-        "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg")
-  ];
+
+
 
   emptyTheTextFormField() {
     searchTextEditingController.clear();
@@ -103,10 +43,11 @@ class _SearchState extends State<Search> {
     print("hi");
     FirebaseUser result = await _auth.getCurrentUser();
     List<String> usernames = await _db.getAllUsernames(result.uid);
+    List<TempUser> tempUsers = new List();
     print("hello");
 
     for( int i = 0; i < usernames.length; i++) {
-      tempUsers[i] = TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg");
+      tempUsers.add( new TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
     }
 
     List<TempUser> queryTempUsers = [];
@@ -156,6 +97,23 @@ class _SearchState extends State<Search> {
         ),
         onFieldSubmitted: controlSearching,
       ),
+      actions: <Widget>[
+    // action button
+        IconButton(
+          icon: Icon(Icons.send),
+          onPressed: () {
+            print("page");
+            //body: PageStorage(
+            //  child: Request(),
+            //  bucket: bucket,
+            //);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Request()),
+            );
+          },
+        )
+      ]
     );
   }
 
@@ -221,6 +179,8 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
       appBar: searchPageHeader(),
       body: futureSearchResults == null
           ? displayNoSearchResultsScreen()
