@@ -219,6 +219,7 @@ class DatabaseService {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Map<String, dynamic> json = jsonDecode(response.body);
+      //print("HERE"+int.parse(json['timestamp']).toString());
       return int.parse(json['timestamp']);
     } else {
       // If the server did not return a 200 OK response,
@@ -235,22 +236,26 @@ class DatabaseService {
   }
 
   Future<List<Tuple2<Goal, String>>> wallMap (String username) async{
+
     List<Tuple2<int, Goal>> tempReturn = new List<Tuple2<int, Goal>>();
 
     List<String> friends = await getAllFriends(username);
     List<Tuple2<Goal, String>> returnList = new List<Tuple2<Goal, String>>();
     Map<Goal, String> userMap = {};
-    for(var f in friends){
-      Map<String, Goal> temp = await getAllUserGoals(f);
+
+    for(int f = 0; f<friends.length; f++){
+      Map<String, Goal> temp = await getAllUserGoals(friends[f]);
+
       List<Goal> goals = temp.values.toList(); //list of goals
       List<String> ids = temp.keys.toList(); //list of ids
       for (int i = 0; i<goals.length; i++){
         if(userMap.containsKey(goals[i])){
-          userMap[goals[i]] += (", "+ f);
+          userMap[goals[i]] += (", "+ friends[f]);
         } else {
-          userMap[goals[i]] = f;
+          userMap[goals[i]] = friends[f];
         }
         int timestamp = await getTimestamp(ids[i]);
+        //print("HERE" + timestamp.toString());
         tempReturn.add(new Tuple2(timestamp, goals[i]));
 
       }
@@ -258,9 +263,9 @@ class DatabaseService {
 
     tempReturn.sort(comparison);
 
-    for (var pair in tempReturn){
-      returnList.add(new Tuple2(pair.item2, userMap[pair.item2]));
-      print(pair.item2.goal);
+    for (int p = 0; p<tempReturn.length; p++){
+      returnList.add(new Tuple2(tempReturn[p].item2, userMap[tempReturn[p].item2]));
+      print("PLS WORK"+ tempReturn[p].item2.goal);
     }
 
     return returnList;

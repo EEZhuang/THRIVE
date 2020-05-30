@@ -43,8 +43,9 @@ class _GoalListState extends State<GoalList> {
 
   Future<Map<String, Goal>> localGoalMap() async{
     String username = await _db.getUsername(widget.currUser.uid);
-
     //List<Tuple2<Goal, String>> wall = await _db.wallMap(username);
+    //print("size:");
+    //print("size:" + wall.length.toString());
     //Map<String, Goal> goalMap = await _db.getAllUserGoals(username);
     return await _db.getAllUserGoals(username);
 

@@ -60,7 +60,7 @@ app.post('/post_goal', function(req, res) {
             goal_units: req.body.goalUnits,
             goal_repeat: req.body.goalRepeat,
             goal_progress: req.body.goalProgress,
-            timestamp: parseInt(req.body.timestamp)
+            timestamp: req.body.timestamp
         })
    res.send(JSON.stringify('done'));
 })
@@ -85,7 +85,7 @@ app.post('/set_public_uid', function(req, res) {
 
 app.get('/get_goal', function(req, res) {
   var goal = db.collection('goals').doc(req.header("goalID")).get().then(querySnapshot => {
-    //console.log(querySnapshot.data().goal_name)
+    console.log(querySnapshot.data().goal_name)
     res.send(JSON.stringify({goal_name: querySnapshot.data().goal_name,
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,
