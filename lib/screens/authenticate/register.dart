@@ -6,6 +6,8 @@ import 'package:thrive/shared/loading.dart';
 import '../../formats/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:thrive/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -31,6 +33,7 @@ class _RegisterState extends State<Register>{
   var dateText = TextEditingController();
   String _birthdate = "";
   final DatabaseService _db = DatabaseService();
+  List<String> allUsers;
 
 
   //Holds state elements
@@ -43,8 +46,14 @@ class _RegisterState extends State<Register>{
   String birthdate = "";
   String error = '';
 
+  getAllUsers() async {
+
+    allUsers = await _db.getAllUsernames("");
+  }
+
   @override
   Widget build(BuildContext context){
+    getAllUsers();
 
 
     // Returns screen according to loading status
@@ -134,7 +143,16 @@ class _RegisterState extends State<Register>{
                             hintText: 'Enter a username'
                         ),
                       //decoration:textInputDecoration.copyWith(hintText:  'Email'),
-                        validator: (val) => val.isEmpty ? 'Enter a username' : null,
+                        validator: (val) {
+                          if( allUsers.contains(val)) {
+                            return "Enter a username that has not been used";
+                          } else if ( val.isEmpty ) {
+                            return "Enter a username";
+                          } else {
+                            return "";
+                          }
+
+                        },
                         onChanged: (val){
                           setState(() {
                             username = val;

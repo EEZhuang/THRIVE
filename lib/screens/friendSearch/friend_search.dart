@@ -42,13 +42,19 @@ class _SearchState extends State<Search> {
   controlSearching(String str) async {
     print("hi");
     FirebaseUser result = await _auth.getCurrentUser();
+
     List<String> usernames = await _db.getAllUsernames(result.uid);
     List<TempUser> tempUsers = new List();
     print("hello");
+    String requestingUID = await _db.getUsername(result.uid);
+
+    usernames.remove(requestingUID);
 
     for( int i = 0; i < usernames.length; i++) {
       tempUsers.add( new TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
     }
+
+
 
     List<TempUser> queryTempUsers = [];
     for (int i = 0; i < tempUsers.length; i++) {
