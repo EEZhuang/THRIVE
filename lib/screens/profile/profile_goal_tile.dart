@@ -6,6 +6,7 @@ import 'package:thrive/screens/profile/edit_goal.dart';
 import 'package:thrive/screens/profile/edit_goal_progress.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 
 class GoalTile extends StatefulWidget {
   final Goal goal;
