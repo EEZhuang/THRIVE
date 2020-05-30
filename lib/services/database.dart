@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'dart:collection';
 import 'package:tuple/tuple.dart';
-import 'package:collection/collection.dart';
 
 class DatabaseService {
   //HTTP Request to Add Friends

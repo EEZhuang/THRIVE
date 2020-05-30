@@ -131,22 +131,6 @@ class _GoalListState extends State<GoalList> {
 
                 //counter++;
                 goalMap.forEach((k, v) => ids.add(k));
-
-/*
-                return ListView.builder(
-                  itemCount: goals.length,
-                  itemBuilder: (context, index) {
-                    //print(goals.length);
-                    //print(goals[index]);
-                    return GoalTile(
-                      goal: goals[index],
-                      id: ids[index],
-                      updateTile: updateTile,
-                    );
-                  },
-                );*/
-                //print("Test");
-                //print(counter);
                 print("TESASDSD" + goals.length.toString());
                 //if(counter >= 0) {
                   return SingleChildScrollView(

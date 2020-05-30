@@ -6,7 +6,8 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';import 'package:thrive/services/database.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
-
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 class Search extends StatefulWidget {
   final Function toggleHome;
@@ -23,7 +24,6 @@ class _SearchState extends State<Search> {
   final _formKey = GlobalKey<FormState>();
   final DatabaseService _db = DatabaseService();
   final PageStorageBucket bucket = PageStorageBucket();
-
 
   //String
   String query = '';
