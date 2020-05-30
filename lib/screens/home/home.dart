@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/screens/friendSearch/friend_search.dart';
+import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
 import 'package:thrive/services/auth.dart';
