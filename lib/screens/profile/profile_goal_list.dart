@@ -41,17 +41,29 @@ class _GoalListState extends State<GoalList> {
   List<double> progressList = [];
   List<TextEditingController> progressController = List<TextEditingController>();
 
+  Future<Map<String, Goal>> localGoalMap() async{
+    String username = await _db.getUsername(widget.currUser.uid);
+    //Map<String, Goal> goalMap = await _db.getAllUserGoals(username);
+    return await _db.getAllUserGoals(username);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     var goals = [];
     var ids = [];
     var goalMap = {};
-
+    String username = "";
+    _db.getUsername(widget.currUser.uid).then((String name){
+      username = name;
+    });
+    print("username:");
+    print(username);
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: ThriveColors.TRANSPARENT_BLACK,
         body: FutureBuilder<dynamic>(
-            future: _db.getAllUserGoals(widget.currUser.uid),
+            future: this.localGoalMap(),
             builder: (context, AsyncSnapshot snapshot) {
               goals = [];
               ids = [];

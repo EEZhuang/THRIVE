@@ -59,7 +59,8 @@ app.post('/post_goal', function(req, res) {
             goal_dates: req.body.goalDates,
             goal_units: req.body.goalUnits,
             goal_repeat: req.body.goalRepeat,
-            goal_progress: req.body.goalProgress
+            goal_progress: req.body.goalProgress,
+            timestamp: parseInt(req.body.timestamp)
         })
    res.send(JSON.stringify('done'));
 })
@@ -98,22 +99,17 @@ app.get('/get_goal', function(req, res) {
 
 app.get('/get_all_goal_ids', function(req, res) {
   var ids = [];
-  console.log(req.header('uid'));
-  var username = db.collection('users').doc(req.header("uid")).get().then(
-      querySnapshot=>{
-          console.log(querySnapshot.data().username)
-          var goal = db.collection('usernames').doc(querySnapshot.data().username).collection('user_goals').get().then(querySnapshot => {
-                 querySnapshot.forEach((doc) => {
-                      ids.push(doc.id);
-                      //console.log(doc.id);
-                 })
-                 console.log(ids);
-                 res.send(JSON.stringify({goal_ids: ids}));
+  var goal = db.collection('usernames').doc(req.header('username')).collection('user_goals').get().then(querySnapshot => {
+         querySnapshot.forEach((doc) => {
+              ids.push(doc.id);
+              //console.log(doc.id);
+         })
+         console.log(ids);
+         res.send(JSON.stringify({goal_ids: ids}));
 
-                //console.log(querySnapshot.data().goal_name)
-          })
-      }
-    )
+        //console.log(querySnapshot.data().goal_name)
+  })
+
 
 })
 

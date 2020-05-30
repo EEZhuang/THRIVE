@@ -3,6 +3,7 @@ import 'package:thrive/models/goal.dart';
 import 'package:thrive/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class DatabaseService {
   //HTTP Request to Add Friends
@@ -46,6 +47,7 @@ class DatabaseService {
 
   Future<bool> postGoal(String goal, String goalID, String goalUnits, String goalDates,
       String goalRepeat, String goalProgress) async {
+    String timestamp = new DateTime.now().millisecondsSinceEpoch.toString();
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
       headers: <String, String>{
@@ -57,7 +59,8 @@ class DatabaseService {
         'goalUnits': goalUnits,
         'goalDates': goalDates,
         'goalRepeat': goalRepeat,
-        'goalProgress': goalProgress
+        'goalProgress': goalProgress,
+        'timestamp': timestamp
       }),
     );
     return true;
@@ -109,13 +112,13 @@ class DatabaseService {
     return usernames;
   }
 
-  Future<Map<String, Goal>> getAllUserGoals(String uid) async {
+  Future<Map<String, Goal>> getAllUserGoals(String username) async {
     //get user doc ids
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_all_goal_ids',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'uid': uid,
+        'username': username,
       },
     );
 
@@ -180,4 +183,6 @@ class DatabaseService {
       throw Exception('Failed to load goal');
     }
   }
+
+
 }
