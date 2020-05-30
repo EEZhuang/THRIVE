@@ -47,7 +47,7 @@ class _EditGoalState extends State<EditGoal> {
     var dateText = TextEditingController(text: goalDate);
 
     return IconButton(
-      icon: Icon(Icons.more_horiz),
+      icon: Icon(Icons.edit),
       onPressed: () {
         showDialog(
             context: context,
