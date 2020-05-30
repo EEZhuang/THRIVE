@@ -363,6 +363,10 @@ class _CreateGoalState extends State<CreateGoal> {
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
+
+                                      widget.togglePage(1);
+
+
                                       // Clear form
                                       //dateText.clear();
                                       //repeatText.clear();
