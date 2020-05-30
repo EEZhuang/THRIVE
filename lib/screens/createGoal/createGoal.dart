@@ -275,6 +275,7 @@ class _CreateGoalState extends State<CreateGoal> {
                             onChanged: (value) {
                               setState(() {
                                 _selectedRepeat = value;
+                                goalRepeat = value;
                               });
                             },
                           ),
@@ -362,11 +363,11 @@ class _CreateGoalState extends State<CreateGoal> {
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
-                                      /*
-                                      _db.postGoal(goal, goalID, goalUnits,
-                                          goalDate, goalRepeat, goalProgress);
-                                       */
-                                      //widget.togglePage(1);
+                                      // Clear form
+                                      //dateText.clear();
+                                      //repeatText.clear();
+                                      //collabText.clear();
+
                                     }
                                     print(goal);
                                     Navigator.of(context).pop(true);
