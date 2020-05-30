@@ -90,12 +90,14 @@ app.get('/get_goal', function(req, res) {
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,
                              goal_repeat: querySnapshot.data().goal_repeat,
-                             goal_progress: querySnapshot.data().goal_progress}))
+                             goal_progress: querySnapshot.data().goal_progress,
+                             timestamp: querySnapshot.data().timestamp}))
   })
   //console.log(goal)
   //res.end(JSON.stringify({userGoal: 'test'}))
 
 })
+
 
 app.get('/get_all_goal_ids', function(req, res) {
   var ids = [];
@@ -106,6 +108,22 @@ app.get('/get_all_goal_ids', function(req, res) {
          })
          console.log(ids);
          res.send(JSON.stringify({goal_ids: ids}));
+
+        //console.log(querySnapshot.data().goal_name)
+  })
+
+
+})
+
+app.get('/get_all_friends', function(req, res) {
+  var friends = [];
+  var goal = db.collection('usernames').doc(req.header('username')).collection('friends').get().then(querySnapshot => {
+         querySnapshot.forEach((doc) => {
+              friends.push(doc.id);
+              //console.log(doc.id);
+         })
+         console.log(friends);
+         res.send(JSON.stringify({friend: friends}));
 
         //console.log(querySnapshot.data().goal_name)
   })

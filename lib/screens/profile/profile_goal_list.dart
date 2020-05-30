@@ -9,7 +9,7 @@ import 'package:thrive/shared/loading.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:intl/intl.dart';
-
+import 'package:tuple/tuple.dart';
 import 'profile_goal_tile.dart';
 
 class GoalList extends StatefulWidget {
@@ -43,6 +43,8 @@ class _GoalListState extends State<GoalList> {
 
   Future<Map<String, Goal>> localGoalMap() async{
     String username = await _db.getUsername(widget.currUser.uid);
+
+    //List<Tuple2<Goal, String>> wall = await _db.wallMap(username);
     //Map<String, Goal> goalMap = await _db.getAllUserGoals(username);
     return await _db.getAllUserGoals(username);
 
