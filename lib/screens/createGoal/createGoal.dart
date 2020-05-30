@@ -364,7 +364,12 @@ class _CreateGoalState extends State<CreateGoal> {
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
-                                      _storeCollaborators(context, username, goalID);
+                                      for (var collab in collabList) {
+
+                                        _db.linkUserGoal(collab, goalID);
+                                        done = await _db.postGoal(goal, goalID, goalUnits,
+                                            goalDate, goalRepeat, goalProgress);
+                                      }
 
 
                                       widget.togglePage(1);
@@ -434,26 +439,6 @@ class _CreateGoalState extends State<CreateGoal> {
     }
   }
 
-  _storeCollaborators(BuildContext context, String username, String goalID) async {
-    collabs = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Collaborators(collabs)),
-    );
-
-    if (collabs.returnList.isNotEmpty) {
-      collabText.text = collabs.returnString;
-      collabList = collabs.returnList;
-    } else {
-      collabList.clear();
-    }
-
-    for (var collab in collabList) {
-
-      _db.linkUserGoal(username, goalID);
-      bool done = await _db.postGoal(goal, goalID, goalUnits,
-          goalDate, goalRepeat, goalProgress);
-    }
-  }
 }
 
 class MyTextField extends StatelessWidget {
