@@ -364,6 +364,8 @@ class _CreateGoalState extends State<CreateGoal> {
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
+                                      _storeCollaborators(context, username, goalID);
+
 
                                       widget.togglePage(1);
 
@@ -429,6 +431,27 @@ class _CreateGoalState extends State<CreateGoal> {
         backgroundColor: ThriveColors.LIGHT_ORANGE,
         labelStyle: ThriveFonts.BODY_DARK_GRAY,
       ));
+    }
+  }
+
+  _storeCollaborators(BuildContext context, String username, String goalID) async {
+    collabs = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Collaborators(collabs)),
+    );
+
+    if (collabs.returnList.isNotEmpty) {
+      collabText.text = collabs.returnString;
+      collabList = collabs.returnList;
+    } else {
+      collabList.clear();
+    }
+
+    for (var collab in collabList) {
+
+      _db.linkUserGoal(username, goalID);
+      bool done = await _db.postGoal(goal, goalID, goalUnits,
+          goalDate, goalRepeat, goalProgress);
     }
   }
 }
