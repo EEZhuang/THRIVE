@@ -358,8 +358,9 @@ class _CreateGoalState extends State<CreateGoal> {
 
                                     // If there is a current user logged in, make HTTP request
                                     if (result != null) {
+                                      String username = await _db.getUsername(result.uid);
                                       print(result.uid);
-                                      _db.linkUserGoal(result.uid, goalID);
+                                      _db.linkUserGoal(username, goalID);
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
