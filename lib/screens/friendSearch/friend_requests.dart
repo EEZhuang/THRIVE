@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';import 'package:thrive/services/database.dart';
-
+import 'dart:convert';
+import 'package:thrive/services/database.dart';
+import 'dart:convert';
+import 'package:thrive/services/database.dart';
 
 class Request extends StatefulWidget {
   final Function toggleHome;
