@@ -27,13 +27,13 @@ class DatabaseService {
 
 
   // Makes HTTP request passing uid and goal in body
-  void linkUserGoal(String uid, String goalID) async {
+  void linkUserGoal(String username, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/link_user_goal',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
+      body: jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
     );
   }
 
