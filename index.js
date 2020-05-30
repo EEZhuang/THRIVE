@@ -47,6 +47,30 @@ app.post('/delete_goal', function(req, res) {
   )
 })
 
+
+app.post('/delete_connection', function(req, res) {
+
+  db.collection('connections').where("friendRequested", "==", req.body.myuid).where("friendRequesting", "==", req.body.frienduid).get()
+    .then(function(querySnapshot) {
+          // Once we get the results, begin a batch
+          var batch = db.batch();
+
+          querySnapshot.forEach(function(doc) {
+              // For each doc, add a delete operation to the batch
+              batch.delete(doc.ref);
+          });
+
+          // Commit the batch
+          return batch.commit();
+    }).then(function() {
+        // Delete completed!
+        // ...
+    });
+
+  console.log(req.body.frienduid);
+
+})
+
 app.post('/post_goal', function(req, res) {
   db.collection("goals")
     .doc(req.body.goalID)
@@ -77,6 +101,15 @@ app.post('/set_public_uid', function(req, res) {
     .doc(req.body.username)
         .set({
         })
+})
+
+app.post('/set_friend', function(req, res) {
+  db.collection("usernames")
+    .doc(req.body.myusername)
+        .collection("friends")
+            .doc(req.body.otherusername).set({})
+
+
 })
 
 app.get('/get_goal', function(req, res) {
@@ -151,6 +184,24 @@ app.get('/get_username', function(req, res) {
        usernames = querySnapshot.data().username
        console.log(usernames);
        res.send(JSON.stringify({user: usernames}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
+app.get('/get_requests', function(req, res) {
+
+  var usernames = [];
+  //console.log(db.collection('usernames').get());
+  console.log(req.header("uid"));
+  var goal = db.collection('connections').where("friendRequested", "==", req.header('uid')).where("accepted", "==", false).get().then(querySnapshot => {
+       querySnapshot.forEach((doc) => {
+           usernames.push(doc.id.substr(0,doc.id.indexOf(' ')));
+           //console.log(doc.id);
+       })
+
+       console.log("yeet" + usernames)
+       res.send(JSON.stringify({friend: usernames}));
 
       //console.log(querySnapshot.data().goal_name)
     })
