@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DatabaseService {
-
   //HTTP Request to Add Friends
-  void linkFriends(String requestingUID, String requestedUID, String accepted) async {
+  void linkFriends(
+      String requestingUID, String requestedUID, String accepted) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/link_friends',
       headers: <String, String>{
@@ -28,14 +28,24 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goalID': goalID
-      }),
+      body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
     );
   }
 
-  void postGoal(String goal, String goalID, String goalUnits, String goalDates, String goalRepeat) async {
+  Future<bool> deleteGoal(String uid, String goalID) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/delete_goal',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
+    );
+    print("before returning true");
+    return true;
+  }
+
+  Future<bool> postGoal(String goal, String goalID, String goalUnits, String goalDates,
+      String goalRepeat, String goalProgress) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
       headers: <String, String>{
@@ -46,13 +56,15 @@ class DatabaseService {
         'goalID': goalID,
         'goalUnits': goalUnits,
         'goalDates': goalDates,
-        'goalRepeat': goalRepeat
-
+        'goalRepeat': goalRepeat,
+        'goalProgress': goalProgress
       }),
     );
+    return true;
   }
 
-  void setUserInfo(String uid, String username, String firstName, String lastName, String birthDate) async {
+  void setUserInfo(String uid, String username, String firstName,
+      String lastName, String birthDate) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/set_user_info',
       headers: <String, String>{
@@ -64,7 +76,6 @@ class DatabaseService {
         'firstName': firstName,
         'lastName': lastName,
         'birthDate': birthDate
-
       }),
     );
   }
@@ -75,14 +86,11 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'username': username
-
-      }),
+      body: jsonEncode(<String, String>{'username': username}),
     );
   }
 
-  Future <List<String>> getAllUsernames(String uid) async {
+  Future<List<String>> getAllUsernames(String uid) async {
     //get user doc ids
     print("yes");
     http.Response response = await http.get(
@@ -93,7 +101,6 @@ class DatabaseService {
       },
     );
 
-
     Map<String, dynamic> json = await jsonDecode(response.body);
     //print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
@@ -102,25 +109,25 @@ class DatabaseService {
     return usernames;
   }
 
-  Future <List<Goal>> getAllUserGoals(String uid) async {
+  Future<Map<String, Goal>> getAllUserGoals(String uid) async {
     //get user doc ids
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_all_goal_ids',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'uid' : uid,
+        'uid': uid,
       },
     );
 
-    List<Goal> goalList = List<Goal>();
+    Map<String, Goal> goalList = Map<String, Goal>();
     Map<String, dynamic> json = await jsonDecode(response.body);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> goal_ids = json['goal_ids'].cast<String>();
     print(goal_ids);
-    for (var id in goal_ids){
+    for (var id in goal_ids) {
       Goal temp = await getGoal(id);
       print(temp.goalUnits);
-      goalList.add(temp);
+      goalList[id] = temp;
     }
     return goalList;
   }
@@ -131,7 +138,7 @@ class DatabaseService {
       'http://10.0.2.2:3000/get_username',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'uid' : uid,
+        'uid': uid,
       },
     );
 
@@ -145,27 +152,25 @@ class DatabaseService {
   }
 
   // helper method
-  Future <Goal> getGoal(String goalID) async {
+  Future<Goal> getGoal(String goalID) async {
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_goal',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'goalID' : goalID,
+        'goalID': goalID,
       },
     );
-
-    /*
-    Map<String, dynamic> json = jsonDecode(response.body);
-    print(json);
-    print("databasee");
-    print(json['userGoal']);
-    return json['userGoal'];*/
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Map<String, dynamic> json = jsonDecode(response.body);
-      Goal temp = new Goal(goal:json['goal_name'], goalDate: json['goal_dates'], goalUnits: json['goal_units'], goalRepeat: json['goal_repeat']);
+      Goal temp = new Goal(
+          goal: json['goal_name'],
+          goalDate: json['goal_dates'],
+          goalUnits: json['goal_units'],
+          goalRepeat: json['goal_repeat'],
+          goalProgress: json['goal_progress']);
       print("database");
       print(temp.goal);
       return temp;

@@ -13,6 +13,9 @@ import 'collaborators.dart';
 import 'dart:math';
 
 class CreateGoal extends StatefulWidget {
+  final Function togglePage;
+
+  CreateGoal({this.togglePage});
   @override
   _CreateGoalState createState() => _CreateGoalState();
 }
@@ -33,6 +36,7 @@ class _CreateGoalState extends State<CreateGoal> {
   String goalUnits = '';
   String goalDate = '';
   String goalRepeat = "Don't Repeat";
+  String goalProgress = "0";
 
   List<String> collabList = [];
   var collabText = TextEditingController();
@@ -355,11 +359,18 @@ class _CreateGoalState extends State<CreateGoal> {
                                     if (result != null) {
                                       print(result.uid);
                                       _db.linkUserGoal(result.uid, goalID);
+                                      bool done = await _db.postGoal(goal, goalID, goalUnits,
+                                          goalDate, goalRepeat, goalProgress);
+
+                                      /*
                                       _db.postGoal(goal, goalID, goalUnits,
-                                          goalDate, goalRepeat);
+                                          goalDate, goalRepeat, goalProgress);
+                                       */
+                                      //widget.togglePage(1);
                                     }
                                     print(goal);
                                     Navigator.of(context).pop(true);
+                                    //Navigator.of(context, rootNavigator: true).pop('dialog');
                                   },
                                   child: new Text('Yes'),
                                 ),

@@ -1,10 +1,14 @@
 class Goal {
+  String goal;
+  String goalUnits;
+  String goalDate;
+  String goalRepeat;
+  String goalProgress;
 
-   String goal;
-   String goalUnits;
-   String goalDate;
-   String goalRepeat;
-
-
-  Goal({this.goal, this.goalUnits, this.goalDate, this.goalRepeat });
+  Goal(
+      {this.goal,
+      this.goalUnits,
+      this.goalDate,
+      this.goalRepeat,
+      this.goalProgress});
 }

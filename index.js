@@ -35,6 +35,22 @@ app.post('/link_user_goal', function(req, res) {
   )
 })
 
+app.post('/delete_goal', function(req, res) {
+  //console.log(req.body('uid'));
+  var username = db.collection('users').doc(req.body.uid).get().then(
+    querySnapshot=>{
+        console.log(querySnapshot.data().username)
+        var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
+        var goal2 = db.collection('goals').doc(req.body.goalID).delete()
+        res.send(JSON.stringify('done'));
+
+
+        //var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
+        //var goal2 = db.collection('goals').doc(req.body.goalID).delete()
+    }
+  )
+})
+
 app.post('/post_goal', function(req, res) {
   db.collection("goals")
     .doc(req.body.goalID)
@@ -42,8 +58,10 @@ app.post('/post_goal', function(req, res) {
             goal_name: req.body.goal,
             goal_dates: req.body.goalDates,
             goal_units: req.body.goalUnits,
-            goal_repeat: req.body.goalRepeat
+            goal_repeat: req.body.goalRepeat,
+            goal_progress: req.body.goalProgress
         })
+   res.send(JSON.stringify('done'));
 })
 
 app.post('/set_user_info', function(req, res) {
@@ -70,7 +88,8 @@ app.get('/get_goal', function(req, res) {
     res.send(JSON.stringify({goal_name: querySnapshot.data().goal_name,
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,
-                             goal_repeat: querySnapshot.data().goal_repeat}))
+                             goal_repeat: querySnapshot.data().goal_repeat,
+                             goal_progress: querySnapshot.data().goal_progress}))
   })
   //console.log(goal)
   //res.end(JSON.stringify({userGoal: 'test'}))

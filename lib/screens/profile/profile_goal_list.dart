@@ -6,7 +6,8 @@ import 'package:thrive/services/auth.dart';
 import 'package:thrive/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:thrive/shared/loading.dart';
-
+import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:intl/intl.dart';
 
 import 'profile_goal_tile.dart';
 
@@ -17,47 +18,114 @@ class GoalList extends StatefulWidget {
 
   @override
   _GoalListState createState() => _GoalListState();
-
-
 }
 
 class _GoalListState extends State<GoalList> {
+  bool updateVal = false;
+
+  void updateTile() {
+    setState(() {
+      //_db.getAllUserGoals(widget.currUser.uid);
+      updateVal = !updateVal;
+    });
+  }
+
   AuthService _auth = AuthService();
   DatabaseService _db = DatabaseService();
-  final goals = [];
+  var goals = [];
+  var ids = [];
+  var goalMap = {};
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<dynamic>(
-        future: _db.getAllUserGoals(widget.currUser.uid),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            final goals =  snapshot.data;
-            print(widget.currUser);
-            return ListView.builder(
-              itemCount: goals.length,
-              itemBuilder: (context, index){
-                print(goals.length);
-                print(goals[index]);
-                return GoalTile(goal: goals[index]);
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
-            print("Here");
-            return Loading();
-          }
+    var goals = [];
+    var ids = [];
+    var goalMap = {};
+
+    double width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        body: FutureBuilder<dynamic>(
+            future: _db.getAllUserGoals(widget.currUser.uid),
+            builder: (context, AsyncSnapshot snapshot) {
+              goals = [];
+              ids = [];
+              goalMap = {};
+              if (snapshot.hasData) {
+                goalMap = snapshot.data;
+
+                //find and update repeating goals that have expired
+                goalMap.forEach((k, v) {
+                  String stringDate = v.goalDate;
+                  String repeatStatus = v.goalRepeat;
+                  DateTime realDate = DateTime.parse(stringDate);
+                  DateTime now = new DateTime.now();
+                  DateTime todayDate = new DateTime(now.year, now.month, now.day);
+                  if (realDate.isBefore(todayDate) && repeatStatus != "Don't Repeat"){
+
+                    if (repeatStatus == "Repeat Every Day"){
+
+                      while (realDate.isBefore(todayDate)){
+                        realDate = new DateTime(realDate.year, realDate.month, realDate.day+1);
+                      }
+
+                    } else if (repeatStatus == "Repeat Every Week"){
+
+                      while (realDate.isBefore(todayDate)){
+                        realDate = new DateTime(realDate.year, realDate.month, realDate.day+7);
+                      }
+
+                    } else if (repeatStatus == "Repeat Every Month"){
+
+                      while (realDate.isBefore(todayDate)){
+                        realDate = new DateTime(realDate.year, realDate.month+1, realDate.day);
+                      }
+
+                    } else if (repeatStatus == "Repeat Every Year"){
+
+                      while (realDate.isBefore(todayDate)){
+                        realDate = new DateTime(realDate.year+1, realDate.month, realDate.day);
+                      }
+
+                    }
+
+                    stringDate = DateFormat('yyyy-MM-dd').format(realDate);
+                    //update goal in database
+                    _db.postGoal(v.goal, k, v.goalUnits, stringDate, v.goalRepeat, "0");
+                    //update local goal object
+                    v.goalDate = stringDate;
+                    v.goalProgress = "0";
+                  }
+
+                });
 
 
+                goalMap.forEach((k, v) => goals.add(v));
+                goalMap.forEach((k, v) => ids.add(k));
 
-
-        }
-    );
+                return ListView.builder(
+                  itemCount: goals.length,
+                  itemBuilder: (context, index) {
+                    //print(goals.length);
+                    //print(goals[index]);
+                    return GoalTile(
+                      goal: goals[index],
+                      id: ids[index],
+                      updateTile: updateTile,
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              } else {
+                //print("Here");
+                return Loading();
+              }
+            }));
   }
 }
 
-    /**
+/**
     dynamic goal = await _db.getUserGoal(widget.currUser.uid);
 
     var goal1 = new Goal();
