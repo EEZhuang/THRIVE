@@ -226,7 +226,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                         BorderSide(color: ThriveColors.WHITE))),
                             validator: (value) {
                               if (value.isEmpty) {
-                                goalUnits = '0'; //goal has no units
+                                goalUnits = '1'; //goal has no units
                                 return null;
                               }
                               goalUnits =
@@ -362,6 +362,10 @@ class _CreateGoalState extends State<CreateGoal> {
                                       _db.linkUserGoal(result.uid, goalID);
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
+
+
+                                      widget.togglePage(1);
+
 
                                       // Clear form
                                       //dateText.clear();
