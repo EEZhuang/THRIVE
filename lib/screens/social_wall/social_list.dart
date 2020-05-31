@@ -47,9 +47,9 @@ class _SocialListState extends State<SocialList> {
   // List<TextEditingController> progressController =
   //   List<TextEditingController>();
 
-  Future<List<Tuple2<Goal, String>>> localGoalMap() async {
+  Future<List<Tuple3<Goal, String, String>>> localGoalMap() async {
     String username = await _db.getUsername(widget.currUser.uid);
-    List<Tuple2<Goal, String>> wall = await _db.wallMap(username);
+    List<Tuple3<Goal, String, String>> wall = await _db.wallMap(username);
     return wall;
     //print("size:");
     //print("size:" + wall.length.toString());
