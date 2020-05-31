@@ -43,9 +43,9 @@ class _SocialListState extends State<SocialList> {
   var isExpandedList = [];
 
   //var counter = 0;
-  List<double> progressList = [];
-  List<TextEditingController> progressController =
-      List<TextEditingController>();
+  // List<double> progressList = [];
+  // List<TextEditingController> progressController =
+  //   List<TextEditingController>();
 
   Future<List<Tuple2<Goal, String>>> localGoalMap() async {
     String username = await _db.getUsername(widget.currUser.uid);
