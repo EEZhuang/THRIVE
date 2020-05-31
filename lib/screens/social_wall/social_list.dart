@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thrive/models/goal.dart';
 import 'package:thrive/screens/home/goal_tile.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 
 class social_list extends StatelessWidget {
   @override
@@ -12,24 +14,26 @@ class social_list extends StatelessWidget {
 
     // Added to help with hard coding
     var goal1 = new Goal();
-    goal1.name = "Making more Krabby Patties";
-    goal1.goal = "Streak: 1";
-    goal1.days = "1";
+    goal1.goal = "Making more Krabby Patties";
+    goal1.goalDate = "Streak: 1";
+    goal1.goalUnits = "1";
 
     var goal2 = new Goal();
-    goal2.name = "Eating Healthy";
-    goal2.goal = "Streak: 2";
-    goal2.days = "2";
+    goal2.goal = "Eating Healthy";
+    goal2.goalDate = "Streak: 2";
+    goal2.goalUnits = "2";
 
     final goals = [goal1, goal2];
     //print(goals);
 
     //print(goals.length);
+    /**
     goals.forEach((goal) {
       print(goal.name);
       print(goal.goal);
       print(goal.days);
-    });
+    }
+         ); **/
 
     return ListView.builder(
       itemCount: 5,
@@ -65,7 +69,8 @@ class social_list extends StatelessWidget {
                       ),
                       new Text(
                         "Spongebob Squarepants",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                        //style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: ThriveColors.WHITE),
                       )
                     ],
                   ),
@@ -83,7 +88,11 @@ class social_list extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
                   **/
-                ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            /*
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -94,27 +103,27 @@ class social_list extends StatelessWidget {
                     children: <Widget>[
                       new Icon(
                         FontAwesomeIcons.heart,
-                        color: Color(0xFFFAF9F9)
+                        color: ThriveColors.WHITE,
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
                       new Icon(
                         FontAwesomeIcons.comment,
-                        color: Color(0xFFFAF9F9)
+                        color: ThriveColors.WHITE,
                       ),
                       new SizedBox(
                         width: 16.0,
                       ),
                       new Icon(
                           FontAwesomeIcons.paperPlane,
-                          color: Color(0xFFFAF9F9)
+                          color: ThriveColors.WHITE,
                       ),
                     ],
                   ),
                   new Icon(
                       FontAwesomeIcons.bookmark,
-                      color: Color(0xFFFAF9F9)
+                      color: ThriveColors.WHITE,
                   )
                 ],
               ),
@@ -123,7 +132,7 @@ class social_list extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 "Liked by Patrick Star, Mr. Krabs, and 528,331 others",
-                style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
+                style: TextStyle(fontWeight: FontWeight.bold, color: ThriveColors.WHITE),
               ),
             ),
             Padding(
@@ -131,12 +140,13 @@ class social_list extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  /*
                   new Container(
                     height: 30.0,
                     width: 40.0,
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xff8c94b6),
+                      color: ThriveColors.LIGHT_ORANGE,
                       /**
                       image: new DecorationImage(
                           fit: BoxFit.fill,
@@ -151,19 +161,22 @@ class social_list extends StatelessWidget {
                   Expanded(
                     child: new TextField(
                       decoration: new InputDecoration(
-                        border: InputBorder.none,
+                        //border: InputBorder.none,
                         hintText: "Add a comment...",
                         //hintStyle: Color(0xFFFAF9F9),
                       ),
-                      cursorColor: Color(0xFFFAF9F9),
+                      cursorColor: ThriveColors.WHITE,
                     ),
                   ),
+
+                   */
                 ],
               ),
             ),
+             */
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text("1 Day Ago", style: TextStyle(color: Colors.grey)),
+              child: Text("1 Day Ago", style: ThriveFonts.BODY_WHITE),
             )
           ],
         );

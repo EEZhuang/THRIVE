@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/screens/friendSearch/friend_search.dart';
+import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
+import 'package:thrive/screens/Password/password.dart';
+import 'package:thrive/screens/Password/changepass.dart';
+import 'package:thrive/screens/settings/settings.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,7 +18,8 @@ import 'package:thrive/services/database.dart';
 class Home extends StatefulWidget {
   final Function toggleHome;
   final Function toggleState;
-  Home({this.toggleHome, this.toggleState});
+  final FirebaseUser currUser;
+  Home({this.toggleHome, this.toggleState, this.currUser});
   @override
   _HomeState createState() => _HomeState();
 }
@@ -42,11 +48,12 @@ class FirstPage extends StatelessWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
+
   // Indicated which screen is selected
   // Starts app on the social wall
   int _selectedIndex = 0;
-
   // Array of different pages for NavBar
+  /*
   final List<Widget> pages = [
     SocialWall(),
     //FirstPage(),
@@ -56,7 +63,15 @@ class _HomeState extends State<Home> {
     FirstPage(),
   ];
 
+   */
+
   final PageStorageBucket bucket = PageStorageBucket();
+
+  void togglePage(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   void _onItemTapped(int index) {
 
@@ -83,6 +98,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> pages = [
+      SocialWall(),
+      //FirstPage(),
+      Profile(currUser: widget.currUser),
+      CreateGoal(togglePage: this.togglePage),
+      Search(),
+      Settings(toggleHome: widget.toggleHome, togglePage: this.togglePage),
+    ];
 
     return Scaffold(
       body: PageStorage(
@@ -117,9 +140,9 @@ class _HomeState extends State<Home> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFfe752b),
-        backgroundColor: Color(0xF0080F0F),
-        unselectedItemColor: Color(0xFFffd6ba),
+        selectedItemColor: ThriveColors.DARK_ORANGE,
+        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        unselectedItemColor: ThriveColors.LIGHT_ORANGE,
         onTap: _onItemTapped,
         //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
@@ -129,7 +152,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
-          widget.toggleState(0);
+          //widget.toggleState(0);
+          widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
       ),

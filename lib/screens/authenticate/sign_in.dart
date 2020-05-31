@@ -64,7 +64,7 @@ class _SignInState extends State<SignIn>{
           child: Form(
               key:_formKey,
               child: Column(
-                    children: <Widget> [
+                children: <Widget> [
                       Text(
                         'THRIVE',
                         style: TextStyle(
@@ -141,9 +141,9 @@ class _SignInState extends State<SignIn>{
                                           error = 'Could not sign in with those credentials';
                                         });
                                       } else {
-                                        print("here");
-                                        widget.toggleState(1);
-                                        print("home toggled");
+                                        //print("here");
+                                        widget.toggleHome();
+                                        //print("home toggled");
                                       }
                                     }
                                   }
