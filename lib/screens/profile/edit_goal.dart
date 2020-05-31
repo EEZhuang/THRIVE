@@ -8,9 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class EditGoal extends StatefulWidget {
   final Goal goal;
   final String id;
+  final String collabs;
   final Function updateTile;
 
-  EditGoal({this.goal, this.id, this.updateTile});
+  EditGoal({this.goal, this.id, this.collabs, this.updateTile});
 
   @override
   _EditGoalState createState() => _EditGoalState();
@@ -230,6 +231,23 @@ class _EditGoalState extends State<EditGoal> {
                                                   if (result != null) {
                                                     bool finished = await _db.deleteGoal(
                                                         result.uid, widget.id);
+
+                                                    String collabStr = widget.collabs;
+
+                                                    while (collabStr.length != 0){
+                                                      int commaIdx = collabStr.indexOf(",");
+                                                      String username = '';
+                                                      if (commaIdx != -1){
+                                                        username = collabStr.substring(0, commaIdx);
+                                                        collabStr = collabStr.substring(commaIdx + 2);
+                                                      } else {
+                                                        username = collabStr;
+                                                        collabStr = '';
+                                                      }
+
+                                                      //make delete call on username
+
+                                                    }
 
                                                     if (finished){
                                                       widget.updateTile();

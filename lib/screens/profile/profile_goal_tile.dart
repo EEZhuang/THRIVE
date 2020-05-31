@@ -11,9 +11,10 @@ import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 class GoalTile extends StatefulWidget {
   final Goal goal;
   final String id;
+  final String collabs;
   final Function updateTile;
 
-  GoalTile({this.goal, this.id, this.updateTile});
+  GoalTile({this.goal, this.id, this.collabs, this.updateTile});
 
   @override
   _GoalTileState createState() => _GoalTileState();
@@ -74,6 +75,7 @@ class _GoalTileState extends State<GoalTile> {
           EditGoal(
               goal: widget.goal,
               id: widget.id,
+              collabs: widget.collabs,
               updateTile: widget.updateTile)
         ],
       ),
