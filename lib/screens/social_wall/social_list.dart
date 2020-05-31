@@ -41,6 +41,7 @@ class _SocialListState extends State<SocialList> {
   var ids = [];
   var goalMap = [];
   var isExpandedList = [];
+  var dates = [];
 
   //var counter = 0;
   // List<double> progressList = [];
@@ -69,6 +70,7 @@ class _SocialListState extends State<SocialList> {
               goals = [];
               ids = [];
               goalMap = [];
+              dates = [];
               print("BEFORE SNAP HAS DATA");
 
               if (snapshot.hasData) {
@@ -76,6 +78,7 @@ class _SocialListState extends State<SocialList> {
                 for (var f in goalMap) {
                   goals.add(f.item1);
                   ids.add(f.item2);
+                  dates.add(f.item3);
                   print("AFTER SNAP HAS DATA ");
                   print(f.toString());
                 }
@@ -228,7 +231,7 @@ class _SocialListState extends State<SocialList> {
                */
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text("1 Day Ago", style: ThriveFonts.BODY_WHITE),
+                        child: Text(dates[index], style: ThriveFonts.BODY_WHITE),
                       )
                     ],
                   );
