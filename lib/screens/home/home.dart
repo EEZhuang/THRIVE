@@ -4,6 +4,7 @@ import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/screens/friendSearch/friend_search.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
+import 'package:thrive/screens/settings/settings.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
     Profile (),
     CreateGoal(),
     Search(),
-    FirstPage(),
+    Settings(),
   ];
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -89,7 +90,7 @@ class _HomeState extends State<Home> {
       Profile(currUser: widget.currUser),
       CreateGoal(),
       Search(),
-      FirstPage(),
+      Settings(),
     ];
 
     return Scaffold(

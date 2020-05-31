@@ -43,15 +43,6 @@ class _ProfileState extends State<Profile> {
         title: Text("My Profile"),
       ),
       body: GoalList(currUser: widget.currUser),
-
-      // Button to signout and return to signin page
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _auth.signOut();
-          //widget.toggleHome();
-          //print(_auth.getCurrentUser());
-        },
-      ),
     );
   }
 }

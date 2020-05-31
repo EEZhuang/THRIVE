@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
+import 'package:thrive/shared/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
 
 // "User home page", screen useer sees after successful login
 class ChangePass extends StatefulWidget {
@@ -66,70 +68,62 @@ class _ChangePasswordState extends State<ChangePass> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Change Password"),
+        title: Text("Change Password", style: TextStyle(fontFamily: 'Proxima', fontWeight: FontWeight.bold, fontSize: 30)),
+        centerTitle: true,
+        backgroundColor: Color(0xFF69A297),
       ),
-      body: Form(
-          key: _formKey,
-          child: Column(
-              children: <Widget>[
-                SizedBox(
-                    height: 20.0
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent, width: 5.0),
-                      ),
-                      hintText: 'Enter New Password'
-                  ),
-                  onChanged: (val) {
-                    setState(() {
-                      password1 = val;
-                    });
-                  },
-
-                ),
-                SizedBox(
-                    height: 20.0
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blueAccent, width: 5.0),
-                      ),
-                      hintText: 'Confirm New Password'
-                  ),
-                  onChanged: (val2) {
-                    setState(() {
-                      password2 = val2;
-                    });
-                  },
-
-                ),
-                RaisedButton(
-                  child: Text('Change Password'),
-                  onPressed: () async {
-
-                    // TODO: pass user as parameter from Wrapper()
-                    FirebaseUser user = await _auth.getCurrentUser();
-
-                    // If there is a current user logged in, make HTTP request
-                    if(password1 == password2) {
-                      user.updatePassword(password1).then((_){
-                        print("Succesfully changed password");
-                      }).catchError((error){
-                        print("Password can't be changed" + error.toString());
-                        //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+      backgroundColor: Color(0xF0080F0F),
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+        child: Form(
+            key: _formKey,
+            child: Column(
+                children: <Widget>[
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    decoration:textInputDecoration.copyWith(hintText:  'Enter new password'),
+                    onChanged: (val) {
+                      setState(() {
+                        password1 = val;
                       });
-                    }
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  TextFormField(
+                    decoration:textInputDecoration.copyWith(hintText:  'Confirm new password'),
+                    onChanged: (val2) {
+                      setState(() {
+                        password2 = val2;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  RaisedButton(
+                    color: ThriveColors.WHITE,
+                    child: Text('Change Password'),
+                    onPressed: () async {
 
-                  },
-                ),
-                SizedBox(height: 12.0),
-                Text( error, style: TextStyle(color: Colors.red) ),
-              ])),
+                      // TODO: pass user as parameter from Wrapper()
+                      FirebaseUser user = await _auth.getCurrentUser();
+
+                      // If there is a current user logged in, make HTTP request
+                      if(password1 == password2) {
+                        user.updatePassword(password1).then((_){
+                          print("Successfully changed password");
+                        }).catchError((error){
+                          print("Password cannot be changed" + error.toString());
+                          //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+                        });
+                      }
+
+                    },
+                  ),
+                  SizedBox(height: 12.0),
+                  Text( error, style: TextStyle(color: Colors.red) ),
+                ])),
+      ),
       // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
+      /*bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -153,8 +147,7 @@ class _ChangePasswordState extends State<ChangePass> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-      ),
-
+      ),*/
     );
   }
 }

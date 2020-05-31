@@ -105,7 +105,7 @@ class _SignInState extends State<SignIn>{
                               SizedBox(height: 20.0),
                               TextFormField(
                                   decoration:textInputDecoration.copyWith(hintText:  'Email'),
-                                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                                  validator: (val) => val.isEmpty ? 'Enter email' : null,
                                   onChanged: (val){
                                     setState(() {
                                       email = val;
@@ -115,7 +115,7 @@ class _SignInState extends State<SignIn>{
                               SizedBox(height: 20.0),
                               TextFormField(
                                   decoration:textInputDecoration.copyWith(hintText: 'Password'),
-                                  validator: (val) => val.length < 6 ? 'Enter a password (6+ characters long)' : null,
+                                  validator: (val) => val.length < 6 ? 'Enter password (6+ characters long)' : null,
                                   onChanged: (val){
                                     setState(() {
                                       password = val;
@@ -131,9 +131,7 @@ class _SignInState extends State<SignIn>{
                                   onPressed: () async {
                                     if(_formKey.currentState.validate()){
                                       setState(() => loading = true);
-                                      print("pre result");
                                       dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                                      print("result here" + result);
                                       if(result == null) {
                                         setState(() {
                                           loading = false;
@@ -149,7 +147,7 @@ class _SignInState extends State<SignIn>{
                                   }
                               ),
                               FlatButton(onPressed: (){
-                                //widget.toggleView();
+                                // open to forgot password page
                               },
                                   child: Text('Forgot Password?',
                                     style: TextStyle(

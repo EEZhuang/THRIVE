@@ -48,16 +48,6 @@ class _SocialWallState extends State<SocialWall> {
       body: social_list(),
       backgroundColor: Color(0xF0080F0F),
       //backgroundColor: Color(0xFF273534),
-      // Button to signout and return to signin page
-      /**
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _auth.signOut();
-          widget.toggleHome();
-          //print(_auth.getCurrentUser());
-        },
-      ),
-          **/
     );
   }
 }

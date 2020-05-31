@@ -154,13 +154,6 @@ class _RegisterState extends State<Register>{
                                       birthdate = value;
                                     });
                                   },
-                                  /*validator: (value) {
-                                    if (value.isEmpty) {
-                                      return "Please enter your birth date";
-                                    }
-                                    birthdate = value;
-                                    return null;
-                                  },*/
                                 ),
                               ),
                             ),
@@ -210,11 +203,9 @@ class _RegisterState extends State<Register>{
                             splashColor: ThriveColors.DARK_ORANGE,
                             child: Text('Sign up'),
                             onPressed: () async {
-                              if(_formKey.currentState.validate() && (username != "") && (firstname != "")
-                                  && (lastname != "") && (password != "") && (password2 != "") && (birthdate != "")){
+                              if(_formKey.currentState.validate()){
                                 setState(() => loading = true);
                                 dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                                print("result here" + result);
                                 if(result == null) {
                                   setState(() {
                                     loading = false;
