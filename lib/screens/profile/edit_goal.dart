@@ -8,9 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class EditGoal extends StatefulWidget {
   final Goal goal;
   final String id;
+  final String collabs;
   final Function updateTile;
 
-  EditGoal({this.goal, this.id, this.updateTile});
+  EditGoal({this.goal, this.id, this.collabs, this.updateTile});
 
   @override
   _EditGoalState createState() => _EditGoalState();
@@ -228,8 +229,26 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
+                                                    String username = await _db.getUsername(result.uid);
                                                     bool finished = await _db.deleteGoal(
-                                                        result.uid, widget.id);
+                                                        username, widget.id);
+
+                                                    String collabStr = widget.collabs;
+
+                                                    while (collabStr.length != 0){
+                                                      int commaIdx = collabStr.indexOf(",");
+                                                      String username = '';
+                                                      if (commaIdx != -1){
+                                                        username = collabStr.substring(0, commaIdx);
+                                                        collabStr = collabStr.substring(commaIdx + 2);
+                                                      } else {
+                                                        username = collabStr;
+                                                        collabStr = '';
+                                                      }
+
+                                                      _db.deleteGoal(username, widget.id);
+
+                                                    }
 
                                                     if (finished){
                                                       widget.updateTile();

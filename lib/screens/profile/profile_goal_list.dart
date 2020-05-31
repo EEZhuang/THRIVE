@@ -40,10 +40,11 @@ class _GoalListState extends State<GoalList> {
   //var counter = 0;
   List<double> progressList = [];
   List<TextEditingController> progressController = List<TextEditingController>();
+  Map<String, String> collabMap = {};
 
   Future<Map<String, Goal>> localGoalMap() async{
     String username = await _db.getUsername(widget.currUser.uid);
-    Map<String, String> temp = await _db.getCollabMap(username);
+    collabMap = await _db.getCollabMap(username);
     //List<Tuple3<Goal, String, String>> wall = await _db.wallMap(username);
     //print("size:");
     //print("size:" + wall.length.toString());
@@ -57,6 +58,7 @@ class _GoalListState extends State<GoalList> {
     var goals = [];
     var ids = [];
     var goalMap = {};
+    var collabs = [];
     String username = "";
     _db.getUsername(widget.currUser.uid).then((String name){
       username = name;
@@ -72,6 +74,7 @@ class _GoalListState extends State<GoalList> {
               goals = [];
               ids = [];
               goalMap = {};
+              collabs = [];
               if (snapshot.hasData) {
                 goalMap = snapshot.data;
 
@@ -123,6 +126,7 @@ class _GoalListState extends State<GoalList> {
 
                 goalMap.forEach((k, v) {
                   goals.add(v);
+                  collabs.add(collabMap[k]);
                   isExpandedList.add(false);
                   //print("2232");
                   progressList.add(0);
@@ -168,144 +172,176 @@ class _GoalListState extends State<GoalList> {
                                 return GoalTile(
                                   goal: goals[index],
                                   id: ids[index],
+                                  collabs: collabs[index],
                                   updateTile: updateTile,
                                 );
                               },
-                              body: Row(
+                              body: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FloatingActionButton(
-                                    mini: true,
-                                    onPressed: () {
-                                      setState(() {
-                                        if ((int.parse(myGoal.goalProgress) + progressList[index]) > 0) {
-                                          progressList[index]--;
-                                          progressController[index].text = progressList[index].toInt().toString();
-                                        }
-                                      });
-                                    },
-                                    child: new Icon(Icons.remove,
-                                        color: ThriveColors.DARK_ORANGE),
-                                    backgroundColor: ThriveColors.LIGHT_GREEN,
-                                  ),
-                                  Expanded(
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      decoration: new InputDecoration(
-                                          labelText:'Change to goal',
-                                          labelStyle: ThriveFonts.BODY_DARK_GRAY,
+                                  Row(
+                                    children: [
+                                      FloatingActionButton(
+                                        mini: true,
+                                        onPressed: () {
+                                          setState(() {
+                                            if ((int.parse(myGoal.goalProgress) + progressList[index]) > 0) {
+                                              progressList[index]--;
+                                              progressController[index].text = progressList[index].toInt().toString();
+                                            }
+                                          });
+                                        },
+                                        child: new Icon(Icons.remove,
+                                            color: ThriveColors.DARK_ORANGE),
+                                        backgroundColor: ThriveColors.LIGHT_GREEN,
                                       ),
-                                      textAlign: TextAlign.center,
-                                      controller: progressController[index],
-                                      onChanged: (text) {
-//                                        if(int.parse(text) > 10) {
-//                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) > int.parse(myGoal.goalUnits)) {
-//                                            progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
-//                                            progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
-//                                          } else {
-//                                            progressController[index].text =
-//                                            "10";
-//                                            progressList[index] = 10;
-//                                          }
-//                                          text = "10";
-//                                        } else
-                                        if((int.parse(myGoal.goalProgress) + int.parse(text)) >= int.parse(myGoal.goalUnits)) {
-                                          progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
-                                          progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
-                                        } else {
-                                          //progressList[index].text = text;
-                                          progressList[index] = double.parse(text);
-                                        }
+                                      Expanded(
+                                        child: TextField(
+                                          keyboardType: TextInputType.number,
+                                          decoration: new InputDecoration(
+                                              labelText:'Change to goal',
+                                              labelStyle: ThriveFonts.BODY_DARK_GRAY,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          controller: progressController[index],
+                                          onChanged: (text) {
+  //                                        if(int.parse(text) > 10) {
+  //                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) > int.parse(myGoal.goalUnits)) {
+  //                                            progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+  //                                            progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+  //                                          } else {
+  //                                            progressController[index].text =
+  //                                            "10";
+  //                                            progressList[index] = 10;
+  //                                          }
+  //                                          text = "10";
+  //                                        } else
+                                            if((int.parse(myGoal.goalProgress) + int.parse(text)) >= int.parse(myGoal.goalUnits)) {
+                                              progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+                                              progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+                                            } else {
+                                              //progressList[index].text = text;
+                                              progressList[index] = double.parse(text);
+                                            }
 
-//                                        if(int.parse(text) < -10) {
-//
-//                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) < 0) {
-//                                            progressController[index].text = "-" + myGoal.goalProgress;
-//                                            progressList[index] = -1 * double.parse(myGoal.goalProgress);
-//                                          } else {
-//                                            progressController[index].text = "-10";
-//                                            progressList[index] = -10;
-//                                            //text = "-10";
-//                                          }
-//                                        } else
-                                        if((int.parse(myGoal.goalProgress) + int.parse(text)) <= 0) {
-                                          //print("TRUE");
-                                          progressController[index].text = "-" + myGoal.goalProgress;
-                                          progressList[index] = -1 * double.parse(myGoal.goalProgress);
-                                        } else {
-                                          progressList[index] = double.parse(text);
-                                        }
-                                      },
-                                      //initialValue: "0",
+  //                                        if(int.parse(text) < -10) {
+  //
+  //                                          if((int.parse(myGoal.goalProgress) + int.parse(text)) < 0) {
+  //                                            progressController[index].text = "-" + myGoal.goalProgress;
+  //                                            progressList[index] = -1 * double.parse(myGoal.goalProgress);
+  //                                          } else {
+  //                                            progressController[index].text = "-10";
+  //                                            progressList[index] = -10;
+  //                                            //text = "-10";
+  //                                          }
+  //                                        } else
+                                            if((int.parse(myGoal.goalProgress) + int.parse(text)) <= 0) {
+                                              //print("TRUE");
+                                              progressController[index].text = "-" + myGoal.goalProgress;
+                                              progressList[index] = -1 * double.parse(myGoal.goalProgress);
+                                            } else {
+                                              progressList[index] = double.parse(text);
+                                            }
+                                          },
+                                          //initialValue: "0",
 
-                                    )
+                                        )
+                                      ),
+                                      FloatingActionButton(
+                                        mini: true,
+                                        onPressed: () {
+                                          setState(() {
+                                            if ((int.parse(myGoal.goalProgress) + progressList[index]) < int.parse(myGoal.goalUnits)) {
+                                              progressList[index]++;
+                                              progressController[index].text = progressList[index].toInt().toString();
+                                            }
+                                          });
+                                        },
+                                        child: new Icon(Icons.add,
+                                            color: ThriveColors.DARK_ORANGE),
+                                        backgroundColor: ThriveColors.LIGHT_GREEN,
+                                      ),
+                                      FlatButton(
+                                        onPressed: () async {
+                                          FirebaseUser result = await _auth
+                                              .getCurrentUser();
+
+                                          int tmpProg =
+                                          int.parse(myGoal.goalProgress);
+                                          tmpProg += progressList[index].toInt();
+
+
+
+                                          if (tmpProg >=
+                                              int.parse(myGoal.goalUnits)) {
+                                            tmpProg =
+                                                int.parse(myGoal.goalUnits);
+                                            progressList[index] = 0;
+                                            progressController[index].text = "0";
+                                          } else if (tmpProg <= 0) {
+                                            tmpProg = 0;
+                                            progressList[index] = 0;
+                                            progressController[index].text = "0";
+                                          }
+
+
+                                          myGoal.goalProgress = tmpProg.toString();
+                                          if (result != null) {
+                                            _db.postGoal(
+                                                myGoal.goal,
+                                                ids[index],
+                                                myGoal.goalUnits,
+                                                myGoal.goalDate,
+                                                myGoal.goalRepeat,
+                                                myGoal.goalProgress);
+                                          }
+
+                                          if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) > int.parse(myGoal.goalUnits)) {
+                                            progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
+                                            progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
+                                          } else if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) < 0) {
+                                            //print("TRUE");
+                                            progressController[index].text = "-" + myGoal.goalProgress;
+                                            progressList[index] = -1 * double.parse(myGoal.goalProgress);
+                                          }
+
+                                          setState(() {
+
+                                          });
+                                        },
+                                        child: Text(
+                                          "Confirm",
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  FloatingActionButton(
-                                    mini: true,
-                                    onPressed: () {
-                                      setState(() {
-                                        if ((int.parse(myGoal.goalProgress) + progressList[index]) < int.parse(myGoal.goalUnits)) {
-                                          progressList[index]++;
-                                          progressController[index].text = progressList[index].toInt().toString();
-                                        }
-                                      });
-                                    },
-                                    child: new Icon(Icons.add,
-                                        color: ThriveColors.DARK_ORANGE),
-                                    backgroundColor: ThriveColors.LIGHT_GREEN,
-                                  ),
-                                  FlatButton(
-                                    onPressed: () async {
-                                      FirebaseUser result = await _auth
-                                          .getCurrentUser();
-
-                                      int tmpProg =
-                                      int.parse(myGoal.goalProgress);
-                                      tmpProg += progressList[index].toInt();
-
-
-
-                                      if (tmpProg >=
-                                          int.parse(myGoal.goalUnits)) {
-                                        tmpProg =
-                                            int.parse(myGoal.goalUnits);
-                                        progressList[index] = 0;
-                                        progressController[index].text = "0";
-                                      } else if (tmpProg <= 0) {
-                                        tmpProg = 0;
-                                        progressList[index] = 0;
-                                        progressController[index].text = "0";
-                                      }
-
-
-                                      myGoal.goalProgress = tmpProg.toString();
-                                      if (result != null) {
-                                        _db.postGoal(
-                                            myGoal.goal,
-                                            ids[index],
-                                            myGoal.goalUnits,
-                                            myGoal.goalDate,
-                                            myGoal.goalRepeat,
-                                            myGoal.goalProgress);
-                                      }
-
-                                      if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) > int.parse(myGoal.goalUnits)) {
-                                        progressController[index].text = (int.parse(myGoal.goalUnits) - int.parse(myGoal.goalProgress)).toString();
-                                        progressList[index] = double.parse(myGoal.goalUnits) - double.parse(myGoal.goalProgress);
-                                      } else if((int.parse(myGoal.goalProgress) + int.parse(progressController[index].text)) < 0) {
-                                        //print("TRUE");
-                                        progressController[index].text = "-" + myGoal.goalProgress;
-                                        progressList[index] = -1 * double.parse(myGoal.goalProgress);
-                                      }
-
-                                      setState(() {
-
-                                      });
-                                    },
-                                    child: Text(
-                                      "Confirm",
+                                  SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: <TextSpan> [
+                                          TextSpan(
+                                              text: 'Collaborators: ',
+                                              style: new TextStyle(
+                                                fontSize: 14,
+                                                color: ThriveColors.DARK_ORANGE,
+                                                fontWeight: FontWeight.bold
+                                              )
+                                          ),
+                                          TextSpan(
+                                              text: collabs[index],
+                                              style: new TextStyle(
+                                                  fontSize: 14,
+                                                  color: ThriveColors.TRANSPARENT_BLACK,
+                                              )
+                                          )
+                                        ]
+                                      )
                                     ),
                                   ),
-                                ],
+                                  SizedBox(height: 10)
+                                ]
                               ),
                               isExpanded: isExpandedList[index],
                             );
