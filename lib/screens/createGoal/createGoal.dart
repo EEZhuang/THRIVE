@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/services/database.dart';
-
 import 'FriendReturn.dart';
 import 'collaborators.dart';
 import 'dart:math';
@@ -82,7 +81,7 @@ class _CreateGoalState extends State<CreateGoal> {
                       bottomRight: Radius.circular(40.0),
                       bottomLeft: Radius.circular(40.0),
                     )),
-                height: 275,
+                height: 280,
                 //height: 300,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -370,15 +369,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                         
                                       }
 
-
                                       widget.togglePage(1);
-
-
-                                      // Clear form
-                                      //dateText.clear();
-                                      //repeatText.clear();
-                                      //collabText.clear();
-
                                     }
                                     print(goal);
                                     Navigator.of(context).pop(true);

@@ -63,7 +63,8 @@ class _SocialListState extends State<SocialList> {
     var deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        //backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+      backgroundColor: Colors.transparent,
         body: FutureBuilder<dynamic>(
             future: this.localGoalMap(),
             builder: (context, snapshot) {
@@ -71,7 +72,7 @@ class _SocialListState extends State<SocialList> {
               ids = [];
               goalMap = [];
               dates = [];
-              print("BEFORE SNAP HAS DATA");
+              //print("BEFORE SNAP HAS DATA");
 
               if (snapshot.hasData) {
                 goalMap = snapshot.data;
@@ -79,8 +80,8 @@ class _SocialListState extends State<SocialList> {
                   goals.add(f.item1);
                   ids.add(f.item2);
                   dates.add(f.item3);
-                  print("AFTER SNAP HAS DATA ");
-                  print(f.toString());
+                  //print("AFTER SNAP HAS DATA ");
+                  //print(f.toString());
                 }
               } else {
                 return Loading();
@@ -93,6 +94,7 @@ class _SocialListState extends State<SocialList> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
+                      /*
                       Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 16.0),
@@ -106,7 +108,8 @@ class _SocialListState extends State<SocialList> {
                                   width: 40.0,
                                   decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: const Color(0xff7c94b6)
+                                      //color: const Color(0xff7c94b6)
+                                    color: ThriveColors.DARK_ORANGE,
                                       /**
                                 image: new DecorationImage(
                                 fit: BoxFit.fill,
@@ -123,20 +126,19 @@ class _SocialListState extends State<SocialList> {
                                   //style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFAF9F9)),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: ThriveColors.WHITE),
+                                      color: ThriveColors.LIGHT_ORANGE),
                                 )
+
                               ],
                             ),
-                            new IconButton(
-                              icon: Icon(Icons.more_vert),
-                              onPressed: null,
-                            )
+
                           ],
                         ),
                       ),
+                             */
                       Flexible(
                           fit: FlexFit.loose,
-                          child: new GoalTile(goal: goals[index])
+                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index])
                           /**
                     Image.network(
                     "https://images.pexels.com/photos/672657/pexels-photo-672657.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -231,7 +233,8 @@ class _SocialListState extends State<SocialList> {
                */
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(dates[index], style: ThriveFonts.BODY_WHITE),
+                        //child: Text(dates[index], style: ThriveFonts.BODY_WHITE),
+                        child: null,
                       )
                     ],
                   );

@@ -12,3 +12,5 @@ const Material.TextStyle BODY_WHITE = Material.TextStyle(fontFamily: 'proxima', 
     color: ThriveColors.WHITE);
 const Material.TextStyle BODY_DARK_GRAY = Material.TextStyle(fontFamily: 'proxima', fontSize: 14,
     color: ThriveColors.DARK_GRAY);
+const Material.TextStyle SUBHEADING_LIGHTEST_GREEN = Material.TextStyle(fontFamily: 'proxima', fontSize: 16,
+    color: ThriveColors.LIGHTEST_GREEN);
