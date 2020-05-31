@@ -246,7 +246,7 @@ class _EditGoalState extends State<EditGoal> {
                                                         collabStr = '';
                                                       }
 
-                                                      //make delete call on username
+                                                      _db.deleteGoal(username, widget.id);
 
                                                     }
 
