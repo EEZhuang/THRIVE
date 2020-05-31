@@ -57,7 +57,8 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+      body:
+          jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
     );
     print("before returning true");
     return true;
@@ -113,6 +114,21 @@ class DatabaseService {
         'iconIndex': iconIndex.toString(),
       }),
     );
+  }
+
+  Future<Tuple2<int, int>> getUserAvatar(String username) async {
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_user_avatar',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'username': username
+      },
+    );
+
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    Tuple2<int, int> avatarTuple =
+        new Tuple2(int.parse(json['colorIndex']), int.parse(json['iconIndex']));
+    return avatarTuple;
   }
 
   void setPublicUid(String username) async {

@@ -248,7 +248,7 @@ class _RegisterState extends State<Register> {
                                 );
                                 _db.setPublicUid(username);
                                 _db.setUserAvatar(
-                                    username, rng.nextInt(9), rng.nextInt(4));
+                                    username, rng.nextInt(9), rng.nextInt(6));
                                 widget.toggleHome();
                               }
                             }

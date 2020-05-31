@@ -24,10 +24,12 @@ const List<Color> AVATAR_COLORS = [
   LIGHTEST_GREEN
 ];
 
-final List<Icon> AVATOR_ICONS = [
+const List<Icon> AVATAR_ICONS = [
   Icon(Icons.airplanemode_active),
   Icon(Icons.nature),
   Icon(Icons.audiotrack),
   Icon(Icons.beach_access),
-  Icon(Icons.brightness_3)
+  Icon(Icons.brightness_3),
+  Icon(Icons.landscape),
+  Icon(Icons.wb_sunny),
 ];
