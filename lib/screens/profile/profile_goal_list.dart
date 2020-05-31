@@ -172,7 +172,6 @@ class _GoalListState extends State<GoalList> {
                                 return GoalTile(
                                   goal: goals[index],
                                   id: ids[index],
-                                  collabs: collabs[index],
                                   updateTile: updateTile,
                                 );
                               },
