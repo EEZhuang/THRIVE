@@ -33,18 +33,12 @@ app.post('/link_user_goal', function(req, res) {
 
 app.post('/delete_goal', function(req, res) {
   //console.log(req.body('uid'));
-  var username = db.collection('users').doc(req.body.uid).get().then(
-    querySnapshot=>{
-        console.log(querySnapshot.data().username)
-        var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
-        var goal2 = db.collection('goals').doc(req.body.goalID).delete()
-        res.send(JSON.stringify('done'));
+
+    var goal = db.collection('usernames').doc(req.body.username).collection("user_goals").doc(req.body.goalID).delete()
+    var goal2 = db.collection('goals').doc(req.body.goalID).delete()
+    res.send(JSON.stringify('done'));
 
 
-        //var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
-        //var goal2 = db.collection('goals').doc(req.body.goalID).delete()
-    }
-  )
 })
 
 
