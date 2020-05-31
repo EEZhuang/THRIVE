@@ -364,6 +364,12 @@ class _CreateGoalState extends State<CreateGoal> {
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
 
+                                      for (var collab in collabList) {
+
+                                        _db.linkUserGoal(collab, goalID);
+                                        
+                                      }
+
 
                                       widget.togglePage(1);
 
@@ -431,6 +437,7 @@ class _CreateGoalState extends State<CreateGoal> {
       ));
     }
   }
+
 }
 
 class MyTextField extends StatelessWidget {

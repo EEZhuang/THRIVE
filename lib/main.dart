@@ -1,5 +1,4 @@
-
-//import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:thrive/screens/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
