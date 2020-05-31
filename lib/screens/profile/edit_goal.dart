@@ -229,8 +229,9 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
+                                                    String username = await _db.getUsername(result.uid);
                                                     bool finished = await _db.deleteGoal(
-                                                        result.uid, widget.id);
+                                                        username, widget.id);
 
                                                     String collabStr = widget.collabs;
 
