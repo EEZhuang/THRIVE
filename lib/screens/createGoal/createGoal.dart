@@ -213,7 +213,7 @@ class _CreateGoalState extends State<CreateGoal> {
                           child: TextFormField(
                             style: ThriveFonts.BODY_WHITE,
                             decoration: InputDecoration(
-                                labelText: 'Units',
+                                labelText: 'Units (Optional)',
                                 labelStyle: ThriveFonts.SUBHEADING_WHITE,
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -229,9 +229,16 @@ class _CreateGoalState extends State<CreateGoal> {
                                 goalUnits = '1'; //goal has no units
                                 return null;
                               }
-                              goalUnits =
-                                  value; //assigns goal units for posting
-                              return null;
+
+                              //print(int.tryParse(value) != null);
+                              if (int.tryParse(value) != null) {
+                                goalUnits =
+                                    value; //assigns goal units for posting
+                                return null;
+                              } else {
+                                return "Needs to be a whole number";
+                              }
+
                             },
                           ),
                           /*
