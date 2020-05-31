@@ -4,6 +4,8 @@ import 'package:thrive/models/goal.dart';
 import 'package:thrive/services/database.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 
 class EditGoal extends StatefulWidget {
   final Goal goal;
@@ -47,7 +49,7 @@ class _EditGoalState extends State<EditGoal> {
     var dateText = TextEditingController(text: goalDate);
 
     return IconButton(
-      icon: Icon(Icons.edit),
+      icon: Icon(Icons.edit, color: ThriveColors.LIGHT_ORANGE),
       onPressed: () {
         showDialog(
             context: context,
@@ -228,10 +230,12 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
-                                                    bool finished = await _db.deleteGoal(
-                                                        result.uid, widget.id);
+                                                    bool finished =
+                                                        await _db.deleteGoal(
+                                                            result.uid,
+                                                            widget.id);
 
-                                                    if (finished){
+                                                    if (finished) {
                                                       widget.updateTile();
                                                     }
                                                   }
