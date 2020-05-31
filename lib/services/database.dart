@@ -85,7 +85,7 @@ class DatabaseService {
     return true;
   }
 
-  void setUserInfo(String uid, String username, String firstName,
+  Future<bool> setUserInfo(String uid, String username, String firstName,
       String lastName, String birthDate) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/set_user_info',
@@ -100,9 +100,10 @@ class DatabaseService {
         'birthDate': birthDate,
       }),
     );
+    return true;
   }
 
-  void setUserAvatar(String username, int colorIndex, int iconIndex) async {
+  Future<bool> setUserAvatar(String username, int colorIndex, int iconIndex) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/set_user_avatar',
       headers: <String, String>{
@@ -114,6 +115,7 @@ class DatabaseService {
         'iconIndex': iconIndex.toString(),
       }),
     );
+    return true;
   }
 
   Future<Tuple2<int, int>> getUserAvatar(String username) async {

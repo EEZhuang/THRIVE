@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,7 @@ class _RegisterState extends State<Register>{
   var dateText = TextEditingController();
   String _birthdate = "";
   final DatabaseService _db = DatabaseService();
+  List<String> allUsers;
 
   String firstname = '';
   String lastname = '';
@@ -39,8 +42,13 @@ class _RegisterState extends State<Register>{
   String password2 = '';
   String error = '';
 
+  getAllUsers() async {
+    allUsers = await _db.getAllUsernames("");
+  }
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    getAllUsers();
     // Returns screen according to loading status
     return loading ? Loading(): Scaffold (
       body: Container(
@@ -141,6 +149,7 @@ class _RegisterState extends State<Register>{
                             setState(() {
                               _birthdate = DateFormat('MM-dd-yyyy').format(date);
                               dateText.text = _birthdate;
+                              birthdate = dateText.text;
                             });
                           });
                         },
@@ -151,7 +160,7 @@ class _RegisterState extends State<Register>{
                             validator: (value) => value.isEmpty ? 'Please enter your birth date' : null,
                             onChanged: (value){
                               setState(() {
-                                birthdate = value;
+                                //birthdate = dateText.text;
                               });
                             },
                           ),
@@ -160,13 +169,19 @@ class _RegisterState extends State<Register>{
                       SizedBox(height: 20.0),
                       TextFormField(
                         decoration:textInputDecoration.copyWith(hintText:  'Enter a username'),
-                        validator: (val) => val.isEmpty ? 'Enter a username' : null,
-                        onChanged: (val){
+                        validator: (val) {
+                          if (allUsers.contains(val)) {
+                            return "Enter a username that has not been used";
+                          } else if (val.isEmpty) {
+                            return "Enter a username";
+                          }
+                          return null;
+                        },
+                        onChanged: (val) {
                           setState(() {
                             username = val;
                           });
-                        },
-                      ),
+                        }),
                       SizedBox(height: 20.0),
                       TextFormField(
                         decoration:textInputDecoration.copyWith(hintText: 'Enter a password'),
@@ -213,9 +228,13 @@ class _RegisterState extends State<Register>{
                               });
                             } else {
                               print(username + firstname + lastname + birthdate);
-                              _db.setUserInfo(result.uid, username, firstname, lastname, birthdate);
+                              bool set = await _db.setUserInfo(result.uid, username, firstname, lastname, birthdate);
                               _db.setPublicUid(username);
-                              widget.toggleHome();
+                              var rng = new Random();
+                              set = await _db.setUserAvatar(username, rng.nextInt(9), rng.nextInt(6));
+                              if(set){
+                                widget.toggleHome();
+                              }
                             }
                           }
                         }
