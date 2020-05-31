@@ -48,7 +48,6 @@ class FirstPage extends StatelessWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
-
   // Indicated which screen is selected
   // Starts app on the social wall
   int _selectedIndex = 0;
@@ -67,14 +66,13 @@ class _HomeState extends State<Home> {
 
   final PageStorageBucket bucket = PageStorageBucket();
 
-  void togglePage(int index){
+  void togglePage(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
   void _onItemTapped(int index) {
-
     // If "add goal" is selected, we push the create goal screen
     if (index == 2) {
       /*
@@ -99,7 +97,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      SocialWall(),
+      SocialWall(currUser: widget.currUser),
       //FirstPage(),
       Profile(currUser: widget.currUser),
       CreateGoal(togglePage: this.togglePage),
@@ -109,8 +107,8 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       body: PageStorage(
-          child: pages[_selectedIndex],
-          bucket: bucket,
+        child: pages[_selectedIndex],
+        bucket: bucket,
       ),
 
       // Bottom Navigation Bar
@@ -149,6 +147,7 @@ class _HomeState extends State<Home> {
       ),
 
       // Button to signout and return to signin page
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
