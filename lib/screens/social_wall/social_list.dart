@@ -65,16 +65,22 @@ class _SocialListState extends State<SocialList> {
         backgroundColor: ThriveColors.TRANSPARENT_BLACK,
         body: FutureBuilder<dynamic>(
             future: this.localGoalMap(),
-            builder: (context, AsyncSnapshot snapshot) {
+            builder: (context, snapshot) {
               goals = [];
               ids = [];
               goalMap = [];
+              print("BEFORE SNAP HAS DATA");
+
               if (snapshot.hasData) {
                 goalMap = snapshot.data;
                 for (var f in goalMap) {
                   goals.add(f.item1);
                   ids.add(f.item2);
+                  print("AFTER SNAP HAS DATA ");
+                  print(f.toString());
                 }
+              } else {
+                return Loading();
               }
               return ListView.builder(
                 itemCount: goals.length,
