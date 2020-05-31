@@ -55,7 +55,7 @@ class _PasswordState extends State<Password> {
         centerTitle: true,
         backgroundColor: Color(0xFF69A297),
       ),
-      backgroundColor: Colors.grey,
+      backgroundColor: Color(0xF0080F0F),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
         child: Form(
@@ -95,7 +95,7 @@ class _PasswordState extends State<Password> {
                             });
                           } else {
                               // password confirmed go to change password page
-                              print("take me to change password");
+                              //print("take me to change password");
                               Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePass()));
                           }
                         }

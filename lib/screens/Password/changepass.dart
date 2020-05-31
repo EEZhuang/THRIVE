@@ -72,7 +72,7 @@ class _ChangePasswordState extends State<ChangePass> {
         centerTitle: true,
         backgroundColor: Color(0xFF69A297),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Color(0xF0080F0F),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
         child: Form(
@@ -111,7 +111,7 @@ class _ChangePasswordState extends State<ChangePass> {
                       // If there is a current user logged in, make HTTP request
                       if(password1 == password2) {
                         user.updatePassword(password1).then((_){
-                          print("Successfully changed password");
+                          //print("Successfully changed password");
                           Navigator.of(context).pop(false);
                           Navigator.of(context).pop(false);
                         }).catchError((error){

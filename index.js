@@ -61,7 +61,7 @@ app.post('/delete_connection', function(req, res) {
         // ...
     });
 
-  console.log(req.body.frienduid);
+  //console.log(req.body.frienduid);
 
 })
 
@@ -88,7 +88,27 @@ app.post('/set_user_info', function(req, res) {
             lastName: req.body.lastName,
             birthDate: req.body.birthDate
         })
+  res.send()
 })
+
+app.post('/set_user_avatar', function(req, res) {
+    console.log("ABOUT TO SET THE AVATAWWWW");
+  db.collection("usernames")
+    .doc(req.body.username)
+        .set({
+            colorIndex: req.body.colorIndex,
+            iconIndex: req.body.iconIndex,
+        })
+  res.send()
+})
+
+app.get('/get_user_avatar', function(req, res) {
+  var avatar = db.collection('usernames').doc(req.header("username")).get().then(querySnapshot => {
+    res.send(JSON.stringify({colorIndex: querySnapshot.data().colorIndex,
+                             iconIndex: querySnapshot.data().iconIndex}))
+  })
+})
+
 
 app.post('/set_public_uid', function(req, res) {
   db.collection("usernames")
@@ -106,9 +126,10 @@ app.post('/set_friend', function(req, res) {
 
 })
 
+
 app.get('/get_goal', function(req, res) {
   var goal = db.collection('goals').doc(req.header("goalID")).get().then(querySnapshot => {
-    console.log(querySnapshot.data().goal_name)
+    //console.log(querySnapshot.data().goal_name)
     res.send(JSON.stringify({goal_name: querySnapshot.data().goal_name,
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,

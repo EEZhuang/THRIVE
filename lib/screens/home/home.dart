@@ -148,6 +148,7 @@ class _HomeState extends State<Home> {
 
       // Button to signout and return to signin page
 
+      /*
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
@@ -155,7 +156,7 @@ class _HomeState extends State<Home> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-      ),
+      ),*/
     );
   }
 }
