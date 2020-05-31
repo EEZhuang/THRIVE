@@ -272,7 +272,7 @@ class DatabaseService {
     }
   }
 
-  int comparison(Tuple2<int, Goal> first, Tuple2<int, Goal> second  ){
+  int comparison(Tuple3<int, Goal, String> first, Tuple3<int, Goal, String> second  ){
     if (first.item1 > second.item1){
       return -1;
     }
@@ -311,11 +311,11 @@ class DatabaseService {
 
   Future<List<Tuple3<Goal, String, String>>> wallMap (String username) async{
 
-    List<Tuple2<int, Goal>> tempReturn = new List<Tuple2<int, Goal>>();
+    List<Tuple3<int, Goal, String>> tempReturn = new List<Tuple3<int, Goal, String>>();
 
     List<String> friends = await getAllFriends(username);
     List<Tuple3<Goal, String, String>> returnList = new List<Tuple3<Goal, String, String>>();
-    Map<Goal, String> userMap = {};
+    Map<String, String> userMap = {};
 
     for(int f = 0; f<friends.length; f++){
       Map<String, Goal> temp = await getAllUserGoals(friends[f]);
@@ -323,14 +323,16 @@ class DatabaseService {
       List<Goal> goals = temp.values.toList(); //list of goals
       List<String> ids = temp.keys.toList(); //list of ids
       for (int i = 0; i<goals.length; i++){
-        if(userMap.containsKey(goals[i])){
-          userMap[goals[i]] += (", "+ friends[f]);
+        if(userMap.containsKey(ids[i])){
+          userMap[ids[i]] += (", "+ friends[f]);
         } else {
-          userMap[goals[i]] = friends[f];
+          userMap[ids[i]] = friends[f];
+          int timestamp = await getTimestamp(ids[i]);
+          //print("HERE" + timestamp.toString());
+          tempReturn.add(new Tuple3(timestamp, goals[i], ids[i]));
+
         }
-        int timestamp = await getTimestamp(ids[i]);
-        //print("HERE" + timestamp.toString());
-        tempReturn.add(new Tuple2(timestamp, goals[i]));
+
 
       }
     }
@@ -343,7 +345,7 @@ class DatabaseService {
       //print(date);
       var dateString = DateFormat("MMMM dd, yyyy").format(date);
       print(dateString);
-      returnList.add(new Tuple3(tempReturn[p].item2, userMap[tempReturn[p].item2], dateString));
+      returnList.add(new Tuple3(tempReturn[p].item2, userMap[tempReturn[p].item3], dateString));
       print("PLS WORK"+ tempReturn[p].item2.goal);
     }
 
