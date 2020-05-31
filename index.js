@@ -94,7 +94,19 @@ app.post('/set_user_info', function(req, res) {
             lastName: req.body.lastName,
             birthDate: req.body.birthDate
         })
+  res.send()
 })
+
+app.post('/set_user_avatar', function(req, res) {
+  db.collection("username")
+    .doc(req.body.username)
+        .set({
+            colorIndex: req.body.colorIndex,
+            iconIndex: req.body.iconIndex,
+        })
+  res.send()
+})
+
 
 app.post('/set_public_uid', function(req, res) {
   db.collection("usernames")
