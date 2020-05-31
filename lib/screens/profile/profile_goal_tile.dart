@@ -56,17 +56,7 @@ class _GoalTileState extends State<GoalTile> {
             color: realDate.isBefore(todayDate) ? ThriveColors.DARK_ORANGE : Colors.black,
         ),
       ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: <Widget>[
-          /*
-          Text("Collaborators: " +
-            widget.collabs,
-            style: new TextStyle(
-              color: realDate.isBefore(todayDate) ? ThriveColors.DARK_ORANGE : ThriveColors.DARK_GRAY,
-            ),
-          ),*/
+      subtitle:
           Text(
             widget.goal.goalDate,
             style: new TextStyle(
@@ -74,8 +64,6 @@ class _GoalTileState extends State<GoalTile> {
             ),
           ),
 
-        ]
-      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
