@@ -367,8 +367,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                       for (var collab in collabList) {
 
                                         _db.linkUserGoal(collab, goalID);
-                                        done = await _db.postGoal(goal, goalID, goalUnits,
-                                            goalDate, goalRepeat, goalProgress);
+                                        
                                       }
 
 
