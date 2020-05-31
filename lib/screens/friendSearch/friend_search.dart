@@ -32,6 +32,7 @@ class _SearchState extends State<Search> {
   TextEditingController searchTextEditingController = TextEditingController();
   // TODO: Future<QuerySnapshot> futureSearchResults;
   Future<List<TempUser>> futureSearchResults;
+  List<String> friendsList;
 
   emptyTheTextFormField() {
     searchTextEditingController.clear();
@@ -40,7 +41,9 @@ class _SearchState extends State<Search> {
   // condition to search for uid for each user
   controlSearching(String str) async {
     FirebaseUser result = await _auth.getCurrentUser();
+    String username = await _db.getUsername(result.uid);
     List<String> usernames = await _db.getAllUsernames(result.uid);
+    friendsList = await _db.getAllFriends(username);
     List<TempUser> tempUsers = new List();
 
     String requestingUID = await _db.getUsername(result.uid);
@@ -174,7 +177,7 @@ class _SearchState extends State<Search> {
           List<UserResult> searchUsersResult = [];
           for (int i = 0; i < snapshot.data.length; i++) {
             TempUser eachTempUser = snapshot.data[i];
-            UserResult userResult = UserResult(eachTempUser);
+            UserResult userResult = UserResult(eachTempUser, friendsList);
             searchUsersResult.add(userResult);
           }
 
@@ -198,7 +201,8 @@ class _SearchState extends State<Search> {
 
 class UserResult extends StatelessWidget {
   final TempUser eachUser; // TODO: replace friend with user
-  UserResult(this.eachUser);
+  final List<String> friendsList;
+  UserResult(this.eachUser, this.friendsList);
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +230,7 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: IconButton(
+                trailing: (friendsList == null || friendsList.contains(eachUser.name)) ? null : IconButton(
                   icon: Icon(Icons.person_add),
                   color: ThriveColors.LIGHT_GREEN,
                   onPressed: () {
