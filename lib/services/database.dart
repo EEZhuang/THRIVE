@@ -279,12 +279,42 @@ class DatabaseService {
     return 1;
   }
 
-  Future<List<Tuple2<Goal, String>>> wallMap (String username) async{
+  Future<Map<String, String>> getCollabMap(String username) async{
+
+    List<String> friends = await getAllFriends(username);
+    Map<String, String> collabMap = {};
+
+    Map<String, Goal> currUserGoals = await getAllUserGoals(username);
+    currUserGoals.forEach((k, v) {
+      collabMap[k] = "";
+    });
+
+    for(int i = 0; i < friends.length; i++){
+      Map<String, Goal> temp = await getAllUserGoals(friends[i]);
+
+      temp.forEach((k, v) {
+        if (collabMap.containsKey(k)){
+          if (collabMap[k] == ""){
+            collabMap[k] = friends[i];
+          } else {
+            collabMap[k] += (", " + friends[i]);
+          }
+        }
+
+      });
+
+    }
+    print(collabMap);
+    return collabMap;
+
+  }
+
+  Future<List<Tuple3<Goal, String, String>>> wallMap (String username) async{
 
     List<Tuple2<int, Goal>> tempReturn = new List<Tuple2<int, Goal>>();
 
     List<String> friends = await getAllFriends(username);
-    List<Tuple2<Goal, String>> returnList = new List<Tuple2<Goal, String>>();
+    List<Tuple3<Goal, String, String>> returnList = new List<Tuple3<Goal, String, String>>();
     Map<Goal, String> userMap = {};
 
     for(int f = 0; f<friends.length; f++){
@@ -308,7 +338,12 @@ class DatabaseService {
     tempReturn.sort(comparison);
 
     for (int p = 0; p<tempReturn.length; p++){
-      returnList.add(new Tuple2(tempReturn[p].item2, userMap[tempReturn[p].item2]));
+
+      DateTime date = new DateTime.fromMillisecondsSinceEpoch(tempReturn[p].item1);
+      //print(date);
+      var dateString = DateFormat("MMMM dd, yyyy").format(date);
+      print(dateString);
+      returnList.add(new Tuple3(tempReturn[p].item2, userMap[tempReturn[p].item2], dateString));
       print("PLS WORK"+ tempReturn[p].item2.goal);
     }
 
