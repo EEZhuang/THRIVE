@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/screens/createGoal/createGoal.dart';
 import 'package:thrive/screens/friendSearch/friend_search.dart';
+import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
+import 'package:thrive/screens/Password/password.dart';
+import 'package:thrive/screens/Password/changepass.dart';
+import 'package:thrive/screens/settings/settings.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -44,7 +48,6 @@ class FirstPage extends StatelessWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
-
   // Indicated which screen is selected
   // Starts app on the social wall
   int _selectedIndex = 0;
@@ -63,14 +66,13 @@ class _HomeState extends State<Home> {
 
   final PageStorageBucket bucket = PageStorageBucket();
 
-  void togglePage(int index){
+  void togglePage(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
   void _onItemTapped(int index) {
-
     // If "add goal" is selected, we push the create goal screen
     if (index == 2) {
       /*
@@ -95,18 +97,18 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      SocialWall(),
+      SocialWall(currUser: widget.currUser),
       //FirstPage(),
       Profile(currUser: widget.currUser),
       CreateGoal(togglePage: this.togglePage),
       Search(),
-      FirstPage(),
+      Settings(toggleHome: widget.toggleHome, togglePage: this.togglePage),
     ];
 
     return Scaffold(
       body: PageStorage(
-          child: pages[_selectedIndex],
-          bucket: bucket,
+        child: pages[_selectedIndex],
+        bucket: bucket,
       ),
 
       // Bottom Navigation Bar
@@ -145,6 +147,8 @@ class _HomeState extends State<Home> {
       ),
 
       // Button to signout and return to signin page
+
+      /*
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
@@ -152,7 +156,7 @@ class _HomeState extends State<Home> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-      ),
+      ),*/
     );
   }
 }

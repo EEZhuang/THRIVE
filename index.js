@@ -27,28 +27,42 @@ app.post('/link_friends', function(req, res) {
 //linking goal to user
 app.post('/link_user_goal', function(req, res) {
   //console.log(req.body('uid'));
-  var username = db.collection('users').doc(req.body.uid).get().then(
-    querySnapshot=>{
-        console.log(querySnapshot.data().username)
-        var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).set({})
-    }
-  )
+  var goal = db.collection('usernames').doc(req.body.username).collection("user_goals").doc(req.body.goalID).set({})
+
 })
 
 app.post('/delete_goal', function(req, res) {
   //console.log(req.body('uid'));
-  var username = db.collection('users').doc(req.body.uid).get().then(
-    querySnapshot=>{
-        console.log(querySnapshot.data().username)
-        var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
-        var goal2 = db.collection('goals').doc(req.body.goalID).delete()
-        res.send(JSON.stringify('done'));
+
+    var goal = db.collection('usernames').doc(req.body.username).collection("user_goals").doc(req.body.goalID).delete()
+    var goal2 = db.collection('goals').doc(req.body.goalID).delete()
+    res.send(JSON.stringify('done'));
 
 
-        //var goal = db.collection('usernames').doc(querySnapshot.data().username).collection("user_goals").doc(req.body.goalID).delete()
-        //var goal2 = db.collection('goals').doc(req.body.goalID).delete()
-    }
-  )
+})
+
+
+app.post('/delete_connection', function(req, res) {
+
+  db.collection('connections').where("friendRequested", "==", req.body.myuid).where("friendRequesting", "==", req.body.frienduid).get()
+    .then(function(querySnapshot) {
+          // Once we get the results, begin a batch
+          var batch = db.batch();
+
+          querySnapshot.forEach(function(doc) {
+              // For each doc, add a delete operation to the batch
+              batch.delete(doc.ref);
+          });
+
+          // Commit the batch
+          return batch.commit();
+    }).then(function() {
+        // Delete completed!
+        // ...
+    });
+
+  //console.log(req.body.frienduid);
+
 })
 
 app.post('/post_goal', function(req, res) {
@@ -74,7 +88,27 @@ app.post('/set_user_info', function(req, res) {
             lastName: req.body.lastName,
             birthDate: req.body.birthDate
         })
+  res.send()
 })
+
+app.post('/set_user_avatar', function(req, res) {
+    console.log("ABOUT TO SET THE AVATAWWWW");
+  db.collection("usernames")
+    .doc(req.body.username)
+        .set({
+            colorIndex: req.body.colorIndex,
+            iconIndex: req.body.iconIndex,
+        })
+  res.send()
+})
+
+app.get('/get_user_avatar', function(req, res) {
+  var avatar = db.collection('usernames').doc(req.header("username")).get().then(querySnapshot => {
+    res.send(JSON.stringify({colorIndex: querySnapshot.data().colorIndex,
+                             iconIndex: querySnapshot.data().iconIndex}))
+  })
+})
+
 
 app.post('/set_public_uid', function(req, res) {
   db.collection("usernames")
@@ -83,9 +117,19 @@ app.post('/set_public_uid', function(req, res) {
         })
 })
 
+app.post('/set_friend', function(req, res) {
+  db.collection("usernames")
+    .doc(req.body.myusername)
+        .collection("friends")
+            .doc(req.body.otherusername).set({})
+
+
+})
+
+
 app.get('/get_goal', function(req, res) {
   var goal = db.collection('goals').doc(req.header("goalID")).get().then(querySnapshot => {
-    console.log(querySnapshot.data().goal_name)
+    //console.log(querySnapshot.data().goal_name)
     res.send(JSON.stringify({goal_name: querySnapshot.data().goal_name,
                              goal_dates: querySnapshot.data().goal_dates,
                              goal_units: querySnapshot.data().goal_units,
@@ -155,6 +199,24 @@ app.get('/get_username', function(req, res) {
        usernames = querySnapshot.data().username
        console.log(usernames);
        res.send(JSON.stringify({user: usernames}));
+
+      //console.log(querySnapshot.data().goal_name)
+    })
+})
+
+app.get('/get_requests', function(req, res) {
+
+  var usernames = [];
+  //console.log(db.collection('usernames').get());
+  console.log(req.header("uid"));
+  var goal = db.collection('connections').where("friendRequested", "==", req.header('uid')).where("accepted", "==", false).get().then(querySnapshot => {
+       querySnapshot.forEach((doc) => {
+           usernames.push(doc.id.substr(0,doc.id.indexOf(' ')));
+           //console.log(doc.id);
+       })
+
+       console.log("yeet" + usernames)
+       res.send(JSON.stringify({friend: usernames}));
 
       //console.log(querySnapshot.data().goal_name)
     })

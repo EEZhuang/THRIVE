@@ -213,7 +213,7 @@ class _CreateGoalState extends State<CreateGoal> {
                           child: TextFormField(
                             style: ThriveFonts.BODY_WHITE,
                             decoration: InputDecoration(
-                                labelText: 'Units',
+                                labelText: 'Units (Optional)',
                                 labelStyle: ThriveFonts.SUBHEADING_WHITE,
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -229,9 +229,16 @@ class _CreateGoalState extends State<CreateGoal> {
                                 goalUnits = '1'; //goal has no units
                                 return null;
                               }
-                              goalUnits =
-                                  value; //assigns goal units for posting
-                              return null;
+
+                              //print(int.tryParse(value) != null);
+                              if (int.tryParse(value) != null) {
+                                goalUnits =
+                                    value; //assigns goal units for posting
+                                return null;
+                              } else {
+                                return "Needs to be a whole number";
+                              }
+
                             },
                           ),
                           /*
@@ -358,10 +365,17 @@ class _CreateGoalState extends State<CreateGoal> {
 
                                     // If there is a current user logged in, make HTTP request
                                     if (result != null) {
+                                      String username = await _db.getUsername(result.uid);
                                       print(result.uid);
-                                      _db.linkUserGoal(result.uid, goalID);
+                                      _db.linkUserGoal(username, goalID);
                                       bool done = await _db.postGoal(goal, goalID, goalUnits,
                                           goalDate, goalRepeat, goalProgress);
+
+                                      for (var collab in collabList) {
+
+                                        _db.linkUserGoal(collab, goalID);
+                                        
+                                      }
 
 
                                       widget.togglePage(1);
@@ -430,6 +444,7 @@ class _CreateGoalState extends State<CreateGoal> {
       ));
     }
   }
+
 }
 
 class MyTextField extends StatelessWidget {
