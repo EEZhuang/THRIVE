@@ -30,6 +30,7 @@ class _SearchState extends State<Search> {
   String query = '';
 
   TextEditingController searchTextEditingController = TextEditingController();
+  // TODO: Future<QuerySnapshot> futureSearchResults;
   Future<List<TempUser>> futureSearchResults;
   List<String> friendsList;
 
@@ -40,15 +41,14 @@ class _SearchState extends State<Search> {
   // condition to search for uid for each user
   controlSearching(String str) async {
     FirebaseUser result = await _auth.getCurrentUser();
-    List<String> usernames = await _db.getAllUsernames(result.uid);
     String username = await _db.getUsername(result.uid);
-    List<String> friends = await _db.getAllFriends(username);
+    List<String> usernames = await _db.getAllUsernames(result.uid);
+    friendsList = await _db.getAllFriends(username);
     List<TempUser> tempUsers = new List();
 
-    usernames.remove(username);
-    for (int i = 0; i < friends.length; i++) {
-      usernames.remove(friends[i]);
-    }
+    String requestingUID = await _db.getUsername(result.uid);
+
+    usernames.remove(requestingUID);
 
     for (int i = 0; i < usernames.length; i++) {
       tempUsers.add(new TempUser(usernames[i],
@@ -153,6 +153,7 @@ class _SearchState extends State<Search> {
     );
   }
 
+  // TODO: depends on database
   displayUsersFoundScreen() {
     return FutureBuilder(
         future: futureSearchResults,
@@ -199,7 +200,7 @@ class _SearchState extends State<Search> {
 }
 
 class UserResult extends StatelessWidget {
-  final TempUser eachUser;
+  final TempUser eachUser; // TODO: replace friend with user
   final List<String> friendsList;
   UserResult(this.eachUser, this.friendsList);
 
@@ -229,7 +230,7 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: IconButton(
+                trailing: (friendsList == null || friendsList.contains(eachUser.name)) ? null : IconButton(
                   icon: Icon(Icons.person_add),
                   color: ThriveColors.LIGHT_GREEN,
                   onPressed: () {
