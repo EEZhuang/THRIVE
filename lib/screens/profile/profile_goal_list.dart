@@ -191,7 +191,7 @@ class _GoalListState extends State<GoalList> {
                               );
                             },
                             body: Container(
-                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -417,9 +417,16 @@ class _GoalListState extends State<GoalList> {
                                                                           Radius.circular(
                                                                               20.0))),
                                                               title: Text(
-                                                                  "Congrats on finishing your goal!"),
+                                                                  "Congrats on finishing your goal!",
+                                                                  style: ThriveFonts
+                                                                      .HEADING2),
                                                               content: Text(
-                                                                  "Way to thrive!"),
+                                                                  "Way to thrive!",
+                                                                  style: ThriveFonts
+                                                                      .BODY_WHITE),
+                                                              backgroundColor:
+                                                                  ThriveColors
+                                                                      .DARK_GREEN,
                                                             )),
                                                       ),
                                                     ],
@@ -448,26 +455,31 @@ class _GoalListState extends State<GoalList> {
                                     ],
                                   ),
                                   SizedBox(height: 20),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10.0, 0, 0, 0),
-                                    child: RichText(
-                                        text: TextSpan(children: <TextSpan>[
-                                      TextSpan(
-                                          text: 'Collaborators: ',
-                                          style: new TextStyle(
-                                              fontSize: 14,
-                                              color: ThriveColors.DARK_ORANGE,
-                                              fontWeight: FontWeight.bold)),
-                                      TextSpan(
-                                          text: collabs[index],
-                                          style: new TextStyle(
-                                            fontSize: 14,
-                                            color: ThriveColors.WHITE,
-                                          )),
-                                    ])),
-                                  ),
-                                  SizedBox(height: 10)
+                                  (collabs[index].length != 0)
+                                      ? Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10.0, 0, 0, 0),
+                                          child: RichText(
+                                              text:
+                                                  TextSpan(children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'Collaborators: ',
+                                                style: new TextStyle(
+                                                    fontSize: 14,
+                                                    color: ThriveColors
+                                                        .DARK_ORANGE,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            TextSpan(
+                                                text: collabs[index],
+                                                style: new TextStyle(
+                                                  fontSize: 14,
+                                                  color: ThriveColors.WHITE,
+                                                )),
+                                          ])),
+                                        )
+                                      : Container(),
+                                  SizedBox(height: 10),
                                 ],
                               ),
                             ),

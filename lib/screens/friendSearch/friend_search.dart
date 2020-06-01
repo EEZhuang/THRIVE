@@ -138,7 +138,7 @@ class _SearchState extends State<Search> {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
         body: Container(
-      color: ThriveColors.TRANSPARENT_BLACK,
+      color: ThriveColors.DARK_GRAY,
       child: Center(
         child: ListView(
           shrinkWrap: true,
@@ -185,7 +185,9 @@ class _SearchState extends State<Search> {
           }
 
           List<UserResult> searchUsersResult = [];
-          int bound = (snapshot == null || snapshot.data == null) ? 0 : snapshot.data.length;
+          int bound = (snapshot == null || snapshot.data == null)
+              ? 0
+              : snapshot.data.length;
           for (int i = 0; i < bound; i++) {
             TempUser eachTempUser = snapshot.data[i];
             UserResult userResult =
