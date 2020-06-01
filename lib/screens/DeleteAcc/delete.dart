@@ -55,46 +55,51 @@ class _DeleteState extends State<Delete> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Delete Account", style: TextStyle(fontFamily: 'Proxima', fontWeight: FontWeight.bold, fontSize: 30)),
+        title: Text("Delete Account",
+            style: TextStyle(
+                fontFamily: 'Proxima',
+                fontWeight: FontWeight.bold,
+                fontSize: 30)),
         centerTitle: true,
         backgroundColor: Color(0xFF69A297),
       ),
-      backgroundColor: Color(0xF0080F0F),
+      backgroundColor: ThriveColors.DARK_GRAY,
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
         child: Form(
             key: _formKey,
-            child: Column(
-                children: <Widget>[
-                  SizedBox(height: 20.0),
-                  TextFormField(
-                    decoration:textInputDecoration.copyWith(hintText:  'Enter email'),
-                    onChanged: (val1) {
-                      setState(() {
-                        email = val1;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 20.0),
-                  TextFormField(
-                    decoration:textInputDecoration.copyWith(hintText:  'Enter password'),
-                    onChanged: (val2) {
-                      setState(() {
-                        password = val2;
-                      });
-                    },
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 20.0),
-                  RaisedButton(
-                    color: ThriveColors.WHITE,
-                    child: Text('Delete Account'),
-                    onPressed: () async {
-                      // TODO: pass user as parameter from Wrapper()
-                      FirebaseUser user = await _auth.getCurrentUser();
+            child: Column(children: <Widget>[
+              SizedBox(height: 20.0),
+              TextFormField(
+                decoration:
+                    textInputDecoration.copyWith(hintText: 'Enter email'),
+                onChanged: (val1) {
+                  setState(() {
+                    email = val1;
+                  });
+                },
+              ),
+              SizedBox(height: 20.0),
+              TextFormField(
+                decoration:
+                    textInputDecoration.copyWith(hintText: 'Enter password'),
+                onChanged: (val2) {
+                  setState(() {
+                    password = val2;
+                  });
+                },
+                obscureText: true,
+              ),
+              SizedBox(height: 20.0),
+              RaisedButton(
+                color: ThriveColors.WHITE,
+                child: Text('Delete Account'),
+                onPressed: () async {
+                  // TODO: pass user as parameter from Wrapper()
+                  FirebaseUser user = await _auth.getCurrentUser();
 
-                      // If there is a current user logged in, make HTTP request
-                      /*
+                  // If there is a current user logged in, make HTTP request
+                  /*
                   if (result != null) {
                     print(result.uid);
                     postUserGoal(result.uid, goal);
@@ -104,63 +109,47 @@ class _DeleteState extends State<Delete> {
               ),
             ],
             */
-                      if (user != null) {
-                        if (_formKey.currentState.validate()) {
-                          setState(() => loading = true);
-                          dynamic result = await _auth.signInWithEmailAndPassword(
-                              email, password);
-                          //print("result here" + result);
-                          if (result == null) {
-                            setState(() {
-                              loading = false;
-                              error = 'Credentials do not match, try again';
-                            });
-                          } else {
-                            FirebaseUser user2 = await _auth.getCurrentUser();
-                            if (user2.uid == user.uid) {
-                              await user.delete();
-                              //widget.toggleHome();
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
-                              //widget.toggleHome();
-                              //Navigator.of(context).pop(false);
-                              //await user.delete();
-                              //widget.toggleHome();
-                              //user.delete();
-                              //await _auth.signOut();
-                            } else {
-                              error = 'Credentials do not match, try again';
-                            }
-                          }
+                  if (user != null) {
+                    if (_formKey.currentState.validate()) {
+                      setState(() => loading = true);
+                      dynamic result = await _auth.signInWithEmailAndPassword(
+                          email, password);
+                      //print("result here" + result);
+                      if (result == null) {
+                        setState(() {
+                          loading = false;
+                          error = 'Credentials do not match, try again';
+                        });
+                      } else {
+                        FirebaseUser user2 = await _auth.getCurrentUser();
+                        if (user2.uid == user.uid) {
+                          await user.delete();
+                          //widget.toggleHome();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Wrapper()));
+                          //widget.toggleHome();
+                          //Navigator.of(context).pop(false);
+                          //await user.delete();
+                          //widget.toggleHome();
+                          //user.delete();
+                          //await _auth.signOut();
+                        } else {
+                          error = 'Credentials do not match, try again';
                         }
                       }
-
-                    },
-                  ),
-                  SizedBox(height: 12.0),
-                  Text( error, style: TextStyle(color: Colors.red) ),
-                ])),
+                    }
+                  }
+                },
+              ),
+              SizedBox(height: 12.0),
+              Text(error, style: TextStyle(color: Colors.red)),
+            ])),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 import 'package:firebase_auth/firebase_auth.dart';
@@ -247,7 +236,7 @@ class _DeleteState extends State<Delete> {
               onPressed: () async {
                 // TODO: pass user as parameter from Wrapper()
                 FirebaseUser user = await _auth.getCurrentUser();
-        
+
                 // If there is a current user logged in, make HTTP request
                 /*
                 if (result != null) {
@@ -287,7 +276,7 @@ class _DeleteState extends State<Delete> {
         SizedBox(height: 12.0),
         Text( error, style: TextStyle(color: Colors.red) ),
       ])),
- 
+
       // Button to signout and return to signin page
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

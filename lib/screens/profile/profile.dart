@@ -95,15 +95,14 @@ class _ProfileState extends State<Profile> {
                               //  ),
                             ),
                             SizedBox(
-                              width: 10, //here
+                              width: 0, //here
                             ),
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Padding(padding: EdgeInsets.only(left: 40)),
+                                Padding(padding: EdgeInsets.only(left: 20)),
                                 Text(
-                                  // TODO INSERT USERNAME HERE
                                   username,
                                   style: ThriveFonts.HEADING,
                                   /*
@@ -133,20 +132,21 @@ class _ProfileState extends State<Profile> {
                                   fontWeight: FontWeight.bold),
                                */
                                         ),
-                                        Text(
-                                          "Goals",
-                                          style: ThriveFonts.SUBHEADING_WHITE,
-
-                                          /*TextStyle(
-                                color: Colors.white70,
-                                fontSize: 1.9, // here
-                              ),
-                                  */
-                                        ),
+                                        (goalCount == "1")
+                                            ? Text(
+                                                "Goal",
+                                                style: ThriveFonts
+                                                    .SUBHEADING_WHITE,
+                                              )
+                                            : Text(
+                                                "Goals",
+                                                style: ThriveFonts
+                                                    .SUBHEADING_WHITE,
+                                              ),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 20,
+                                      width: 40,
                                     ),
                                     Column(
                                       children: <Widget>[
@@ -159,16 +159,17 @@ class _ProfileState extends State<Profile> {
                                   fontWeight: FontWeight.bold),
                                */
                                             ),
-                                        Text(
-                                          "Friends",
-                                          style: ThriveFonts.SUBHEADING_WHITE,
-                                          /*
-                              TextStyle(
-                                color: Colors.white70,
-                                fontSize: 1.9, //here
-                              ),
-                               */
-                                        ),
+                                        (friendCount == "1")
+                                            ? Text(
+                                                "Friend",
+                                                style: ThriveFonts
+                                                    .SUBHEADING_WHITE,
+                                              )
+                                            : Text(
+                                                "Friends",
+                                                style: ThriveFonts
+                                                    .SUBHEADING_WHITE,
+                                              ),
                                       ],
                                     ),
                                     /*
