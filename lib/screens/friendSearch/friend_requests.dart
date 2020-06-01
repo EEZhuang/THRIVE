@@ -28,6 +28,7 @@ class _RequestState extends State<Request> {
   final _formKey = GlobalKey<FormState>();
   final DatabaseService _db = DatabaseService();
   final PageStorageBucket bucket = PageStorageBucket();
+  bool changed = false;
   Future<List<TempUser>> friends;
   int i = 0;
 
@@ -47,6 +48,7 @@ class _RequestState extends State<Request> {
   }
 
   Future<List<String>> getFriends() async {
+  //void getFriends() async {
     FirebaseUser result = await _auth.getCurrentUser();
     String requestingUID = await _db.getUsername(result.uid);
     List<String> requests = await _db.getRequests(requestingUID);
@@ -69,8 +71,9 @@ class _RequestState extends State<Request> {
   // TODO: depends on database
   displayUsersFoundScreen() {
     return FutureBuilder(
+        //future: this.getFriends(),
         future: friends,
-        builder: (context, AsyncSnapshot<List<TempUser>> snapshot) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             List<Widget> children = <Widget>[
               Center(
@@ -138,6 +141,8 @@ class _RequestState extends State<Request> {
 
   @override
   Widget build(BuildContext context) {
+    getFriends();
+
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
@@ -147,10 +152,15 @@ class _RequestState extends State<Request> {
   }
 }
 
-class UserResult extends StatelessWidget {
-  final TempUser eachUser; // TODO: replace friend with user
+class UserResult extends StatefulWidget {
+  final TempUser eachUser;
   UserResult(this.eachUser);
 
+  @override
+  _UserResultState createState() => _UserResultState();
+}
+
+class _UserResultState extends State<UserResult> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -160,116 +170,17 @@ class UserResult extends StatelessWidget {
         child: Column(
           children: <Widget>[
             GestureDetector(
-              /*
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => new AlertDialog(
-                          title: new Text('Add Friend'),
-                          content: new Text(
-                              'Do you want to accept this Friend Request?'),
-                          actions: <Widget>[
-                            new FlatButton(
-                              onPressed: () async {
-                                final AuthService _auth = AuthService();
-                                final DatabaseService _db = DatabaseService();
-                                // TODO: pass user as parameter from Wrapper()
-                                FirebaseUser result =
-                                    await _auth.getCurrentUser();
-                                String requestingUID =
-                                    await _db.getUsername(result.uid);
-
-                                _db.deleteFriend(requestingUID, eachUser.name);
-                                Navigator.of(context).pop(false);
-                              },
-                              child: new Text('Decline'),
-                            ),
-                            new FlatButton(
-                              onPressed: () async {
-                                final AuthService _auth = AuthService();
-                                final DatabaseService _db = DatabaseService();
-                                // TODO: pass user as parameter from Wrapper()
-                                FirebaseUser result =
-                                    await _auth.getCurrentUser();
-                                String requestingUID =
-                                    await _db.getUsername(result.uid);
-
-                                _db.addFriend(eachUser.name, requestingUID);
-                                _db.addFriend(requestingUID, eachUser.name);
-                                _db.deleteFriend(requestingUID, eachUser.name);
-
-                                Navigator.of(context).pop(false);
-                              },
-                              child: new Text('Accept'),
-                            ),
-                          ],
-                        ));
-              },
-
-               */
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
-                  child: AVATAR_ICONS[eachUser.iconIndex],
+                  backgroundColor: AVATAR_COLORS[widget.eachUser.colorIndex],
+                  child: AVATAR_ICONS[widget.eachUser.iconIndex],
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
-                  eachUser.name,
+                  widget.eachUser.name,
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing:
-                    /*
-                IconButton(
-                  icon: Icon(Icons.check),
-                  color: ThriveColors.LIGHT_GREEN,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => new AlertDialog(
-                          title: new Text('Add Friend'),
-                          content: new Text(
-                              'Do you want to accept this Friend Request?'),
-                          actions: <Widget>[
-                            new FlatButton(
-                              onPressed: () async {
-                                final AuthService _auth = AuthService();
-                                final DatabaseService _db = DatabaseService();
-                                // TODO: pass user as parameter from Wrapper()
-                                FirebaseUser result =
-                                await _auth.getCurrentUser();
-                                String requestingUID =
-                                await _db.getUsername(result.uid);
-
-                                _db.deleteFriend(requestingUID, eachUser.name);
-                                Navigator.of(context).pop(false);
-                              },
-                              child: new Text('Decline'),
-                            ),
-                            new FlatButton(
-                              onPressed: () async {
-                                final AuthService _auth = AuthService();
-                                final DatabaseService _db = DatabaseService();
-                                // TODO: pass user as parameter from Wrapper()
-                                FirebaseUser result =
-                                await _auth.getCurrentUser();
-                                String requestingUID =
-                                await _db.getUsername(result.uid);
-
-                                _db.addFriend(eachUser.name, requestingUID);
-                                _db.addFriend(requestingUID, eachUser.name);
-                                _db.deleteFriend(requestingUID, eachUser.name);
-
-                                Navigator.of(context).pop(false);
-                              },
-                              child: new Text('Accept'),
-                            ),
-                          ],
-                        ));
-                  },
-                  //color: ThriveColors.WHITE,
-                ),
-                 */
-                    Row(
+                trailing: Row (
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     IconButton(
@@ -285,11 +196,10 @@ class UserResult extends StatelessWidget {
                         String requestingUID =
                             await _db.getUsername(result.uid);
 
-                        _db.addFriend(eachUser.name, requestingUID);
-                        _db.addFriend(requestingUID, eachUser.name);
-                        _db.deleteFriend(requestingUID, eachUser.name);
-
-                        //Navigator.of(context).pop(false);
+                        _db.addFriend(widget.eachUser.name, requestingUID);
+                        _db.addFriend(requestingUID, widget.eachUser.name);
+                        _db.deleteFriend(requestingUID, widget.eachUser.name);
+                        setState(() {});
                       },
                     ),
                     IconButton(
@@ -305,8 +215,8 @@ class UserResult extends StatelessWidget {
                         String requestingUID =
                             await _db.getUsername(result.uid);
 
-                        _db.deleteFriend(requestingUID, eachUser.name);
-                        //Navigator.of(context).pop(false);
+                        _db.deleteFriend(requestingUID, widget.eachUser.name);
+                        setState(() {});
                       },
                     ),
                   ],
