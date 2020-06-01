@@ -68,33 +68,6 @@ class _RequestState extends State<Request> {
     return requests;
   }
 
-  Container displayNoSearchResultsScreen() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-    return Container(
-      color: ThriveColors.TRANSPARENT_BLACK,
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Icon(
-              Icons.group,
-              color: Colors.grey,
-              size: 200.0,
-            ),
-            Text(
-              "Friend Requests",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 65.0),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   // TODO: depends on database
   displayUsersFoundScreen() {
     return FutureBuilder(
@@ -124,7 +97,45 @@ class _RequestState extends State<Request> {
             searchUsersResult.add(userResult);
           }
 
-          return ListView(children: searchUsersResult);
+          if(searchUsersResult.isEmpty) {
+            return Scaffold(
+
+              body: Container(
+                  color: ThriveColors.TRANSPARENT_BLACK,
+                // TODO-BG change asset for friend requests
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: new ExactAssetImage("images/thrive.png"),
+                                fit: BoxFit.fitWidth,
+                              )
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "No friend requests",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: ThriveColors.LIGHT_ORANGE,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 30.0),
+                        ),
+                      )
+                    ],
+                  )
+
+              )
+            );
+          } else {
+            return ListView(children: searchUsersResult);
+          }
         });
   }
 
@@ -135,9 +146,7 @@ class _RequestState extends State<Request> {
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
-      body: friends == null
-          ? displayNoSearchResultsScreen()
-          : displayUsersFoundScreen(),
+      body: displayUsersFoundScreen(),
       //Button to signout and return to signin page
     );
   }
@@ -157,7 +166,7 @@ class _UserResultState extends State<UserResult> {
     return Padding(
       padding: EdgeInsets.all(3.0),
       child: Container(
-        color: Colors.transparent,
+        color: ThriveColors.TRANSPARENT_BLACK,
         child: Column(
           children: <Widget>[
             GestureDetector(

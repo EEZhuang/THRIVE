@@ -235,7 +235,7 @@ class _CreateGoalState extends State<CreateGoal> {
                                     value; //assigns goal units for posting
                                 return null;
                               } else {
-                                return "Needs to be a whole number";
+                                 return "Needs to be a whole number";
                               }
 
                             },
