@@ -66,6 +66,7 @@ class _CreateGoalState extends State<CreateGoal> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       body: SafeArea(
         child: Form(
