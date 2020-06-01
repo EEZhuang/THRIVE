@@ -25,35 +25,65 @@ class GoalTile extends StatelessWidget {
             children: <Widget>[
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                leading: Container(
-                  width: 65,
-                  child: Stack(
-                    alignment: (users.contains(" ")) ? Alignment.centerLeft : Alignment.center,
-                    children: <Widget>[
-                      Positioned (
-                        left: 14.0,
-                        //bottom: 30,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: ThriveColors.DARK_GRAY,
-                        ),
-                      ),
-                      Positioned (
-                        left: 7.0,
-                        //bottom: -10,
-                        //top: 15,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: ThriveColors.LIGHT_GREEN,
-                        ),
-                      ),
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: ThriveColors.LIGHT_ORANGE,
-                      ),
-                    ],
+                leading: FutureBuilder (
+                  builder: (context, snapshot) {
+                    List<Widget> builder = [];
+                    //List<Widget> builder = [avatars[0]];
+                    //for (var a in avatars) {
+                    for (int i = avatars.length - 1; i >= 0; i--) {
+                      Widget a = avatars[i];
 
-                  ),
+                      if (i != 0) {
+                        a = new Positioned(
+                            left: i * 7.0,
+                            //right: i * 7.0,
+                            child: a,
+                        );
+                      }
+
+                      builder.add(a);
+                    }
+
+                    Stack avs = new Stack(
+                      alignment: (builder.length > 1) ? Alignment.centerLeft : Alignment.center,
+                      children: builder,
+                    );
+
+
+                   return Container(
+                    width: 65,
+                    //child: avatars[0],
+                     child: avs,
+                        /*
+                    Stack(
+                      alignment: (avatars.length > 1) ? Alignment.centerLeft : Alignment.center,
+                      children: <Widget>[
+                        Positioned (
+                          left: 14.0,
+                          //bottom: 30,
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: ThriveColors.DARK_GRAY,
+                          ),
+                        ),
+                        Positioned (
+                          left: 7.0,
+                          //bottom: -10,
+                          //top: 15,
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: ThriveColors.LIGHT_GREEN,
+                          ),
+                        ),
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: ThriveColors.LIGHT_ORANGE,
+                        ),
+                      ],
+                    ),
+
+                         */
+                  );},
                 ),
                 title: Column (
                   children: <Widget>[
