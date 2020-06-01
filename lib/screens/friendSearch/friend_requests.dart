@@ -27,15 +27,16 @@ class _RequestState extends State<Request> {
   final DatabaseService _db = DatabaseService();
   final PageStorageBucket bucket = PageStorageBucket();
   Future<List<TempUser>> friends;
-  int i = 0;
+  //int i = 0;
 
   AppBar searchPageHeader() {
-    if (i == 0) {
-      getFriends();
-      i++;
-    }
+    //if (i == 0) {
+      //getFriends();
+      //print(i);
+      //i++;
+   // }
     return AppBar(
-      title: Text("Friend Requests", style: ThriveFonts.HEADING,),
+      title: Text("Friend Requests", style: ThriveFonts.HEADING),
       centerTitle: true,
       backgroundColor: ThriveColors.DARK_GREEN,
     );
@@ -124,6 +125,8 @@ class _RequestState extends State<Request> {
 
   @override
   Widget build(BuildContext context) {
+    //print("hi");
+    getFriends();
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
@@ -135,10 +138,15 @@ class _RequestState extends State<Request> {
   }
 }
 
-class UserResult extends StatelessWidget {
+class UserResult extends StatefulWidget {
   final TempUser eachUser; // TODO: replace friend with user
   UserResult(this.eachUser);
 
+  @override
+  _UserResultState createState() => _UserResultState();
+}
+
+class _UserResultState extends State<UserResult> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -201,7 +209,7 @@ class UserResult extends StatelessWidget {
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
-                  eachUser.name,
+                  widget.eachUser.name,
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
                 trailing:
@@ -273,9 +281,12 @@ class UserResult extends StatelessWidget {
                         String requestingUID =
                         await _db.getUsername(result.uid);
 
-                        _db.addFriend(eachUser.name, requestingUID);
-                        _db.addFriend(requestingUID, eachUser.name);
-                        _db.deleteFriend(requestingUID, eachUser.name);
+                        _db.addFriend(widget.eachUser.name, requestingUID);
+                        _db.addFriend(requestingUID, widget.eachUser.name);
+                        _db.deleteFriend(requestingUID, widget.eachUser.name);
+                        setState() {
+
+                        }
 
                         //Navigator.of(context).pop(false);
                       },
@@ -294,7 +305,11 @@ class UserResult extends StatelessWidget {
                         String requestingUID =
                         await _db.getUsername(result.uid);
 
-                        _db.deleteFriend(requestingUID, eachUser.name);
+                        _db.deleteFriend(requestingUID, widget.eachUser.name);
+
+                        setState() {
+
+                        }
                         //Navigator.of(context).pop(false);
                       },
                     ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +86,17 @@ class _SocialListState extends State<SocialList> {
               } else {
                 return Loading();
               }
-              return ListView.builder(
+              return goals.isEmpty ?
+              Container(
+                  // TODO-BG change asset for social wall
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: new ExactAssetImage("images/thrive.png"),
+                      fit: BoxFit.fitWidth,
+                    )
+                  ),
+              ) :
+              ListView.builder(
                 itemCount: goals.length,
                 itemBuilder: (context, index) {
                   return new Column(

@@ -115,8 +115,18 @@ class _CreateCollabState extends State<Collaborators> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: ListView.builder(
+
+                      child: friends.isEmpty ?
+                      Container(
+                        // TODO-BG change asset for collab
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: new ExactAssetImage("images/thrive.png"),
+                            fit: BoxFit.fitWidth,
+                          )
+                        ),
+                      ) :
+                      ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: friends.length,
@@ -142,7 +152,6 @@ class _CreateCollabState extends State<Collaborators> {
                             ),
                           );
                         },
-                      ),
                     ),
                   ),
                 ],
