@@ -63,33 +63,6 @@ class _RequestState extends State<Request> {
     return requests;
   }
 
-  Container displayNoSearchResultsScreen() {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-    return Container(
-      color: ThriveColors.TRANSPARENT_BLACK,
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Icon(
-              Icons.group,
-              color: Colors.grey,
-              size: 200.0,
-            ),
-            Text(
-              "Friend Requests",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 65.0),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   // TODO: depends on database
   displayUsersFoundScreen() {
     return FutureBuilder(
@@ -139,9 +112,7 @@ class _RequestState extends State<Request> {
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
-      body: friends == null
-          ? displayNoSearchResultsScreen()
-          : displayUsersFoundScreen(),
+      body: displayUsersFoundScreen(),
       //Button to signout and return to signin page
     );
   }
