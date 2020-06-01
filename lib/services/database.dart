@@ -338,13 +338,13 @@ class DatabaseService {
     return collabMap;
   }
 
-  Future<List<Tuple3<Goal, String, String>>> wallMap(String username) async {
+  Future<List<Tuple4<Goal, String, String, String>>> wallMap(String username) async {
     List<Tuple3<int, Goal, String>> tempReturn =
         new List<Tuple3<int, Goal, String>>();
 
     List<String> friends = await getAllFriends(username);
-    List<Tuple3<Goal, String, String>> returnList =
-        new List<Tuple3<Goal, String, String>>();
+    List<Tuple4<Goal, String, String,String>> returnList =
+        new List<Tuple4<Goal, String, String, String>>();
     Map<String, String> userMap = {};
 
     for (int f = 0; f < friends.length; f++) {
@@ -372,28 +372,77 @@ class DatabaseService {
       //print(date);
       var dateString = DateFormat("MMMM dd, yyyy").format(date);
       print(dateString);
-      returnList.add(new Tuple3(
-          tempReturn[p].item2, userMap[tempReturn[p].item3], dateString));
+      returnList.add(new Tuple4(
+          tempReturn[p].item2, userMap[tempReturn[p].item3], dateString, tempReturn[p].item3));
       print("PLS WORK" + tempReturn[p].item2.goal);
     }
 
     return returnList;
   }
 
-  //populate wallMap, returns Map<Goal, String>:
-/**
- * friends = getAllFriends(currUser)
- * returnList = List(Goal, username)
- * for f in friends:
- *        goals = getallUserGoals(f)
- *        for g in goals:
- *            map[g] = f
- *            pq.push(timestamp, g)
- * for p in pq:
- *        returnList.append(pq.pop[1], map[pq.pop[1]])
- *
- * return returnList
- *
- */
+  //get size of likes collection
+  Future<int> getLikeCount (String goalID) async{
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_like_count',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'goalID': goalID,
+      },
+    );
+    print('i am here');
+    Map<String, dynamic> json = jsonDecode(response.body);
+    //print("HERE"+int.parse(json['timestamp']).toString());
+    print(json['count']+"HERHEHHRHRHRHEHHE");
+    return int.parse(json['count']);
+  }
+
+  //get whether user exists in likes collection
+  Future<bool> likeExists (String username, String goalID) async {
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/like_exists',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'username': username,
+        'goalID': goalID,
+      },
+    );
+    Map<String, dynamic> json = jsonDecode(response.body);
+    //print("HERE"+int.parse(json['timestamp']).toString());
+    int status = int.parse(json['status']);
+    if(status == 1){
+      return true;
+    }
+    return false;
+
+  }
+
+
+  //post toggle: if user has liked, then delete user doc. if user hasn't liked, then add user doc
+  Future<bool> toggleLike(String username, String goalID) async {
+    //check if user exists then delete
+    bool exists = await likeExists(username,goalID);
+    if (exists){
+      print("hello");
+      http.Response response = await http.post(
+        'http://10.0.2.2:3000/delete_like',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body:
+        jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+      );
+      print("before returning true");
+    } else {
+      http.Response response = await http.post(
+        'http://10.0.2.2:3000/add_like',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body:
+        jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+      );
+    }
+    return true;
+  }
 
 }

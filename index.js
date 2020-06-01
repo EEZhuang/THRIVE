@@ -41,6 +41,48 @@ app.post('/delete_goal', function(req, res) {
 
 })
 
+app.post('/delete_like', function(req, res) {
+  //console.log(req.body('uid'));
+
+    var goal = db.collection('goals').doc(req.body.goalID).collection("likes").doc(req.body.username).delete()
+    res.send(JSON.stringify('done'));
+
+
+})
+
+app.get('/like_exists', function(req, res) {
+  //console.log(req.body('uid'));
+    var goal = db.collection('goals').doc(req.header("goalID")).collection("likes").doc(req.header("username")).get().then(querySnapshot => {
+        if(querySnapshot.exists){
+            res.send(JSON.stringify({status:'1'}));
+        } else{
+            res.send(JSON.stringify({status:'0'}));
+        }
+      })
+
+
+
+})
+
+app.get('/get_like_count', function(req, res) {
+  //console.log(req.body('uid'));
+    var goal = db.collection('goals').doc(req.header("goalID")).collection("likes").get().then(querySnapshot => {
+        console.log(querySnapshot.size)
+        res.send(JSON.stringify({count:querySnapshot.size.toString()}));
+
+      })
+
+
+
+})
+
+app.post('/add_like', function(req, res) {
+  //console.log(req.body('uid'));
+  var goal = db.collection('goals').doc(req.body.goalID).collection("likes").doc(req.body.username).set({})
+  res.send(JSON.stringify('done'));
+
+})
+
 app.post('/remove_friend', function(req, res) {
   //console.log(req.body('uid'));
 
