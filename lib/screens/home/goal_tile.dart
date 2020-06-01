@@ -12,8 +12,9 @@ class GoalTile extends StatefulWidget {
   final List<CircleAvatar> avatars;
   final String username;
   final String goalID;
-
-  GoalTile({this.goal, this.users, this.date, this.avatars, this.username, this.goalID});
+  final bool likeStatus;
+  final int count;
+  GoalTile({this.goal, this.users, this.date, this.avatars, this.username, this.goalID, this.likeStatus, this.count});
 
   @override
   _GoalTileState createState() => _GoalTileState();
@@ -21,8 +22,15 @@ class GoalTile extends StatefulWidget {
 
 class _GoalTileState extends State<GoalTile> {
   bool liked = false;
-  int likes = 100;
+  int likes = 0;
   DatabaseService _db = DatabaseService();
+
+  @protected
+  @mustCallSuper
+  void initState() {
+    liked = widget.likeStatus;
+    likes = widget.count;
+  }
 
   @override
   Widget build(BuildContext context) {

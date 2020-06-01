@@ -45,6 +45,7 @@ class _SocialListState extends State<SocialList> {
   var goalIDs = [];
   String username = "";
   var hasLiked = [];
+  var likeCount = [];
 
   //var counter = 0;
   // List<double> progressList = [];
@@ -57,7 +58,9 @@ class _SocialListState extends State<SocialList> {
 
     for(var goal in wall){
       bool liked = await _db.likeExists(username, goal.item4);
+      int count = await _db.getLikeCount(goal.item4);
       hasLiked.add(liked);
+      likeCount.add(count);
     }
 
     
@@ -109,7 +112,7 @@ class _SocialListState extends State<SocialList> {
                     children: <Widget>[
                       Flexible(
                           fit: FlexFit.loose,
-                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index], username: username, goalID: goalIDs[index])
+                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index], username: username, goalID: goalIDs[index], likeStatus: hasLiked[index], count: likeCount[index])
                       ),
                       SizedBox(
                         height: 10,

@@ -67,8 +67,8 @@ app.get('/like_exists', function(req, res) {
 app.get('/get_like_count', function(req, res) {
   //console.log(req.body('uid'));
     var goal = db.collection('goals').doc(req.header("goalID")).collection("likes").get().then(querySnapshot => {
-
-        res.send(JSON.stringify({count:querySnapshot.size}));
+        console.log(querySnapshot.size)
+        res.send(JSON.stringify({count:querySnapshot.size.toString()}));
 
       })
 

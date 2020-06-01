@@ -405,8 +405,10 @@ class DatabaseService {
         'goalID': goalID,
       },
     );
+    print('i am here');
     Map<String, dynamic> json = jsonDecode(response.body);
     //print("HERE"+int.parse(json['timestamp']).toString());
+    print(json['count']+"HERHEHHRHRHRHEHHE");
     return int.parse(json['count']);
   }
 
