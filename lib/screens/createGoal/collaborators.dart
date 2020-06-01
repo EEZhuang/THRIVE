@@ -111,6 +111,7 @@ class _CreateCollabState extends State<Collaborators> {
             }
 
             return Scaffold(
+              backgroundColor: ThriveColors.TRANSPARENT_BLACK,
               body: friends.isEmpty ?
                 Container(
                   // TODO-BG change asset for collabs
@@ -146,7 +147,8 @@ class _CreateCollabState extends State<Collaborators> {
                 ) :
 
                 Container(
-                  decoration: BoxDecoration(color: ThriveColors.TRANSPARENT_BLACK),
+                  color: ThriveColors.TRANSPARENT_BLACK,
+                  //decoration: BoxDecoration(color: ThriveColors.TRANSPARENT_BLACK),
                   //color: ThriveColors.TRANSPARENT_BLACK,
                   child: ListView.builder(
 
