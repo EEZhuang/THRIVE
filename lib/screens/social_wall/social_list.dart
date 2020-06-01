@@ -78,8 +78,12 @@ class _SocialListState extends State<SocialList> {
         Tuple2<int, int> result = await _db.getUserAvatar(user);
 
         avForTile.add(CircleAvatar(
-          backgroundColor: AVATAR_COLORS[result.item1],
-          child: AVATAR_ICONS[result.item2],
+          backgroundColor: ThriveColors.DARK_GRAY,
+          radius: 22,
+          child: CircleAvatar(
+            backgroundColor: AVATAR_COLORS[result.item1],
+            child: AVATAR_ICONS[result.item2],
+          ),
         ));
 
         //num++;

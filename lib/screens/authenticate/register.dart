@@ -258,7 +258,6 @@ class _RegisterState extends State<Register> {
                                     birthdate);
                                 bool set = await _db.setUserInfo(result.uid,
                                     username, firstname, lastname, birthdate);
-                                //_db.setPublicUid(username);
                                 var rng = new Random();
                                 set = await _db.setUserAvatar(
                                     username, rng.nextInt(9), rng.nextInt(7));
