@@ -7,7 +7,7 @@ A goal setting app
 
 
 Accounts for test cases:
-
+** 
 =======================================
 
 TC-LOG-2: Log In to Account
@@ -15,6 +15,10 @@ TC-LOG-3: Log Out of Account
 
 Email: thrivetest@gmail.com
 Password: password
+
+** Account with the email “bademail@gmail.com” does not exist
+** Account with email “goodemail@gmail.com” exists and the password is not “password”
+** Account with the username "used" exists
 
 =======================================
 
@@ -24,12 +28,21 @@ TC-FRN-3: Removing Friends
 TC-FRN-4: Accepting Friend Invitation
 TC-FRN-5: Declining Friend Invitation
 
+Account #1:
 Email: testerunique@gmail.com
 Password: password
 
+Account #2:
+Email: gary@gmail.com
+Password: password
+
+Account #3:
+Email: bob@gmail.com
+Password: password
+
 ** Needs account with username "Gary" to exist and not be a friend
-** Needs account with username "Jack" to not exist
-** Needs account with username "secondfriend" to exist and be a current friend(Incomplete Test Case)
+** Needs no users with the substring "jack" to exist
+** Needs account with username "secondfriend" to exist and be a current friend
 ** Needs account with username "friendrequest" to have sent a friend request to the user
 ** Needs account with username "rejection" to have sent a friend request to the user
 
@@ -68,6 +81,7 @@ Account
 Email: testerpersonal@gmail.com
 Password: password
 
+Account #2
 ** Needs goal with name of "premade goal" & deadline "June 1st, 2020" & Units "0/10" already created 
 ** Needs goal with name of "premade goal2" & deadline "June 1st, 2020" & Units "0/1" already created 
 ** Needs goal with name of "delete this goal" & deadline "June 1st, 2020" & Units "0/1" already created
