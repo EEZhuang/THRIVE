@@ -48,7 +48,7 @@ class _RequestState extends State<Request> {
   }
 
   Future<List<String>> getFriends() async {
-  //void getFriends() async {
+    //void getFriends() async {
     FirebaseUser result = await _auth.getCurrentUser();
     String requestingUID = await _db.getUsername(result.uid);
     List<String> requests = await _db.getRequests(requestingUID);
@@ -97,42 +97,36 @@ class _RequestState extends State<Request> {
             searchUsersResult.add(userResult);
           }
 
-          if(searchUsersResult.isEmpty) {
+          if (searchUsersResult.isEmpty) {
             return Scaffold(
-
-              body: Container(
-                  color: ThriveColors.TRANSPARENT_BLACK,
-                // TODO-BG change asset for friend requests
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: new ExactAssetImage("images/thrive.png"),
-                                fit: BoxFit.fitWidth,
-                              )
+                body: Container(
+                    color: ThriveColors.TRANSPARENT_BLACK,
+                    // TODO-BG change asset for friend requests
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                              image: new ExactAssetImage("images/thrive.png"),
+                              fit: BoxFit.fitWidth,
+                            )),
                           ),
                         ),
-                      ),
-
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          "No friend requests",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: ThriveColors.LIGHT_ORANGE,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 30.0),
-                        ),
-                      )
-                    ],
-                  )
-
-              )
-            );
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "No friend requests",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ThriveColors.LIGHT_ORANGE,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 30.0),
+                          ),
+                        )
+                      ],
+                    )));
           } else {
             return ListView(children: searchUsersResult);
           }
@@ -180,7 +174,7 @@ class _UserResultState extends State<UserResult> {
                   widget.eachUser.name,
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: Row (
+                trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     IconButton(
@@ -195,7 +189,6 @@ class _UserResultState extends State<UserResult> {
                         FirebaseUser result = await _auth.getCurrentUser();
                         String requestingUID =
                             await _db.getUsername(result.uid);
-
                         _db.addFriend(widget.eachUser.name, requestingUID);
                         _db.addFriend(requestingUID, widget.eachUser.name);
                         _db.deleteFriend(requestingUID, widget.eachUser.name);

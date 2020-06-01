@@ -23,10 +23,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/painting.dart' show decodeImageFromList;
 
-
 //import 'package:spritewidget/spritewidget.dart';
 //import 'package:sa_v1_migration/sa_v1_migration.dart';
-
 
 class GoalList extends StatefulWidget {
   final FirebaseUser currUser;
@@ -38,12 +36,8 @@ class GoalList extends StatefulWidget {
 }
 
 class _GoalListState extends State<GoalList> {
-
   bool updateVal = false;
   double sOpacity;
-
-
-
 
   void updateTile() {
     setState(() {
@@ -326,32 +320,30 @@ class _GoalListState extends State<GoalList> {
                                       //  SizedBox(width: 10),
                                       FlatButton(
                                         onPressed: () async {
-
-                                          FirebaseUser result = await _auth
-                                              .getCurrentUser();
+                                          FirebaseUser result =
+                                              await _auth.getCurrentUser();
 
                                           int tmpProg =
-                                          int.parse(myGoal.goalProgress);
-                                          tmpProg += progressList[index].toInt();
+                                              int.parse(myGoal.goalProgress);
+                                          tmpProg +=
+                                              progressList[index].toInt();
                                           bool goalComplete = false;
-
-
 
                                           if (tmpProg >=
                                               int.parse(myGoal.goalUnits)) {
                                             tmpProg =
                                                 int.parse(myGoal.goalUnits);
 
-                                            if(progressList[index].toInt() > 0) {
+                                            if (progressList[index].toInt() >
+                                                0) {
                                               goalComplete = true;
                                             } else {
                                               goalComplete = false;
                                             }
 
                                             progressList[index] = 0;
-                                            progressController[index].text = "0";
-
-
+                                            progressController[index].text =
+                                                "0";
                                           } else if (tmpProg <= 0) {
                                             tmpProg = 0;
                                             progressList[index] = 0;
@@ -399,50 +391,50 @@ class _GoalListState extends State<GoalList> {
                                                     myGoal.goalProgress);
                                           }
 
-
-                                          if(goalComplete) {
-
+                                          if (goalComplete) {
                                             return showGeneralDialog(
-                                              barrierColor: ThriveColors.TRANSPARENT_GREEN,
-                                              transitionBuilder: (context, a1, a2, widget) {
-                                                //print("te2233");
-                                                return Stack(
-                                                  children: <Widget>[
-                                                    GestureDetector(
-                                                      child: Circles(),
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                      },
-
-                                                    ),
-
-
-                                                    Transform.scale(
-                                                      scale: a1.value,
-                                                      child: Opacity(
-                                                        opacity: 1,
-                                                        child: AlertDialog(
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.all(Radius.circular(20.0))
-                                                          ),
-                                                          title: Text("Congrats on finishing your goal!"),
-                                                          content: Text("Way to thrive!"),
-                                                        )
+                                                barrierColor: ThriveColors
+                                                    .TRANSPARENT_GREEN,
+                                                transitionBuilder:
+                                                    (context, a1, a2, widget) {
+                                                  //print("te2233");
+                                                  return Stack(
+                                                    children: <Widget>[
+                                                      GestureDetector(
+                                                        child: Circles(),
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
                                                       ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                              transitionDuration: Duration(milliseconds: 250),
-                                              barrierDismissible: true,
+                                                      Transform.scale(
+                                                        scale: a1.value,
+                                                        child: Opacity(
+                                                            opacity: 1,
+                                                            child: AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0))),
+                                                              title: Text(
+                                                                  "Congrats on finishing your goal!"),
+                                                              content: Text(
+                                                                  "Way to thrive!"),
+                                                            )),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                                transitionDuration:
+                                                    Duration(milliseconds: 250),
+                                                barrierDismissible: true,
                                                 barrierLabel: "",
-                                              context: context,
-                                              pageBuilder: (context, animation1, animation2) {}
-                                            );
+                                                context: context,
+                                                pageBuilder: (context,
+                                                    animation1, animation2) {});
                                           }
-                                          setState(() {
-
-                                          });
+                                          setState(() {});
                                         },
                                         child: new Icon(
                                           Icons.check,
@@ -512,9 +504,16 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
   List<Circle> circles;
   final int cNum = 250;
   //final Color color = ThriveColors.LIGHT_ORANGE;
-  final List<Color> color = [ThriveColors.LIGHT_ORANGE, ThriveColors.LIGHT_ORANGE,
-    ThriveColors.DARK_ORANGE, ThriveColors.DARK_GREEN, ThriveColors.TRANSPARENT_BLACK,
-    ThriveColors.LIGHT_ORANGE, ThriveColors.DARK_ORANGE,ThriveColors.LIGHT_GREEN];
+  final List<Color> color = [
+    ThriveColors.LIGHT_ORANGE,
+    ThriveColors.LIGHT_ORANGE,
+    ThriveColors.DARK_ORANGE,
+    ThriveColors.DARK_GREEN,
+    ThriveColors.TRANSPARENT_BLACK,
+    ThriveColors.LIGHT_ORANGE,
+    ThriveColors.DARK_ORANGE,
+    ThriveColors.LIGHT_GREEN
+  ];
   //ui.Image tempImage;
 
   Random r = new Random();
@@ -531,10 +530,9 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
 
     circles = List<Circle>();
 
-    for(int i = 0; i < cNum; i++) {
+    for (int i = 0; i < cNum; i++) {
       circles.add(Circle(color[r.nextInt(color.length)]));
     }
-
 
     controller = new AnimationController(
         duration: const Duration(seconds: 1000), vsync: this);
@@ -542,9 +540,6 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
       newPos();
     });
     controller.forward();
-
-
-
   }
 
   @override
@@ -564,12 +559,11 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
       backgroundColor: ThriveColors.TRANSPARENT_GREEN,
       body: CustomPaint(
           foregroundPainter: Painter(circles: circles, controller: controller),
-          size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height)
-      ),
+          size: Size(MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height)),
     );
   }
 }
-
 
 class Painter extends CustomPainter {
   List<Circle> circles;
@@ -628,24 +622,19 @@ class Circle {
       dir = Random().nextDouble() * 360;
     }
 
-
-
     //canvas.drawImage(img, Offset(x, y), paint);
     canvas.drawCircle(Offset(x, y), radius, paint);
-
-
   }
 
   updatePosition() {
     var a = 180 - (dir + 90);
-    if (dir > 0 && dir < 180 ) {
+    if (dir > 0 && dir < 180) {
       x += speed * sin(dir) / sin(speed);
-
     } else {
       x -= speed * sin(dir) / sin(speed);
     }
 
-    if (dir > 90 && dir < 270 ) {
+    if (dir > 90 && dir < 270) {
       y += speed * sin(a) / sin(speed);
     } else {
       y -= speed * sin(a) / sin(speed);
@@ -654,44 +643,11 @@ class Circle {
     //if (opToggle) {
     //  color = color.withOpacity(r.nextDouble());
     //}
-
   }
-
 }
+
 // https://groups.google.com/forum/#!topic/flutter-dev/CgVEA_Zzcz4
 Future<ui.Image> loadImageAsset(String assetName) async {
   final data = await rootBundle.load(assetName);
   return decodeImageFromList(data.buffer.asUint8List());
 }
-/**
-    dynamic goal = await _db.getUserGoal(widget.currUser.uid);
-
-    var goal1 = new Goal();
-    goal1.name = "Goal 1";
-    goal1.goal = "Complete by: 5/18/2020";
-    goal1.days = "1";
-
-    var goal2 = new Goal();
-    goal2.name = "Goal 2";
-    goal2.goal = "Complete by: 5/23/2020";
-    goal2.days = "2";
-
-    final goals = [goal1, goal2];
-    //print(goals);
-
-    //print(goals.length);
-    goals.forEach((goal) {
-      print(goal.name);
-      print(goal.goal);
-      print(goal.days);
-    });
-
-    return ListView.builder(
-      itemCount: goals.length,
-      itemBuilder: (context, index){
-        return GoalTile(goal: goals[index]);
-      },
-    );
-  }
-}
-        */
