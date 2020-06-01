@@ -190,6 +190,8 @@ class _RegisterState extends State<Register> {
                                     return "Enter a username that has not been used";
                                   } else if (val.isEmpty) {
                                     return "Enter a username";
+                                  } else if (val.contains(" ")){
+                                    return "Cannot create username with a space character";
                                   }
                                   return null;
                                 },
@@ -256,7 +258,7 @@ class _RegisterState extends State<Register> {
                                     birthdate);
                                 bool set = await _db.setUserInfo(result.uid,
                                     username, firstname, lastname, birthdate);
-                                _db.setPublicUid(username);
+                                //_db.setPublicUid(username);
                                 var rng = new Random();
                                 set = await _db.setUserAvatar(
                                     username, rng.nextInt(9), rng.nextInt(7));
