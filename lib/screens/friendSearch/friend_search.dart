@@ -9,6 +9,8 @@ import 'package:thrive/services/database.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:tuple/tuple.dart';
+import 'package:thrive/formats/avatar.dart';
 
 class Search extends StatefulWidget {
   final Function toggleHome;
@@ -51,8 +53,7 @@ class _SearchState extends State<Search> {
     usernames.remove(requestingUID);
 
     for (int i = 0; i < usernames.length; i++) {
-      tempUsers.add(new TempUser(usernames[i],
-          "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
+      tempUsers.add(new TempUser(usernames[i], 0, 0));
     }
 
     List<TempUser> queryTempUsers = [];
@@ -61,6 +62,9 @@ class _SearchState extends State<Search> {
       String tempName = tempUser.name.toLowerCase();
       String tempStr = str.toLowerCase();
       if (str != "" && tempName.contains(tempStr)) {
+        Tuple2<int, int> result = await _db.getUserAvatar(usernames[i]);
+        tempUser.colorIndex = result.item1;
+        tempUser.iconIndex = result.item2;
         queryTempUsers.add(tempUser);
       }
     }
@@ -216,7 +220,8 @@ class UserResult extends StatelessWidget {
             GestureDetector(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: ThriveColors.LIGHTEST_GREEN,
+                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
+                  child: AVATAR_ICONS[eachUser.iconIndex],
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
@@ -230,44 +235,48 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: (friendsList == null || friendsList.contains(eachUser.name)) ? null : IconButton(
-                  icon: Icon(Icons.person_add),
-                  color: ThriveColors.LIGHT_GREEN,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => new AlertDialog(
-                              title: new Text('Add Friend'),
-                              content: new Text(
-                                  'Do you want to send a friend request to this user?'),
-                              actions: <Widget>[
-                                new FlatButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: new Text('No'),
-                                ),
-                                new FlatButton(
-                                  onPressed: () async {
-                                    final AuthService _auth = AuthService();
-                                    final DatabaseService _db =
-                                        DatabaseService();
-                                    // TODO: pass user as parameter from Wrapper()
-                                    FirebaseUser result =
-                                        await _auth.getCurrentUser();
-                                    String requestingUID =
-                                        await _db.getUsername(result.uid);
+                trailing: (friendsList == null ||
+                        friendsList.contains(eachUser.name))
+                    ? null
+                    : IconButton(
+                        icon: Icon(Icons.person_add),
+                        color: ThriveColors.LIGHT_GREEN,
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => new AlertDialog(
+                                    title: new Text('Add Friend'),
+                                    content: new Text(
+                                        'Do you want to send a friend request to this user?'),
+                                    actions: <Widget>[
+                                      new FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: new Text('No'),
+                                      ),
+                                      new FlatButton(
+                                        onPressed: () async {
+                                          final AuthService _auth =
+                                              AuthService();
+                                          final DatabaseService _db =
+                                              DatabaseService();
+                                          // TODO: pass user as parameter from Wrapper()
+                                          FirebaseUser result =
+                                              await _auth.getCurrentUser();
+                                          String requestingUID =
+                                              await _db.getUsername(result.uid);
 
-                                    _db.linkFriends(
-                                        requestingUID, eachUser.name, "false");
+                                          _db.linkFriends(requestingUID,
+                                              eachUser.name, "false");
 
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: new Text('Yes'),
-                                ),
-                              ],
-                            ));
-                  }, // TODO: profile page can go here
-                ),
+                                          Navigator.of(context).pop(false);
+                                        },
+                                        child: new Text('Yes'),
+                                      ),
+                                    ],
+                                  ));
+                        }, // TODO: profile page can go here
+                      ),
               ),
             ),
           ],
@@ -279,8 +288,10 @@ class UserResult extends StatelessWidget {
 
 class TempUser {
   final String name;
-  final String imageUrl;
-  TempUser(this.name, this.imageUrl);
+  //final String imageUrl;
+  int colorIndex;
+  int iconIndex;
+  TempUser(this.name, this.colorIndex, this.iconIndex);
 
   Widget getName(BuildContext context) {
     return Text(

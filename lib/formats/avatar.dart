@@ -33,3 +33,7 @@ const List<Icon> AVATAR_ICONS = [
   Icon(Icons.landscape),
   Icon(Icons.wb_sunny),
 ];
+
+// const circleAvatar() {
+
+// }

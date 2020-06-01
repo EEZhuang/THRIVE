@@ -10,6 +10,8 @@ import 'dart:convert';
 import 'package:thrive/services/database.dart';
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:tuple/tuple.dart';
+import 'package:thrive/formats/avatar.dart';
 
 class Request extends StatefulWidget {
   final Function toggleHome;
@@ -36,7 +38,10 @@ class _RequestState extends State<Request> {
       i++;
     }
     return AppBar(
-      title: Text("Friend Requests", style: ThriveFonts.HEADING,),
+      title: Text(
+        "Friend Requests",
+        style: ThriveFonts.HEADING,
+      ),
       centerTitle: true,
       backgroundColor: ThriveColors.DARK_GREEN,
     );
@@ -50,8 +55,8 @@ class _RequestState extends State<Request> {
     List<TempUser> users = new List();
 
     for (int i = 0; i < requests.length; i++) {
-      users.add(TempUser(requests[i],
-          "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
+      Tuple2<int, int> result = await _db.getUserAvatar(requests[i]);
+      users.add(new TempUser(requests[i], result.item1, result.item2));
     }
 
     final Future<List<TempUser>> allUsers =
@@ -158,7 +163,8 @@ class _UserResultState extends State<UserResult> {
             GestureDetector(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: ThriveColors.LIGHTEST_GREEN,
+                  backgroundColor: AVATAR_COLORS[widget.eachUser.colorIndex],
+                  child: AVATAR_ICONS[widget.eachUser.iconIndex],
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
@@ -177,10 +183,9 @@ class _UserResultState extends State<UserResult> {
                         final AuthService _auth = AuthService();
                         final DatabaseService _db = DatabaseService();
                         // TODO: pass user as parameter from Wrapper()
-                        FirebaseUser result =
-                        await _auth.getCurrentUser();
+                        FirebaseUser result = await _auth.getCurrentUser();
                         String requestingUID =
-                        await _db.getUsername(result.uid);
+                            await _db.getUsername(result.uid);
 
                         _db.addFriend(widget.eachUser.name, requestingUID);
                         _db.addFriend(requestingUID, widget.eachUser.name);
@@ -197,10 +202,9 @@ class _UserResultState extends State<UserResult> {
                         final AuthService _auth = AuthService();
                         final DatabaseService _db = DatabaseService();
                         // TODO: pass user as parameter from Wrapper()
-                        FirebaseUser result =
-                        await _auth.getCurrentUser();
+                        FirebaseUser result = await _auth.getCurrentUser();
                         String requestingUID =
-                        await _db.getUsername(result.uid);
+                            await _db.getUsername(result.uid);
 
                         _db.deleteFriend(requestingUID, widget.eachUser.name);
                         setState(() {});
@@ -219,8 +223,10 @@ class _UserResultState extends State<UserResult> {
 
 class TempUser {
   final String name;
-  final String imageUrl;
-  TempUser(this.name, this.imageUrl);
+  //final String imageUrl;
+  int colorIndex;
+  int iconIndex;
+  TempUser(this.name, this.colorIndex, this.iconIndex);
 
   Widget getName(BuildContext context) {
     return Text(
