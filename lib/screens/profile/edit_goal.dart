@@ -177,7 +177,7 @@ class _EditGoalState extends State<EditGoal> {
                                             context: context,
                                             builder: (context) =>
                                                 new AlertDialog(
-                                              title: new Text('Create Goal'),
+                                              title: new Text('Submit Changes'),
                                               content: new Text(
                                                   'Do you want to edit this goal?'),
                                               actions: <Widget>[

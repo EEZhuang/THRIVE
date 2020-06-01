@@ -50,6 +50,7 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -258,7 +259,8 @@ class _RegisterState extends State<Register> {
                                 _db.setPublicUid(username);
                                 var rng = new Random();
                                 set = await _db.setUserAvatar(
-                                    username, rng.nextInt(9), rng.nextInt(6));
+                                    username, rng.nextInt(9), rng.nextInt(7));
+
                                 if (set) {
                                   widget.toggleHome();
                                 }

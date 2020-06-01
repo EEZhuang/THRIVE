@@ -134,9 +134,10 @@ class _SearchState extends State<Search> {
         ]);
   }
 
-  Container displayNoSearchResultsScreen() {
+  Scaffold displayNoSearchResultsScreen() {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return Container(
+    return Scaffold(
+        body: Container(
       color: ThriveColors.TRANSPARENT_BLACK,
       child: Center(
         child: ListView(
@@ -158,7 +159,7 @@ class _SearchState extends State<Search> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   // TODO: depends on database
@@ -179,17 +180,50 @@ class _SearchState extends State<Search> {
                 ),
               )
             ];
-            return children[0];
+            //print('test');
+            //return Text('hi');
           }
 
           List<UserResult> searchUsersResult = [];
           for (int i = 0; i < snapshot.data.length; i++) {
             TempUser eachTempUser = snapshot.data[i];
-            UserResult userResult = UserResult(eachTempUser, friendsList, widget.togglePage);
+            UserResult userResult =
+                UserResult(eachTempUser, friendsList, widget.togglePage);
             searchUsersResult.add(userResult);
           }
 
-          return ListView(children: searchUsersResult);
+          if (searchUsersResult.isEmpty) {
+            return Container(
+                color: ThriveColors.TRANSPARENT_BLACK,
+                // TODO-BG change asset for friend search
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: new ExactAssetImage("images/thrive.png"),
+                          fit: BoxFit.fitWidth,
+                        )),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "That username doesn't exist",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ThriveColors.LIGHT_ORANGE,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30.0),
+                      ),
+                    )
+                  ],
+                ));
+          } else {
+            return ListView(children: searchUsersResult);
+          }
         });
   }
 
@@ -218,117 +252,128 @@ class UserResult extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(3.0),
       child: Container(
-        color: Colors.transparent,
+        color: ThriveColors.TRANSPARENT_BLACK,
         //color: ThriveColors.TRANSPARENT_BLACK,
         child: Column(
           children: <Widget>[
             GestureDetector(
               child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
-                  child: AVATAR_ICONS[eachUser.iconIndex],
-                  //backgroundImage: NetworkImage(eachUser.imageUrl),
-                ),
-                title: Text(
-                  eachUser.name,
-                  /*
+                  leading: CircleAvatar(
+                    backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
+                    child: AVATAR_ICONS[eachUser.iconIndex],
+                    //backgroundImage: NetworkImage(eachUser.imageUrl),
+                  ),
+                  title: Text(
+                    eachUser.name,
+                    /*
                   style: TextStyle(
                     color: ThriveColors.WHITE,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
                    */
-                  style: ThriveFonts.SUBHEADING_WHITE,
-                ),
+                    style: ThriveFonts.SUBHEADING_WHITE,
+                  ),
+                  trailing: ((friendsList != null) &&
+                          friendsList.contains(eachUser.name))
+                      ? IconButton(
+                          icon: Icon(
+                            FontAwesomeIcons.userMinus,
+                            size: 20,
+                          ),
+                          color: ThriveColors.DARK_ORANGE,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => new AlertDialog(
+                                      title: new Text('Delete Friend'),
+                                      content: new Text(
+                                          'Do you want to delete this user from your friends list?'),
+                                      actions: <Widget>[
+                                        new FlatButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: new Text('No'),
+                                        ),
+                                        new FlatButton(
+                                          onPressed: () async {
+                                            final AuthService _auth =
+                                                AuthService();
+                                            final DatabaseService _db =
+                                                DatabaseService();
+                                            // TODO: pass user as parameter from Wrapper()
+                                            FirebaseUser result =
+                                                await _auth.getCurrentUser();
+                                            String requestingUID = await _db
+                                                .getUsername(result.uid);
 
-                trailing: ((friendsList != null) && friendsList.contains(eachUser.name)) ?
-                IconButton(
-                  icon: Icon(FontAwesomeIcons.userMinus, size: 20,),
-                  color: ThriveColors.DARK_ORANGE,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => new AlertDialog(
-                          title: new Text('Delete Friend'),
-                          content: new Text(
-                              'Do you want to delete this user from your friends list?'),
-                          actions: <Widget>[
-                            new FlatButton(
-                              onPressed: () =>
-                                  Navigator.of(context).pop(false),
-                              child: new Text('No'),
-                            ),
-                            new FlatButton(
-                              onPressed: () async {
-                                final AuthService _auth = AuthService();
-                                final DatabaseService _db =
-                                DatabaseService();
-                                // TODO: pass user as parameter from Wrapper()
-                                FirebaseUser result =
-                                await _auth.getCurrentUser();
-                                String requestingUID =
-                                await _db.getUsername(result.uid);
+                                            //TODO: call delete friends
+                                            bool set = await _db.removeFriend(
+                                                requestingUID, eachUser.name);
+                                            set = await _db.removeFriend(
+                                                eachUser.name, requestingUID);
+                                            Navigator.of(context).pop(false);
+                                            this.togglePage(5);
+                                            await new Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 250));
+                                            this.togglePage(3);
+                                          },
+                                          child: new Text('Yes'),
+                                        ),
+                                      ],
+                                    ));
+                          }, // TODO: profile page can go here
+                        )
+                      : IconButton(
+                          //icon: Icon(Icons.person_add),
+                          icon: Icon(
+                            FontAwesomeIcons.userPlus,
+                            size: 20,
+                          ),
+                          color: ThriveColors.LIGHT_GREEN,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => new AlertDialog(
+                                      title: new Text('Add Friend'),
+                                      content: new Text(
+                                          'Do you want to send a friend request to this user?'),
+                                      actions: <Widget>[
+                                        new FlatButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: new Text('No'),
+                                        ),
+                                        new FlatButton(
+                                          onPressed: () async {
+                                            final AuthService _auth =
+                                                AuthService();
+                                            final DatabaseService _db =
+                                                DatabaseService();
+                                            // TODO: pass user as parameter from Wrapper()
+                                            FirebaseUser result =
+                                                await _auth.getCurrentUser();
+                                            String requestingUID = await _db
+                                                .getUsername(result.uid);
 
-                                //TODO: call delete friends
-                                bool set = await _db.removeFriend(requestingUID, eachUser.name);
-                                set = await _db.removeFriend(eachUser.name, requestingUID);
-                                Navigator.of(context).pop(false);
-                                this.togglePage(5);
-                                await new Future.delayed(const Duration(milliseconds : 250));
-                                this.togglePage(3);
+                                            _db.linkFriends(requestingUID,
+                                                eachUser.name, "false");
 
-                              },
-                              child: new Text('Yes'),
-                            ),
-                          ],
-                        ));
-                  }, // TODO: profile page can go here
-                ) : IconButton(
-                  //icon: Icon(Icons.person_add),
-                  icon: Icon(FontAwesomeIcons.userPlus, size: 20,),
-                  color: ThriveColors.LIGHT_GREEN,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => new AlertDialog(
-                              title: new Text('Add Friend'),
-                              content: new Text(
-                                  'Do you want to send a friend request to this user?'),
-                              actions: <Widget>[
-                                new FlatButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: new Text('No'),
-                                ),
-                                new FlatButton(
-                                  onPressed: () async {
-                                    final AuthService _auth = AuthService();
-                                    final DatabaseService _db =
-                                        DatabaseService();
-                                    // TODO: pass user as parameter from Wrapper()
-                                    FirebaseUser result =
-                                        await _auth.getCurrentUser();
-                                    String requestingUID =
-                                        await _db.getUsername(result.uid);
-
-
-                                          _db.linkFriends(requestingUID,
-                                              eachUser.name, "false");
-
-
-                                    Navigator.of(context).pop(false);
-                                    this.togglePage(5);
-                                    await new Future.delayed(const Duration(milliseconds : 250));
-                                    this.togglePage(3);
-                                  },
-                                  child: new Text('Yes'),
-                                ),
-                              ],
-                            ));
-                  }, // TODO: profile page can go here
-                )),
-
-              ),
+                                            Navigator.of(context).pop(false);
+                                            this.togglePage(5);
+                                            await new Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 250));
+                                            this.togglePage(3);
+                                          },
+                                          child: new Text('Yes'),
+                                        ),
+                                      ],
+                                    ));
+                          }, // TODO: profile page can go here
+                        )),
+            ),
             //),
           ],
         ),

@@ -71,9 +71,8 @@ class DatabaseService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body:
-      jsonEncode(<String, String>{'username': username, 'friend': friend}),
+          jsonEncode(<String, String>{'username': username, 'friend': friend}),
     );
-    //print("before returning true");
     return true;
   }
 
@@ -116,7 +115,8 @@ class DatabaseService {
     return true;
   }
 
-  Future<bool> setUserAvatar(String username, int colorIndex, int iconIndex) async {
+  Future<bool> setUserAvatar(
+      String username, int colorIndex, int iconIndex) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/set_user_avatar',
       headers: <String, String>{
@@ -171,7 +171,6 @@ class DatabaseService {
 
   Future<List<String>> getAllUsernames(String uid) async {
     //get user doc ids
-    print("yes");
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_all_usernames',
       headers: <String, String>{
@@ -181,10 +180,8 @@ class DatabaseService {
     );
 
     Map<String, dynamic> json = await jsonDecode(response.body);
-    //print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> usernames = json['users'].cast<String>();
-    print(usernames);
     return usernames;
   }
 
@@ -202,10 +199,8 @@ class DatabaseService {
     Map<String, dynamic> json = await jsonDecode(response.body);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> goal_ids = json['goal_ids'].cast<String>();
-    print(goal_ids);
     for (var id in goal_ids) {
       Goal temp = await getGoal(id);
-      print(temp.goalUnits);
       goalList[id] = temp;
     }
     return goalList;
@@ -222,11 +217,8 @@ class DatabaseService {
     );
 
     Map<String, dynamic> json = await jsonDecode(response.body);
-    print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     String username = json['user'];
-    print(username);
-
     return username;
   }
 
@@ -241,10 +233,8 @@ class DatabaseService {
     );
 
     Map<String, dynamic> json = await jsonDecode(response.body);
-    //print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> username = json['friend'].cast<String>();
-    //print(username);
 
     return username;
   }
@@ -269,8 +259,6 @@ class DatabaseService {
           goalUnits: json['goal_units'],
           goalRepeat: json['goal_repeat'],
           goalProgress: json['goal_progress']);
-      print("database");
-      print(temp.goal);
       return temp;
     } else {
       // If the server did not return a 200 OK response,
@@ -281,7 +269,6 @@ class DatabaseService {
 
   Future<List<String>> getAllFriends(String username) async {
     //get user doc ids
-    print("yes");
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_all_friends',
       headers: <String, String>{
@@ -291,10 +278,8 @@ class DatabaseService {
     );
 
     Map<String, dynamic> json = await jsonDecode(response.body);
-    //print(json);
     //Map<String, dynamic> json = new Map<String, dynamic>.from(jsonDecode(response.body));
     List<String> friends = json['friend'].cast<String>();
-    print(friends);
     return friends;
   }
 
@@ -311,7 +296,6 @@ class DatabaseService {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       Map<String, dynamic> json = jsonDecode(response.body);
-      //print("HERE"+int.parse(json['timestamp']).toString());
       return int.parse(json['timestamp']);
     } else {
       // If the server did not return a 200 OK response,

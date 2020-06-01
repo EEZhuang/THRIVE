@@ -68,6 +68,7 @@ class _CreateGoalState extends State<CreateGoal> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -238,7 +239,6 @@ class _CreateGoalState extends State<CreateGoal> {
                               } else {
                                 return "Needs to be a whole number";
                               }
-
                             },
                           ),
                           /*
@@ -365,16 +365,20 @@ class _CreateGoalState extends State<CreateGoal> {
 
                                     // If there is a current user logged in, make HTTP request
                                     if (result != null) {
-                                      String username = await _db.getUsername(result.uid);
+                                      String username =
+                                          await _db.getUsername(result.uid);
                                       print(result.uid);
                                       _db.linkUserGoal(username, goalID);
-                                      bool done = await _db.postGoal(goal, goalID, goalUnits,
-                                          goalDate, goalRepeat, goalProgress);
+                                      bool done = await _db.postGoal(
+                                          goal,
+                                          goalID,
+                                          goalUnits,
+                                          goalDate,
+                                          goalRepeat,
+                                          goalProgress);
 
                                       for (var collab in collabList) {
-
                                         _db.linkUserGoal(collab, goalID);
-                                        
                                       }
 
                                       widget.togglePage(1);
@@ -436,7 +440,6 @@ class _CreateGoalState extends State<CreateGoal> {
       ));
     }
   }
-
 }
 
 class MyTextField extends StatelessWidget {
