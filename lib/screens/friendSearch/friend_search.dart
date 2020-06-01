@@ -11,6 +11,8 @@ import 'package:thrive/services/database.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:tuple/tuple.dart';
+import 'package:thrive/formats/avatar.dart';
 
 class Search extends StatefulWidget {
   //final Function toggleHome;
@@ -54,8 +56,7 @@ class _SearchState extends State<Search> {
     usernames.remove(requestingUID);
 
     for (int i = 0; i < usernames.length; i++) {
-      tempUsers.add(new TempUser(usernames[i],
-          "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
+      tempUsers.add(new TempUser(usernames[i], 0, 0));
     }
 
     List<TempUser> queryTempUsers = [];
@@ -64,6 +65,9 @@ class _SearchState extends State<Search> {
       String tempName = tempUser.name.toLowerCase();
       String tempStr = str.toLowerCase();
       if (str != "" && tempName.contains(tempStr)) {
+        Tuple2<int, int> result = await _db.getUserAvatar(usernames[i]);
+        tempUser.colorIndex = result.item1;
+        tempUser.iconIndex = result.item2;
         queryTempUsers.add(tempUser);
       }
     }
@@ -220,7 +224,8 @@ class UserResult extends StatelessWidget {
             GestureDetector(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: ThriveColors.LIGHTEST_GREEN,
+                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
+                  child: AVATAR_ICONS[eachUser.iconIndex],
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
@@ -234,6 +239,7 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
+
                 trailing: (friendsList == null)? null : (friendsList.contains(eachUser.name) ? IconButton(
                   icon: Icon(Icons.clear),
                   color: ThriveColors.DARK_ORANGE,
@@ -265,7 +271,6 @@ class UserResult extends StatelessWidget {
                                 bool set = await _db.removeFriend(requestingUID, eachUser.name);
                                 set = await _db.removeFriend(eachUser.name, requestingUID);
                                 Navigator.of(context).pop(false);
-//                                print("HEREEHRHERHRHHRHRHHEHEHRHR");
                                 this.togglePage(5);
                                 await new Future.delayed(const Duration(milliseconds : 250));
                                 this.togglePage(3);
@@ -303,8 +308,10 @@ class UserResult extends StatelessWidget {
                                     String requestingUID =
                                         await _db.getUsername(result.uid);
 
-                                    _db.linkFriends(
-                                        requestingUID, eachUser.name, "false");
+
+                                          _db.linkFriends(requestingUID,
+                                              eachUser.name, "false");
+
 
                                     Navigator.of(context).pop(false);
                                   },
@@ -314,6 +321,7 @@ class UserResult extends StatelessWidget {
                             ));
                   }, // TODO: profile page can go here
                 )),
+
               ),
             ),
           ],
@@ -325,8 +333,10 @@ class UserResult extends StatelessWidget {
 
 class TempUser {
   final String name;
-  final String imageUrl;
-  TempUser(this.name, this.imageUrl);
+  //final String imageUrl;
+  int colorIndex;
+  int iconIndex;
+  TempUser(this.name, this.colorIndex, this.iconIndex);
 
   Widget getName(BuildContext context) {
     return Text(
