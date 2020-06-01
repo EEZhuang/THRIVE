@@ -13,6 +13,7 @@ import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:thrive/services/database.dart';
+import 'package:thrive/shared/loading.dart';
 
 // "User home page", screen user sees after successful login
 class Home extends StatefulWidget {
@@ -51,6 +52,7 @@ class _HomeState extends State<Home> {
   // Indicated which screen is selected
   // Starts app on the social wall
   int _selectedIndex = 0;
+  bool loading = false;
   // Array of different pages for NavBar
   /*
   final List<Widget> pages = [
@@ -68,7 +70,14 @@ class _HomeState extends State<Home> {
 
   void togglePage(int index) {
     setState(() {
-      _selectedIndex = index;
+      if (index == 5){
+        index = 3;
+        loading = true;
+        _selectedIndex = index;
+      } else {
+        _selectedIndex = index;
+        loading = false;
+      }
     });
   }
 
@@ -106,7 +115,7 @@ class _HomeState extends State<Home> {
     ];
 
     return Scaffold(
-      body: PageStorage(
+      body: loading ? Loading() : PageStorage(
         child: pages[_selectedIndex],
         bucket: bucket,
       ),

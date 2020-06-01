@@ -266,9 +266,9 @@ class UserResult extends StatelessWidget {
                                 set = await _db.removeFriend(eachUser.name, requestingUID);
                                 Navigator.of(context).pop(false);
 //                                print("HEREEHRHERHRHHRHRHHEHEHRHR");
-//                                this.togglePage(5);
-//                                await new Future.delayed(const Duration(milliseconds : 300));
-//                                this.togglePage(3);
+                                this.togglePage(5);
+                                await new Future.delayed(const Duration(milliseconds : 250));
+                                this.togglePage(3);
 
                               },
                               child: new Text('Yes'),
