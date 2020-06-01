@@ -185,7 +185,8 @@ class _SearchState extends State<Search> {
           }
 
           List<UserResult> searchUsersResult = [];
-          for (int i = 0; i < snapshot.data.length; i++) {
+          int bound = (snapshot == null || snapshot.data == null) ? 0 : snapshot.data.length;
+          for (int i = 0; i < bound; i++) {
             TempUser eachTempUser = snapshot.data[i];
             UserResult userResult =
                 UserResult(eachTempUser, friendsList, widget.togglePage);
