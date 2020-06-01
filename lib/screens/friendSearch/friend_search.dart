@@ -314,6 +314,9 @@ class UserResult extends StatelessWidget {
 
 
                                     Navigator.of(context).pop(false);
+                                    this.togglePage(5);
+                                    await new Future.delayed(const Duration(milliseconds : 250));
+                                    this.togglePage(3);
                                   },
                                   child: new Text('Yes'),
                                 ),
