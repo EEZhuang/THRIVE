@@ -10,9 +10,10 @@ import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 class EditGoal extends StatefulWidget {
   final Goal goal;
   final String id;
+  final String collabs;
   final Function updateTile;
 
-  EditGoal({this.goal, this.id, this.updateTile});
+  EditGoal({this.goal, this.id, this.collabs, this.updateTile});
 
   @override
   _EditGoalState createState() => _EditGoalState();
@@ -58,18 +59,25 @@ class _EditGoalState extends State<EditGoal> {
               String _goalDeadline = goalDate;
               return StatefulBuilder(builder: (context, setState) {
                 return new AlertDialog(
-                    title: Center(child: new Text('Edit Goal')),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                    backgroundColor: ThriveColors.DARK_GREEN,
+                    title: Center(
+                        child: new Text(
+                      'Edit Goal',
+                      style: ThriveFonts.HEADING,
+                    )),
                     content: new Container(
                         width: 400,
                         padding: EdgeInsets.symmetric(
-                          vertical: 10,
+                          vertical: 5,
                         ),
                         child: SingleChildScrollView(
                           child: Form(
                               key: _formkey,
                               child: Column(
                                 children: <Widget>[
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 10),
                                   TextFormField(
                                     initialValue: goal_name,
                                     validator: (value) {
@@ -79,16 +87,18 @@ class _EditGoalState extends State<EditGoal> {
                                       goal_name = value;
                                       return null;
                                     },
+                                    style: ThriveFonts.BODY_WHITE,
                                     decoration: new InputDecoration(
                                         hintText: "Goal Name"),
                                   ),
-                                  SizedBox(height: 20.0),
+                                  SizedBox(height: 10.0),
                                   TextFormField(
                                     initialValue: goalUnits,
                                     validator: (value) {
                                       goalUnits = value;
                                       return null;
                                     },
+                                    style: ThriveFonts.BODY_WHITE,
                                     decoration: new InputDecoration(
                                         hintText: "How Many Units(Optional)"),
                                   ),
@@ -113,44 +123,54 @@ class _EditGoalState extends State<EditGoal> {
                                       },
                                       child: IgnorePointer(
                                           child: new TextFormField(
-                                              decoration: new InputDecoration(
-                                                  hintText: "Goal Deadline"),
-                                              controller: dateText,
-                                              validator: (value) {
-                                                if (value.isEmpty) {
-                                                  return "Please set a deadline for your goal";
-                                                }
-                                                goalDate = value;
-                                                _goalDeadline = value;
-                                                return null;
-                                              }))),
+                                        decoration: new InputDecoration(
+                                            hintText: "Goal Deadline"),
+                                        controller: dateText,
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return "Please set a deadline for your goal";
+                                          }
+                                          goalDate = value;
+                                          _goalDeadline = value;
+                                          return null;
+                                        },
+                                        style: ThriveFonts.BODY_WHITE,
+                                      ))),
                                   SizedBox(height: 20.0),
-                                  DropdownButton<String>(
-                                    hint: Text("Repeat"),
-                                    value: _selectedRepeat,
-                                    items: <String>[
-                                      "Don't Repeat",
-                                      "Repeat Every Day",
-                                      "Repeat Every Week",
-                                      "Repeat Every Month",
-                                      "Repeat Every Year"
-                                    ].map((String value) {
-                                      return new DropdownMenuItem<String>(
-                                        value: value,
-                                        child: new Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedRepeat = value;
-                                        print(_selectedRepeat);
-                                        goalRepeat = value;
-                                      });
-                                    },
+                                  Theme(
+                                    data: Theme.of(context).copyWith(
+                                        canvasColor: ThriveColors.BLACK,
+                                        buttonColor: ThriveColors.BLACK),
+                                    child: DropdownButton<String>(
+                                      hint: Text("Repeat"),
+                                      style: ThriveFonts.SUBHEADING_WHITE,
+                                      focusColor: ThriveColors.LIGHT_GREEN,
+                                      value: _selectedRepeat,
+                                      items: <String>[
+                                        "Don't Repeat",
+                                        "Repeat Every Day",
+                                        "Repeat Every Week",
+                                        "Repeat Every Month",
+                                        "Repeat Every Year"
+                                      ].map((String value) {
+                                        return new DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _selectedRepeat = value;
+                                          print(_selectedRepeat);
+                                          goalRepeat = value;
+                                        });
+                                      },
+                                    ),
                                   ),
                                   SizedBox(height: 20),
                                   RaisedButton(
                                       child: Text("Submit changes"),
+                                      color: ThriveColors.LIGHTEST_GREEN,
                                       onPressed: () {
                                         if (_formkey.currentState.validate()) {
                                           showDialog(
@@ -202,7 +222,7 @@ class _EditGoalState extends State<EditGoal> {
                                           );
                                         }
                                       }),
-                                  SizedBox(height: 100.0),
+                                  SizedBox(height: 50.0),
                                   RaisedButton(
                                     child: Text('Delete goal'),
                                     onPressed: () {
@@ -230,11 +250,37 @@ class _EditGoalState extends State<EditGoal> {
 
                                                   // If there is a current user logged in, make HTTP request
                                                   if (result != null) {
+                                                    String username =
+                                                        await _db.getUsername(
+                                                            result.uid);
                                                     bool finished =
                                                         await _db.deleteGoal(
-                                                            result.uid,
+                                                            username,
                                                             widget.id);
 
+                                                    String collabStr =
+                                                        widget.collabs;
+
+                                                    while (
+                                                        collabStr.length != 0) {
+                                                      int commaIdx = collabStr
+                                                          .indexOf(",");
+                                                      String username = '';
+                                                      if (commaIdx != -1) {
+                                                        username =
+                                                            collabStr.substring(
+                                                                0, commaIdx);
+                                                        collabStr =
+                                                            collabStr.substring(
+                                                                commaIdx + 2);
+                                                      } else {
+                                                        username = collabStr;
+                                                        collabStr = '';
+                                                      }
+
+                                                      _db.deleteGoal(
+                                                          username, widget.id);
+                                                    }
                                                     if (finished) {
                                                       widget.updateTile();
                                                     }
@@ -253,7 +299,7 @@ class _EditGoalState extends State<EditGoal> {
                                         );
                                       }
                                     },
-                                    color: Colors.red,
+                                    color: ThriveColors.DARK_ORANGE,
                                   )
                                 ],
                               )),

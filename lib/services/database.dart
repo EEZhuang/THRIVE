@@ -24,8 +24,6 @@ class DatabaseService {
     );
   }
 
-
-
   // Makes HTTP request passing uid and goal in body
   void linkUserGoal(String username, String goalID) async {
     http.Response response = await http.post(
@@ -33,7 +31,8 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+      body:
+          jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
     );
   }
 
@@ -43,7 +42,8 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'myuid': myuid, 'frienduid': frienduid}),
+      body:
+          jsonEncode(<String, String>{'myuid': myuid, 'frienduid': frienduid}),
     );
     print(myuid);
     print(frienduid);
@@ -51,20 +51,21 @@ class DatabaseService {
     return true;
   }
 
-  Future<bool> deleteGoal(String uid, String goalID) async {
+  Future<bool> deleteGoal(String username, String goalID) async {
     http.Response response = await http.post(
       'http://10.0.2.2:3000/delete_goal',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'uid': uid, 'goalID': goalID}),
+      body:
+          jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
     );
     print("before returning true");
     return true;
   }
 
-  Future<bool> postGoal(String goal, String goalID, String goalUnits, String goalDates,
-      String goalRepeat, String goalProgress) async {
+  Future<bool> postGoal(String goal, String goalID, String goalUnits,
+      String goalDates, String goalRepeat, String goalProgress) async {
     String timestamp = new DateTime.now().millisecondsSinceEpoch.toString();
     http.Response response = await http.post(
       'http://10.0.2.2:3000/post_goal',
@@ -96,9 +97,38 @@ class DatabaseService {
         'username': username,
         'firstName': firstName,
         'lastName': lastName,
-        'birthDate': birthDate
+        'birthDate': birthDate,
       }),
     );
+  }
+
+  void setUserAvatar(String username, int colorIndex, int iconIndex) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/set_user_avatar',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'colorIndex': colorIndex.toString(),
+        'iconIndex': iconIndex.toString(),
+      }),
+    );
+  }
+
+  Future<Tuple2<int, int>> getUserAvatar(String username) async {
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_user_avatar',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'username': username
+      },
+    );
+
+    Map<String, dynamic> json = await jsonDecode(response.body);
+    Tuple2<int, int> avatarTuple =
+        new Tuple2(int.parse(json['colorIndex']), int.parse(json['iconIndex']));
+    return avatarTuple;
   }
 
   void setPublicUid(String username) async {
@@ -117,7 +147,10 @@ class DatabaseService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{'myusername': myusername, 'otherusername': otherusername }),
+      body: jsonEncode(<String, String>{
+        'myusername': myusername,
+        'otherusername': otherusername
+      }),
     );
   }
 
@@ -272,50 +305,80 @@ class DatabaseService {
     }
   }
 
-  int comparison(Tuple2<int, Goal> first, Tuple2<int, Goal> second  ){
-    if (first.item1 > second.item1){
+  int comparison(
+      Tuple3<int, Goal, String> first, Tuple3<int, Goal, String> second) {
+    if (first.item1 > second.item1) {
       return -1;
     }
     return 1;
   }
 
-  Future<List<Tuple2<Goal, String>>> wallMap (String username) async{
+  Future<Map<String, String>> getCollabMap(String username) async {
+    List<String> friends = await getAllFriends(username);
+    Map<String, String> collabMap = {};
 
-    List<Tuple2<int, Goal>> tempReturn = new List<Tuple2<int, Goal>>();
+    Map<String, Goal> currUserGoals = await getAllUserGoals(username);
+    currUserGoals.forEach((k, v) {
+      collabMap[k] = "";
+    });
+
+    for (int i = 0; i < friends.length; i++) {
+      Map<String, Goal> temp = await getAllUserGoals(friends[i]);
+
+      temp.forEach((k, v) {
+        if (collabMap.containsKey(k)) {
+          if (collabMap[k] == "") {
+            collabMap[k] = friends[i];
+          } else {
+            collabMap[k] += (", " + friends[i]);
+          }
+        }
+      });
+    }
+    print(collabMap);
+    return collabMap;
+  }
+
+  Future<List<Tuple3<Goal, String, String>>> wallMap(String username) async {
+    List<Tuple3<int, Goal, String>> tempReturn =
+        new List<Tuple3<int, Goal, String>>();
 
     List<String> friends = await getAllFriends(username);
-    List<Tuple2<Goal, String>> returnList = new List<Tuple2<Goal, String>>();
-    Map<Goal, String> userMap = {};
+    List<Tuple3<Goal, String, String>> returnList =
+        new List<Tuple3<Goal, String, String>>();
+    Map<String, String> userMap = {};
 
-    for(int f = 0; f<friends.length; f++){
+    for (int f = 0; f < friends.length; f++) {
       Map<String, Goal> temp = await getAllUserGoals(friends[f]);
 
       List<Goal> goals = temp.values.toList(); //list of goals
       List<String> ids = temp.keys.toList(); //list of ids
-      for (int i = 0; i<goals.length; i++){
-        if(userMap.containsKey(goals[i])){
-          userMap[goals[i]] += (", "+ friends[f]);
+      for (int i = 0; i < goals.length; i++) {
+        if (userMap.containsKey(ids[i])) {
+          userMap[ids[i]] += (", " + friends[f]);
         } else {
-          userMap[goals[i]] = friends[f];
+          userMap[ids[i]] = friends[f];
+          int timestamp = await getTimestamp(ids[i]);
+          //print("HERE" + timestamp.toString());
+          tempReturn.add(new Tuple3(timestamp, goals[i], ids[i]));
         }
-        int timestamp = await getTimestamp(ids[i]);
-        //print("HERE" + timestamp.toString());
-        tempReturn.add(new Tuple2(timestamp, goals[i]));
-
       }
     }
 
     tempReturn.sort(comparison);
 
-    for (int p = 0; p<tempReturn.length; p++){
-      returnList.add(new Tuple2(tempReturn[p].item2, userMap[tempReturn[p].item2]));
-      print("PLS WORK"+ tempReturn[p].item2.goal);
+    for (int p = 0; p < tempReturn.length; p++) {
+      DateTime date =
+          new DateTime.fromMillisecondsSinceEpoch(tempReturn[p].item1);
+      //print(date);
+      var dateString = DateFormat("MMMM dd, yyyy").format(date);
+      print(dateString);
+      returnList.add(new Tuple3(
+          tempReturn[p].item2, userMap[tempReturn[p].item3], dateString));
+      print("PLS WORK" + tempReturn[p].item2.goal);
     }
 
     return returnList;
-
-
-
   }
 
   //populate wallMap, returns Map<Goal, String>:
@@ -333,8 +396,5 @@ class DatabaseService {
  * return returnList
  *
  */
-
-
-
 
 }

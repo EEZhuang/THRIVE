@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';import 'package:thrive/services/database.dart';
+import 'dart:convert';
+import 'package:thrive/services/database.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:tuple/tuple.dart';
+import 'package:thrive/formats/avatar.dart';
 
 class Search extends StatefulWidget {
   final Function toggleHome;
@@ -31,8 +34,7 @@ class _SearchState extends State<Search> {
   TextEditingController searchTextEditingController = TextEditingController();
   // TODO: Future<QuerySnapshot> futureSearchResults;
   Future<List<TempUser>> futureSearchResults;
-
-
+  List<String> friendsList;
 
   emptyTheTextFormField() {
     searchTextEditingController.clear();
@@ -40,18 +42,18 @@ class _SearchState extends State<Search> {
 
   // condition to search for uid for each user
   controlSearching(String str) async {
-    print("hi");
     FirebaseUser result = await _auth.getCurrentUser();
+    String username = await _db.getUsername(result.uid);
     List<String> usernames = await _db.getAllUsernames(result.uid);
+    friendsList = await _db.getAllFriends(username);
     List<TempUser> tempUsers = new List();
-    print("hello");
 
     String requestingUID = await _db.getUsername(result.uid);
 
     usernames.remove(requestingUID);
 
-    for( int i = 0; i < usernames.length; i++) {
-      tempUsers.add( new TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
+    for (int i = 0; i < usernames.length; i++) {
+      tempUsers.add(new TempUser(usernames[i], 0, 0));
     }
 
     List<TempUser> queryTempUsers = [];
@@ -60,6 +62,9 @@ class _SearchState extends State<Search> {
       String tempName = tempUser.name.toLowerCase();
       String tempStr = str.toLowerCase();
       if (str != "" && tempName.contains(tempStr)) {
+        Tuple2<int, int> result = await _db.getUserAvatar(usernames[i]);
+        tempUser.colorIndex = result.item1;
+        tempUser.iconIndex = result.item2;
         queryTempUsers.add(tempUser);
       }
     }
@@ -73,74 +78,78 @@ class _SearchState extends State<Search> {
 
   AppBar searchPageHeader() {
     return AppBar(
-      title: TextFormField(
-        style: TextStyle(fontSize: 18.0),
-        controller: searchTextEditingController,
-        decoration: InputDecoration(
-          hintText: "Search here...",
-          hintStyle: TextStyle(color: Colors.grey),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
-          ),
-          filled: true,
-          prefixIcon: Icon(
-            Icons.person_pin,
-            color: Colors.black,
-            size: 30.0,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-              Icons.clear,
-              color: Colors.black,
+        backgroundColor: ThriveColors.DARK_GREEN,
+        title: TextFormField(
+          style: TextStyle(fontSize: 18.0),
+          controller: searchTextEditingController,
+          decoration: InputDecoration(
+            hintText: "Search here...",
+            hintStyle: TextStyle(color: ThriveColors.LIGHT_GREEN),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ThriveColors.LIGHT_ORANGE),
             ),
-            onPressed: emptyTheTextFormField,
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ThriveColors.DARK_ORANGE),
+            ),
+            filled: true,
+            prefixIcon: Icon(
+              Icons.person_pin,
+              color: ThriveColors.LIGHT_ORANGE,
+              size: 30.0,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                Icons.clear,
+                color: ThriveColors.LIGHT_ORANGE,
+              ),
+              onPressed: emptyTheTextFormField,
+            ),
           ),
+          onFieldSubmitted: controlSearching,
         ),
-        onFieldSubmitted: controlSearching,
-      ),
-      actions: <Widget>[
-    // action button
-        IconButton(
-          icon: Icon(Icons.send),
-          onPressed: () {
-            print("page");
-            //body: PageStorage(
-            //  child: Request(),
-            //  bucket: bucket,
-            //);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Request()),
-            );
-          },
-        )
-      ]
-    );
+        actions: <Widget>[
+          // action button
+          IconButton(
+            icon: Icon(
+              Icons.group_add,
+              color: ThriveColors.LIGHT_ORANGE,
+              size: 30,
+            ),
+            onPressed: () {
+              print("page");
+              //body: PageStorage(
+              //  child: Request(),
+              //  bucket: bucket,
+              //);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Request()),
+              );
+            },
+          )
+        ]);
   }
 
   Container displayNoSearchResultsScreen() {
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Container(
-      color: Colors.white,
+      color: ThriveColors.TRANSPARENT_BLACK,
       child: Center(
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
             Icon(
               Icons.group,
-              color: Colors.grey,
+              color: ThriveColors.LIGHT_ORANGE,
               size: 200.0,
             ),
             Text(
               "Search Users",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.grey,
+                  color: ThriveColors.LIGHT_ORANGE,
                   fontWeight: FontWeight.w500,
-                  fontSize: 65.0),
+                  fontSize: 50.0),
             ),
           ],
         ),
@@ -172,7 +181,7 @@ class _SearchState extends State<Search> {
           List<UserResult> searchUsersResult = [];
           for (int i = 0; i < snapshot.data.length; i++) {
             TempUser eachTempUser = snapshot.data[i];
-            UserResult userResult = UserResult(eachTempUser);
+            UserResult userResult = UserResult(eachTempUser, friendsList);
             searchUsersResult.add(userResult);
           }
 
@@ -183,7 +192,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: ThriveColors.TRANSPARENT_BLACK,
 
       appBar: searchPageHeader(),
       body: futureSearchResults == null
@@ -196,62 +205,78 @@ class _SearchState extends State<Search> {
 
 class UserResult extends StatelessWidget {
   final TempUser eachUser; // TODO: replace friend with user
-  UserResult(this.eachUser);
+  final List<String> friendsList;
+  UserResult(this.eachUser, this.friendsList);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(3.0),
       child: Container(
-        color: Colors.white54,
+        color: Colors.transparent,
+        //color: ThriveColors.TRANSPARENT_BLACK,
         child: Column(
           children: <Widget>[
             GestureDetector(
-              onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) =>
-                  new AlertDialog(
-                    title: new Text('Add Friend'),
-                    content: new Text(
-                        'Do you want to send a friend request to this user?'),
-                    actions: <Widget>[
-                      new FlatButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(false),
-                        child: new Text('No'),
-                      ),
-                      new FlatButton(
-                        onPressed: () async {
-                          final AuthService _auth = AuthService();
-                          final DatabaseService _db = DatabaseService();
-                          // TODO: pass user as parameter from Wrapper()
-                          FirebaseUser result = await _auth.getCurrentUser();
-                          String requestingUID = await _db.getUsername(result.uid);
-
-                          _db.linkFriends(requestingUID, eachUser.name, "false");
-
-                          Navigator.of(context).pop(false);
-                        },
-                        child: new Text('Yes'),
-                      ),
-                    ],
-                  )
-                );
-              }, // TODO: profile page can go here
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.black,
-                  backgroundImage: NetworkImage(eachUser.imageUrl),
+                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
+                  child: AVATAR_ICONS[eachUser.iconIndex],
+                  //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
                   eachUser.name,
+                  /*
                   style: TextStyle(
-                    color: Colors.black,
+                    color: ThriveColors.WHITE,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
+                   */
+                  style: ThriveFonts.SUBHEADING_WHITE,
                 ),
+                trailing: (friendsList == null ||
+                        friendsList.contains(eachUser.name))
+                    ? null
+                    : IconButton(
+                        icon: Icon(Icons.person_add),
+                        color: ThriveColors.LIGHT_GREEN,
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => new AlertDialog(
+                                    title: new Text('Add Friend'),
+                                    content: new Text(
+                                        'Do you want to send a friend request to this user?'),
+                                    actions: <Widget>[
+                                      new FlatButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(false),
+                                        child: new Text('No'),
+                                      ),
+                                      new FlatButton(
+                                        onPressed: () async {
+                                          final AuthService _auth =
+                                              AuthService();
+                                          final DatabaseService _db =
+                                              DatabaseService();
+                                          // TODO: pass user as parameter from Wrapper()
+                                          FirebaseUser result =
+                                              await _auth.getCurrentUser();
+                                          String requestingUID =
+                                              await _db.getUsername(result.uid);
+
+                                          _db.linkFriends(requestingUID,
+                                              eachUser.name, "false");
+
+                                          Navigator.of(context).pop(false);
+                                        },
+                                        child: new Text('Yes'),
+                                      ),
+                                    ],
+                                  ));
+                        }, // TODO: profile page can go here
+                      ),
               ),
             ),
           ],
@@ -263,8 +288,10 @@ class UserResult extends StatelessWidget {
 
 class TempUser {
   final String name;
-  final String imageUrl;
-  TempUser(this.name, this.imageUrl);
+  //final String imageUrl;
+  int colorIndex;
+  int iconIndex;
+  TempUser(this.name, this.colorIndex, this.iconIndex);
 
   Widget getName(BuildContext context) {
     return Text(
@@ -272,4 +299,3 @@ class TempUser {
     );
   }
 }
-

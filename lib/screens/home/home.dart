@@ -6,6 +6,9 @@ import 'package:thrive/screens/friendSearch/friend_search.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/screens/profile/profile.dart';
 import 'package:thrive/screens/social_wall/social_wall.dart';
+import 'package:thrive/screens/Password/password.dart';
+import 'package:thrive/screens/Password/changepass.dart';
+import 'package:thrive/screens/settings/settings.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -99,7 +102,7 @@ class _HomeState extends State<Home> {
       Profile(currUser: widget.currUser),
       CreateGoal(togglePage: this.togglePage),
       Search(),
-      FirstPage(),
+      Settings(toggleHome: widget.toggleHome, togglePage: this.togglePage),
     ];
 
     return Scaffold(
@@ -144,6 +147,8 @@ class _HomeState extends State<Home> {
       ),
 
       // Button to signout and return to signin page
+
+      /*
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await _auth.signOut();
@@ -151,7 +156,7 @@ class _HomeState extends State<Home> {
           widget.toggleHome();
           //print(_auth.getCurrentUser());
         },
-      ),
+      ),*/
     );
   }
 }
