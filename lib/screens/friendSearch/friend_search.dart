@@ -30,7 +30,6 @@ class _SearchState extends State<Search> {
   String query = '';
 
   TextEditingController searchTextEditingController = TextEditingController();
-  // TODO: Future<QuerySnapshot> futureSearchResults;
   Future<List<TempUser>> futureSearchResults;
   List<String> friendsList;
 
@@ -200,7 +199,7 @@ class _SearchState extends State<Search> {
 }
 
 class UserResult extends StatelessWidget {
-  final TempUser eachUser; // TODO: replace friend with user
+  final TempUser eachUser;
   final List<String> friendsList;
   UserResult(this.eachUser, this.friendsList);
 
@@ -230,48 +229,44 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: (friendsList == null ||
-                        friendsList.contains(eachUser.name))
-                    ? null
-                    : IconButton(
-                        icon: Icon(Icons.person_add),
-                        color: ThriveColors.LIGHT_GREEN,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => new AlertDialog(
-                                    title: new Text('Add Friend'),
-                                    content: new Text(
-                                        'Do you want to send a friend request to this user?'),
-                                    actions: <Widget>[
-                                      new FlatButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(false),
-                                        child: new Text('No'),
-                                      ),
-                                      new FlatButton(
-                                        onPressed: () async {
-                                          final AuthService _auth =
-                                              AuthService();
-                                          final DatabaseService _db =
-                                              DatabaseService();
-                                          // TODO: pass user as parameter from Wrapper()
-                                          FirebaseUser result =
-                                              await _auth.getCurrentUser();
-                                          String requestingUID =
-                                              await _db.getUsername(result.uid);
+                trailing: IconButton(
+                  icon: Icon(Icons.person_add),
+                  color: ThriveColors.LIGHT_GREEN,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => new AlertDialog(
+                              title: new Text('Add Friend'),
+                              content: new Text(
+                                  'Do you want to send a friend request to this user?'),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: new Text('No'),
+                                ),
+                                new FlatButton(
+                                  onPressed: () async {
+                                    final AuthService _auth = AuthService();
+                                    final DatabaseService _db =
+                                        DatabaseService();
+                                    // TODO: pass user as parameter from Wrapper()
+                                    FirebaseUser result =
+                                        await _auth.getCurrentUser();
+                                    String requestingUID =
+                                        await _db.getUsername(result.uid);
 
-                                          _db.linkFriends(requestingUID,
-                                              eachUser.name, "false");
+                                    _db.linkFriends(
+                                        requestingUID, eachUser.name, "false");
 
-                                          Navigator.of(context).pop(false);
-                                        },
-                                        child: new Text('Yes'),
-                                      ),
-                                    ],
-                                  ));
-                        }, // TODO: profile page can go here
-                      ),
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: new Text('Yes'),
+                                ),
+                              ],
+                            ));
+                  }, // TODO: profile page can go here
+                ),
               ),
             ),
           ],
