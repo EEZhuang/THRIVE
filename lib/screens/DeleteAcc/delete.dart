@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thrive/screens/wrapper.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:thrive/shared/constants.dart';
+import 'package:thrive/screens/authenticate/sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
@@ -116,9 +118,14 @@ class _DeleteState extends State<Delete> {
                           } else {
                             FirebaseUser user2 = await _auth.getCurrentUser();
                             if (user2.uid == user.uid) {
-                              widget.toggleHome();
-                              Navigator.of(context).pop(false);
-                              user.delete();
+                              await user.delete();
+                              //widget.toggleHome();
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper()));
+                              //widget.toggleHome();
+                              //Navigator.of(context).pop(false);
+                              //await user.delete();
+                              //widget.toggleHome();
+                              //user.delete();
                               //await _auth.signOut();
                             } else {
                               error = 'Credentials do not match, try again';
