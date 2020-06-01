@@ -44,6 +44,7 @@ class _SocialListState extends State<SocialList> {
   var dates = [];
   var goalIDs = [];
   String username = "";
+  var hasLiked = [];
 
   //var counter = 0;
   // List<double> progressList = [];
@@ -53,6 +54,14 @@ class _SocialListState extends State<SocialList> {
   Future<List<Tuple4<Goal, String, String, String>>> localGoalMap() async {
     username = await _db.getUsername(widget.currUser.uid);
     List<Tuple4<Goal, String, String, String>> wall = await _db.wallMap(username);
+
+    for(var goal in wall){
+      bool liked = await _db.likeExists(username, goal.item4);
+      hasLiked.add(liked);
+    }
+
+    
+
     return wall;
     //print("size:");
     //print("size:" + wall.length.toString());

@@ -430,6 +430,7 @@ class DatabaseService {
 
   }
 
+
   //post toggle: if user has liked, then delete user doc. if user hasn't liked, then add user doc
   Future<bool> toggleLike(String username, String goalID) async {
     //check if user exists then delete
