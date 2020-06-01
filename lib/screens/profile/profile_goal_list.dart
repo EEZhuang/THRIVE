@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +13,9 @@ import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 import 'profile_goal_tile.dart';
+//import 'package:spritewidget/spritewidget.dart';
+//import 'package:sa_v1_migration/sa_v1_migration.dart';
+
 
 class GoalList extends StatefulWidget {
   final FirebaseUser currUser;
@@ -21,8 +26,13 @@ class GoalList extends StatefulWidget {
   _GoalListState createState() => _GoalListState();
 }
 
-class _GoalListState extends State<GoalList> {
+class _GoalListState extends State<GoalList> with SingleTickerProviderStateMixin {
+
   bool updateVal = false;
+  double sOpacity;
+
+
+
 
   void updateTile() {
     setState(() {
@@ -136,7 +146,7 @@ class _GoalListState extends State<GoalList> {
 
                 //counter++;
                 goalMap.forEach((k, v) => ids.add(k));
-                print("TESASDSD" + goals.length.toString());
+                //print("TESASDSD" + goals.length.toString());
                 //if(counter >= 0) {
                   return SingleChildScrollView(
                     child: Container(
@@ -263,12 +273,14 @@ class _GoalListState extends State<GoalList> {
                                       ),
                                       FlatButton(
                                         onPressed: () async {
+
                                           FirebaseUser result = await _auth
                                               .getCurrentUser();
 
                                           int tmpProg =
                                           int.parse(myGoal.goalProgress);
                                           tmpProg += progressList[index].toInt();
+                                          bool goalComplete = false;
 
 
 
@@ -276,8 +288,17 @@ class _GoalListState extends State<GoalList> {
                                               int.parse(myGoal.goalUnits)) {
                                             tmpProg =
                                                 int.parse(myGoal.goalUnits);
+
+                                            if(progressList[index].toInt() > 0) {
+                                              goalComplete = true;
+                                            } else {
+                                              goalComplete = false;
+                                            }
+
                                             progressList[index] = 0;
                                             progressController[index].text = "0";
+
+
                                           } else if (tmpProg <= 0) {
                                             tmpProg = 0;
                                             progressList[index] = 0;
@@ -305,6 +326,47 @@ class _GoalListState extends State<GoalList> {
                                             progressList[index] = -1 * double.parse(myGoal.goalProgress);
                                           }
 
+
+                                          if(goalComplete) {
+
+                                            return showGeneralDialog(
+                                              barrierColor: ThriveColors.TRANSPARENT_GREEN,
+                                              transitionBuilder: (context, a1, a2, widget) {
+                                                //print("te2233");
+                                                return Stack(
+                                                  children: <Widget>[
+                                                    GestureDetector(
+                                                      child: Circles(),
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+
+                                                    ),
+
+
+                                                    Transform.scale(
+                                                      scale: a1.value,
+                                                      child: Opacity(
+                                                        opacity: 1,
+                                                        child: AlertDialog(
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.all(Radius.circular(20.0))
+                                                          ),
+                                                          title: Text("Congrats on finishing your goal!"),
+                                                          content: Text("Way to thrive!"),
+                                                        )
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                              transitionDuration: Duration(milliseconds: 250),
+                                              barrierDismissible: true,
+                                                barrierLabel: "",
+                                              context: context,
+                                              pageBuilder: (context, animation1, animation2) {}
+                                            );
+                                          }
                                           setState(() {
 
                                           });
@@ -360,6 +422,132 @@ class _GoalListState extends State<GoalList> {
                 return Loading();
               }
             }));
+  }
+}
+
+class Circles extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _CircleState();
+  }
+}
+
+class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  List<Circle> circles;
+  final int cNum = 100;
+  final Color color = ThriveColors.LIGHT_ORANGE;
+
+  @override
+  void initState() {
+    super.initState();
+
+
+    circles = List<Circle>();
+
+    for(int i = 0; i < cNum; i++) {
+      circles.add(Circle(color));
+    }
+
+
+    controller = new AnimationController(
+        duration: const Duration(seconds: 1000), vsync: this);
+    controller.addListener(() {
+      newPos();
+    });
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void newPos() {
+    circles.forEach((v) => v.updatePosition());
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ThriveColors.TRANSPARENT_GREEN,
+      body: CustomPaint(
+          foregroundPainter: Painter(circles: circles, controller: controller),
+          size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height)
+      ),
+    );
+  }
+}
+
+
+class Painter extends CustomPainter {
+  List<Circle> circles;
+  AnimationController controller;
+
+  Painter({this.circles, this.controller});
+
+  @override
+  void paint(Canvas canvas, Size canvasSize) {
+    circles.forEach((v) => v.draw(canvas, canvasSize));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter old) {
+    return true;
+  }
+}
+
+// Based on:
+// https://github.com/anupcowkur/Bubbles/blob/master/lib/bubbles.dart
+class Circle {
+  Color color;
+  double dir;
+  double speed;
+  double radius;
+  double x;
+  double y;
+  var r = new Random();
+
+  Circle(Color c) {
+    this.color = c.withOpacity(r.nextDouble());
+    this.dir = r.nextDouble() * 360;
+    this.speed = 1.5;
+    this.radius = r.nextDouble() * 20;
+  }
+
+  draw(Canvas canvas, Size canvasSize) {
+    Paint paint = new Paint()
+      ..color = color
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.fill;
+
+    if (x == null) {
+      this.x = Random().nextDouble() * canvasSize.width;
+    }
+
+    if (y == null) {
+      this.y = Random().nextDouble() * canvasSize.height;
+    }
+
+    if (x > canvasSize.width || x < 0 || y > canvasSize.height || y < 0) {
+      dir = Random().nextDouble() * 360;
+    }
+
+    canvas.drawCircle(Offset(x, y), radius, paint);
+
+
+  }
+
+  updatePosition() {
+    var a = 180 - (dir + 90);
+    dir > 0 && dir < 180
+        ? x += speed * sin(dir) / sin(speed)
+        : x -= speed * sin(dir) / sin(speed);
+    dir > 90 && dir < 270
+        ? y += speed * sin(a) / sin(speed)
+        : y -= speed * sin(a) / sin(speed);
   }
 }
 /**

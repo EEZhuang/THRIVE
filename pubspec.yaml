@@ -35,6 +35,7 @@ dependencies:
   flutter_spinkit: ^4.0.0
   intl: ^0.16.1
   http: ^0.12.1
+  #sa_v1_migration: ^1.1.2
 
 dev_dependencies:
   flutter_test:
