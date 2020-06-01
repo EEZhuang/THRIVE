@@ -260,6 +260,7 @@ class _RegisterState extends State<Register> {
                                 var rng = new Random();
                                 set = await _db.setUserAvatar(
                                     username, rng.nextInt(9), rng.nextInt(7));
+
                                 if (set) {
                                   widget.toggleHome();
                                 }

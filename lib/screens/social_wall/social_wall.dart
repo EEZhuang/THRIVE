@@ -32,7 +32,8 @@ class _SocialWallState extends State<SocialWall> {
         backgroundColor: ThriveColors.DARK_GREEN,
       ),
       body: SocialList(currUser: widget.currUser),
-      backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+      //backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+      backgroundColor: ThriveColors.DARK_GRAY,
       // Button to signout and return to signin page
       /**
       floatingActionButton: FloatingActionButton(

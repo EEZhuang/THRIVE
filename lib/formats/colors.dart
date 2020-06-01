@@ -11,3 +11,4 @@ const Material.Color WHITE = Material.Color(0xFFFAF9F9);
 const Material.Color LIGHT_ORANGE = Material.Color(0xFFFFD6BA);
 const Material.Color DARK_ORANGE = Material.Color(0xFFFE752B);
 const Material.Color LIGHTEST_GREEN = Material.Color(0xFFF0FFED);
+const Material.Color TRANSPARENT_GREEN = Material.Color(0x66C2EAC6);
