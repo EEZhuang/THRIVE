@@ -13,6 +13,16 @@ import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 import 'profile_goal_tile.dart';
+
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/services.dart';
+
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/painting.dart' show decodeImageFromList;
+
+
 //import 'package:spritewidget/spritewidget.dart';
 //import 'package:sa_v1_migration/sa_v1_migration.dart';
 
@@ -26,7 +36,7 @@ class GoalList extends StatefulWidget {
   _GoalListState createState() => _GoalListState();
 }
 
-class _GoalListState extends State<GoalList> with SingleTickerProviderStateMixin {
+class _GoalListState extends State<GoalList> {
 
   bool updateVal = false;
   double sOpacity;
@@ -435,18 +445,29 @@ class Circles extends StatefulWidget {
 class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
   AnimationController controller;
   List<Circle> circles;
-  final int cNum = 100;
-  final Color color = ThriveColors.LIGHT_ORANGE;
+  final int cNum = 250;
+  //final Color color = ThriveColors.LIGHT_ORANGE;
+  final List<Color> color = [ThriveColors.LIGHT_ORANGE, ThriveColors.LIGHT_ORANGE,
+    ThriveColors.DARK_ORANGE, ThriveColors.DARK_GREEN, ThriveColors.TRANSPARENT_BLACK,
+    ThriveColors.LIGHT_ORANGE, ThriveColors.DARK_ORANGE,ThriveColors.LIGHT_GREEN];
+  //ui.Image tempImage;
+
+  Random r = new Random();
 
   @override
   void initState() {
     super.initState();
 
+    /*
+    loadImageAsset("images/thrive.png").then((result) {
+      tempImage = result;
+      print("Loading image");
+    });*/
 
     circles = List<Circle>();
 
     for(int i = 0; i < cNum; i++) {
-      circles.add(Circle(color));
+      circles.add(Circle(color[r.nextInt(color.length)]));
     }
 
 
@@ -456,6 +477,9 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
       newPos();
     });
     controller.forward();
+
+
+
   }
 
   @override
@@ -508,13 +532,17 @@ class Circle {
   double radius;
   double x;
   double y;
+  bool opToggle;
   var r = new Random();
+  ui.Image img;
 
   Circle(Color c) {
     this.color = c.withOpacity(r.nextDouble());
     this.dir = r.nextDouble() * 360;
-    this.speed = 1.5;
-    this.radius = r.nextDouble() * 20;
+    this.speed = 1.2;
+    this.radius = r.nextDouble() * 5;
+    //this.img = img;
+    this.opToggle = c.opacity < .5 ? true : false;
   }
 
   draw(Canvas canvas, Size canvasSize) {
@@ -535,6 +563,9 @@ class Circle {
       dir = Random().nextDouble() * 360;
     }
 
+
+
+    //canvas.drawImage(img, Offset(x, y), paint);
     canvas.drawCircle(Offset(x, y), radius, paint);
 
 
@@ -542,13 +573,30 @@ class Circle {
 
   updatePosition() {
     var a = 180 - (dir + 90);
-    dir > 0 && dir < 180
-        ? x += speed * sin(dir) / sin(speed)
-        : x -= speed * sin(dir) / sin(speed);
-    dir > 90 && dir < 270
-        ? y += speed * sin(a) / sin(speed)
-        : y -= speed * sin(a) / sin(speed);
+    if (dir > 0 && dir < 180 ) {
+      x += speed * sin(dir) / sin(speed);
+
+    } else {
+      x -= speed * sin(dir) / sin(speed);
+    }
+
+    if (dir > 90 && dir < 270 ) {
+      y += speed * sin(a) / sin(speed);
+    } else {
+      y -= speed * sin(a) / sin(speed);
+    }
+
+    //if (opToggle) {
+    //  color = color.withOpacity(r.nextDouble());
+    //}
+
   }
+
+}
+// https://groups.google.com/forum/#!topic/flutter-dev/CgVEA_Zzcz4
+Future<ui.Image> loadImageAsset(String assetName) async {
+  final data = await rootBundle.load(assetName);
+  return decodeImageFromList(data.buffer.asUint8List());
 }
 /**
     dynamic goal = await _db.getUserGoal(widget.currUser.uid);
