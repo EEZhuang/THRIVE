@@ -18,16 +18,20 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   final AuthService _auth = AuthService();
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings", style: TextStyle(fontFamily: 'Proxima', fontWeight: FontWeight.bold, fontSize: 30)),
+        title: Text("Settings",
+            style: TextStyle(
+                fontFamily: 'Proxima',
+                fontWeight: FontWeight.bold,
+                fontSize: 30)),
         centerTitle: true,
         //brightness: Brightness.light,
         //iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Color(0xFF69A297),
       ),
-      backgroundColor: Color(0xF0080F0F),
+      backgroundColor: ThriveColors.DARK_GRAY,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,26 +40,40 @@ class _SettingsState extends State<Settings> {
             Card(
               elevation: 4.0,
               margin: const EdgeInsets.all(8.0),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               color: ThriveColors.LIGHTEST_GREEN,
               child: Column(
                 children: <Widget>[
                   //_buildDivider(),
                   ListTile(
-                    leading: Icon(Icons.lock_outline, color: ThriveColors.DARK_GREEN),
-                    title: Text("Change Password", style: TextStyle(fontFamily: 'Proxima')),
-                    trailing: Icon(Icons.keyboard_arrow_right, color: ThriveColors.DARK_GREEN),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Password(togglePage: widget.togglePage)));
+                    leading: Icon(Icons.lock_outline,
+                        color: ThriveColors.DARK_GREEN),
+                    title: Text("Change Password",
+                        style: TextStyle(fontFamily: 'Proxima')),
+                    trailing: Icon(Icons.keyboard_arrow_right,
+                        color: ThriveColors.DARK_GREEN),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Password(togglePage: widget.togglePage)));
                     },
                   ),
                   _buildContainer(),
                   ListTile(
                     leading: Icon(Icons.delete, color: ThriveColors.DARK_GREEN),
-                    title: Text("Delete Account", style: TextStyle(fontFamily: 'Proxima')),
-                    trailing: Icon(Icons.keyboard_arrow_right, color: ThriveColors.DARK_GREEN),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Delete(toggleHome: widget.toggleHome)));
+                    title: Text("Delete Account",
+                        style: TextStyle(fontFamily: 'Proxima')),
+                    trailing: Icon(Icons.keyboard_arrow_right,
+                        color: ThriveColors.DARK_GREEN),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Delete(toggleHome: widget.toggleHome)));
                     },
                   ),
                 ],
@@ -64,7 +82,8 @@ class _SettingsState extends State<Settings> {
             const SizedBox(height: 10.0),
             Card(
               elevation: 8.0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
               margin: const EdgeInsets.only(left: 150.0, right: 150.0),
               color: ThriveColors.DARK_ORANGE,
               child: ListTile(
@@ -72,7 +91,12 @@ class _SettingsState extends State<Settings> {
                   await _auth.signOut();
                   widget.toggleHome();
                 },
-                title: Text("Logout", textAlign: TextAlign.center, style: TextStyle(color: ThriveColors.BLACK, fontFamily: 'Proxima', fontWeight: FontWeight.w600)),
+                title: Text("Logout",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: ThriveColors.BLACK,
+                        fontFamily: 'Proxima',
+                        fontWeight: FontWeight.w600)),
               ),
             ),
           ],
