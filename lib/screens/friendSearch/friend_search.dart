@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';import 'package:thrive/services/database.dart';
-
+import 'dart:convert';
+import 'package:thrive/services/database.dart';
 
 class Search extends StatefulWidget {
   final Function toggleHome;
@@ -21,7 +21,6 @@ class _SearchState extends State<Search> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final DatabaseService _db = DatabaseService();
-
 
   //String
   String query = '';
@@ -102,11 +101,18 @@ class _SearchState extends State<Search> {
   controlSearching(String str) async {
     print("hi");
     FirebaseUser result = await _auth.getCurrentUser();
-    List<String> usernames = await _db.getAllUsernames(result.uid);
+    List<String> allUsernames = await _db.getAllUsernames(result.uid);
+    String username = await _db.getUsername(result.uid);
+    List<String> friends = await _db.getAllFriends(username);
     print("hello");
 
-    for( int i = 0; i < usernames.length; i++) {
-      tempUsers[i] = TempUser(usernames[i], "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg");
+    for (int i = 0; i < allUsernames.length; i++) {
+      if (allUsernames[i] != username) {
+        if (!friends.contains(allUsernames[i])) {
+          tempUsers[i] = TempUser(allUsernames[i],
+              "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg");
+        }
+      }
     }
 
     List<TempUser> queryTempUsers = [];
@@ -186,7 +192,6 @@ class _SearchState extends State<Search> {
     );
   }
 
-  // TODO: depends on database
   displayUsersFoundScreen() {
     return FutureBuilder(
         future: futureSearchResults,
@@ -244,36 +249,36 @@ class UserResult extends StatelessWidget {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) =>
-                  new AlertDialog(
-                    title: new Text('Add Friend'),
-                    content: new Text(
-                        'Do you want to send a friend request to this user?'),
-                    actions: <Widget>[
-                      new FlatButton(
-                        onPressed: () =>
-                            Navigator.of(context).pop(false),
-                        child: new Text('No'),
-                      ),
-                      new FlatButton(
-                        onPressed: () async {
-                          final AuthService _auth = AuthService();
-                          final DatabaseService _db = DatabaseService();
-                          // TODO: pass user as parameter from Wrapper()
-                          FirebaseUser result = await _auth.getCurrentUser();
-                          String requestingUID = await _db.getUsername(result.uid);
+                showDialog(
+                    context: context,
+                    builder: (context) => new AlertDialog(
+                          title: new Text('Add Friend'),
+                          content: new Text(
+                              'Do you want to send a friend request to this user?'),
+                          actions: <Widget>[
+                            new FlatButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: new Text('No'),
+                            ),
+                            new FlatButton(
+                              onPressed: () async {
+                                final AuthService _auth = AuthService();
+                                final DatabaseService _db = DatabaseService();
+                                // TODO: pass user as parameter from Wrapper()
+                                FirebaseUser result =
+                                    await _auth.getCurrentUser();
+                                String requestingUID =
+                                    await _db.getUsername(result.uid);
 
-                          _db.linkFriends(requestingUID, eachUser.name, "false");
+                                _db.linkFriends(
+                                    requestingUID, eachUser.name, "false");
 
-                          Navigator.of(context).pop(false);
-                        },
-                        child: new Text('Yes'),
-                      ),
-                    ],
-                  )
-                );
+                                Navigator.of(context).pop(false);
+                              },
+                              child: new Text('Yes'),
+                            ),
+                          ],
+                        ));
               }, // TODO: profile page can go here
               child: ListTile(
                 leading: CircleAvatar(
@@ -308,4 +313,3 @@ class TempUser {
     );
   }
 }
-
