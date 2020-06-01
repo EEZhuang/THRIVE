@@ -35,8 +35,8 @@ class _SocialListState extends State<SocialList> {
   var dates = [];
   var goalIDs = [];
   String username = "";
-  var hasLiked = [];
-  var likeCount = [];
+  List<bool> hasLiked = [];
+  List<int> likeCount = [];
   List<List<CircleAvatar>> avatars = [];
 
   //var counter = 0;
@@ -50,7 +50,9 @@ class _SocialListState extends State<SocialList> {
         username);
 
 
-    wall.asMap().forEach((i, goal) async {
+    //wall.asMap().forEach((i, goal) async {
+    for (int i = 0; i < wall.length; i++) {
+      Tuple4<Goal, String, String, String> goal = wall[i];
       bool liked = await _db.likeExists(username, goal.item4);
       int count = await _db.getLikeCount(goal.item4);
       hasLiked.add(liked);
@@ -84,10 +86,16 @@ class _SocialListState extends State<SocialList> {
         num = num + 1;
       }
 
-      avatars.add(avForTile);
-      //avatars.insert(i, avForTile);
+      print("LENGTH OF AVFORTILE " + avForTile.length.toString());
 
-    });
+      avatars.add(avForTile);
+
+      //});
+    }
+
+    print("LENGTH OF AVATARS" + avatars.length.toString());
+
+    return wall;
   }
 
     Future<Tuple2<int, int>> getAvatar() async {
@@ -120,9 +128,10 @@ class _SocialListState extends State<SocialList> {
                     ids.add(f.item2);
                     dates.add(f.item3);
                     goalIDs.add(f.item4);
-                    //print("AFTER SNAP HAS DATA ");
                     //print(f.toString());
                   }
+                  print("AFTER SNAP HAS DATA ");
+
                 } else {
                   return Loading();
                 }
@@ -136,8 +145,7 @@ class _SocialListState extends State<SocialList> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: new ExactAssetImage(
-                                      "images/thrive.png"),
+                                  image: new ExactAssetImage("images/thrive.png"),
                                   fit: BoxFit.fitWidth,
                                 )
                             ),
@@ -162,6 +170,7 @@ class _SocialListState extends State<SocialList> {
                 ListView.builder(
                   itemCount: goals.length,
                   itemBuilder: (context, index) {
+
                     return new Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
