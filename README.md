@@ -57,6 +57,31 @@ Password: password
 
 =======================================
 
+TC-PER-1: Update Goal Progress
+TC-PER-2: Renaming Goal
+TC-PER-3: Delete Goal
+TC-PER-4: Updating Goal Timeline
+TC-PER-5: Updating Reminders for Goals
+TC-PER-7: Adding/Changing Avatar
+
+Account
+Email: testerpersonal@gmail.com
+Password: password
+
+** Needs goal with name of "premade goal" & deadline "June 1st, 2020" & Units "0/10" already created 
+** Needs goal with name of "premade goal2" & deadline "June 1st, 2020" & Units "0/1" already created 
+** Needs goal with name of "delete this goal" & deadline "June 1st, 2020" & Units "0/1" already created
+
+=======================================
+
+TC-PER-6: Password Change
+
+Account
+Email: changepass@gmail.com
+Password: oldpass
+
+=======================================
+
 TC-NOT-1: Comments from Friends
 
 Account #1
