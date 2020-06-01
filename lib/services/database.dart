@@ -64,6 +64,19 @@ class DatabaseService {
     return true;
   }
 
+  Future<bool> removeFriend(String username, String friend) async {
+    http.Response response = await http.post(
+      'http://10.0.2.2:3000/remove_friend',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body:
+      jsonEncode(<String, String>{'username': username, 'friend': friend}),
+    );
+    //print("before returning true");
+    return true;
+  }
+
   Future<bool> postGoal(String goal, String goalID, String goalUnits,
       String goalDates, String goalRepeat, String goalProgress) async {
     String timestamp = new DateTime.now().millisecondsSinceEpoch.toString();

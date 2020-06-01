@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
       //FirstPage(),
       Profile(currUser: widget.currUser),
       CreateGoal(togglePage: this.togglePage),
-      Search(),
+      Search(togglePage: this.togglePage),
       Settings(toggleHome: widget.toggleHome, togglePage: this.togglePage),
     ];
 
