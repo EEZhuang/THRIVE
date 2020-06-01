@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thrive/models/user.dart';
 import 'package:thrive/screens/wrapper.dart';
 import 'package:thrive/services/auth.dart';
@@ -240,8 +241,9 @@ class UserResult extends StatelessWidget {
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
 
-                trailing: (friendsList == null)? null : (friendsList.contains(eachUser.name) ? IconButton(
-                  icon: Icon(Icons.clear),
+                trailing: ((friendsList != null) && friendsList.contains(eachUser.name)) ?
+                IconButton(
+                  icon: Icon(FontAwesomeIcons.userMinus, size: 20,),
                   color: ThriveColors.DARK_ORANGE,
                   onPressed: () {
                     showDialog(
@@ -282,7 +284,8 @@ class UserResult extends StatelessWidget {
                         ));
                   }, // TODO: profile page can go here
                 ) : IconButton(
-                  icon: Icon(Icons.person_add),
+                  //icon: Icon(Icons.person_add),
+                  icon: Icon(FontAwesomeIcons.userPlus, size: 20,),
                   color: ThriveColors.LIGHT_GREEN,
                   onPressed: () {
                     showDialog(
@@ -326,7 +329,7 @@ class UserResult extends StatelessWidget {
                 )),
 
               ),
-            ),
+            //),
           ],
         ),
       ),

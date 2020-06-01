@@ -70,7 +70,8 @@ class _CreateCollabState extends State<Collaborators> {
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        //backgroundColor: ThriveColors.TRANSPARENT_BLACK,
+        backgroundColor: ThriveColors.DARK_GRAY,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: ThriveColors.DARK_GREEN,
@@ -115,7 +116,6 @@ class _CreateCollabState extends State<Collaborators> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: SingleChildScrollView(
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -142,7 +142,6 @@ class _CreateCollabState extends State<Collaborators> {
                             ),
                           );
                         },
-                      ),
                     ),
                   ),
                 ],
