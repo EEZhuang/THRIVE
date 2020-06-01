@@ -397,8 +397,17 @@ class DatabaseService {
   }
 
   //get size of likes collection
-  Future<Map<String, int>> getLikeCount (String goalID) async{
-    return new Map<String, int>();
+  Future<int> getLikeCount (String goalID) async{
+    http.Response response = await http.get(
+      'http://10.0.2.2:3000/get_like_count',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'goalID': goalID,
+      },
+    );
+    Map<String, dynamic> json = jsonDecode(response.body);
+    //print("HERE"+int.parse(json['timestamp']).toString());
+    return int.parse(json['count']);
   }
 
   //get whether user exists in likes collection
