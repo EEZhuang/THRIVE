@@ -4,13 +4,21 @@ import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:percent_indicator/percent_indicator.dart';
 
-class GoalTile extends StatelessWidget {
+class GoalTile extends StatefulWidget {
   final Goal goal;
   final String users;
   final String date;
   final List<CircleAvatar> avatars;
 
   GoalTile({this.goal, this.users, this.date, this.avatars});
+
+  @override
+  _GoalTileState createState() => _GoalTileState();
+}
+
+class _GoalTileState extends State<GoalTile> {
+  bool liked = false;
+  int likes = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,7 @@ class GoalTile extends StatelessWidget {
                 leading: Container(
                   width: 65,
                   child: Stack(
-                    alignment: (users.contains(" ")) ? Alignment.centerLeft : Alignment.center,
+                    alignment: (widget.users.contains(" ")) ? Alignment.centerLeft : Alignment.center,
                     children: <Widget>[
                       Positioned (
                         left: 14.0,
@@ -67,9 +75,9 @@ class GoalTile extends StatelessWidget {
                         //textDirection: TextDirection.rtl,
                         spacing: 0.0,
                         children: <Widget>[
-                          Text(users, style: ThriveFonts.USERS_LIGHT_ORANGE,),
+                          Text(widget.users, style: ThriveFonts.USERS_LIGHT_ORANGE,),
                           Text(" "),
-                          (users.contains(' ')) ? Text("are ", style: ThriveFonts.GOALTILE_WHITE,) : Text("is ", style: ThriveFonts.GOALTILE_WHITE,),
+                          (widget.users.contains(' ')) ? Text("are ", style: ThriveFonts.GOALTILE_WHITE,) : Text("is ", style: ThriveFonts.GOALTILE_WHITE,),
                           Text("striving to...", style: ThriveFonts.GOALTILE_WHITE,)
                         ],
                       ),
@@ -79,7 +87,7 @@ class GoalTile extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(goal.goal, style: ThriveFonts.GOALNAME_LIGHTEST_GREEN,)
+                      child: Text(widget.goal.goal, style: ThriveFonts.GOALNAME_LIGHTEST_GREEN,)
                     ),
                     SizedBox(
                       height: 5.0,
@@ -89,13 +97,13 @@ class GoalTile extends StatelessWidget {
                 subtitle: Row(
                   children: <Widget>[
                     Text("by ", style: ThriveFonts.GOALTILE_DATE_DARK_GREEN,),
-                    Text(goal.goalDate, style: ThriveFonts.GOALTILE_DATE_DARK_GREEN,),
+                    Text(widget.goal.goalDate, style: ThriveFonts.GOALTILE_DATE_DARK_GREEN,),
                   ],
                 ),
                 trailing: Column(
                   children: <Widget>[
                     Text(
-                      date, style: ThriveFonts.GOALTILE_DATE_LIGHTEST_GREEN,
+                      widget.date, style: ThriveFonts.GOALTILE_DATE_LIGHTEST_GREEN,
                       textAlign: TextAlign.right,
                     ),
                     SizedBox(
@@ -112,14 +120,53 @@ class GoalTile extends StatelessWidget {
                 width: 350,
                 alignment: MainAxisAlignment.center,
                 lineHeight: 5.0,
-                percent: (double.parse(goal.goalProgress) /
-                    double.parse(goal.goalUnits)),
+                percent: (double.parse(widget.goal.goalProgress) /
+                    double.parse(widget.goal.goalUnits)),
                 backgroundColor: ThriveColors.LIGHTEST_GREEN,
                 progressColor: ThriveColors.DARK_ORANGE,
               ),
               SizedBox(
                 height: 15,
               ),
+
+              Row(
+                children: <Widget>[
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: IconButton(
+                          icon: liked ? Icon(Icons.favorite, color: ThriveColors.WHITE) :  Icon(Icons.favorite_border, color: ThriveColors.WHITE),
+                          onPressed: () {
+                            setState(() {
+                              if (liked){
+                                likes--;
+                              } else {
+                                likes++;
+                              }
+                              liked = !liked;
+
+
+
+                            });
+                          }
+                      )
+                  ),
+                  RichText(
+                    text: TextSpan(children: <TextSpan>[
+                      TextSpan(
+                        text: likes.toString(),
+                        style: ThriveFonts.BODY_WHITE
+                      ),
+                      TextSpan(
+                        text: " likes"
+                      )
+                    ]
+
+                    )
+                  )
+
+                ],
+              ),
+
             ],
           ),
         ));

@@ -44,14 +44,13 @@ class _GoalListState extends State<GoalList> {
   List<TextEditingController> progressController =
       List<TextEditingController>();
   Map<String, String> collabMap = {};
+  Map<String, int> likeMap = {};
+  Map<String, bool> userHasLikedMap = {};
 
   Future<Map<String, Goal>> localGoalMap() async {
     String username = await _db.getUsername(widget.currUser.uid);
     collabMap = await _db.getCollabMap(username);
-    //List<Tuple3<Goal, String, String>> wall = await _db.wallMap(username);
-    //print("size:");
-    //print("size:" + wall.length.toString());
-    //Map<String, Goal> goalMap = await _db.getAllUserGoals(username);
+    //
     return await _db.getAllUserGoals(username);
   }
 
