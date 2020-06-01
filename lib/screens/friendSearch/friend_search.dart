@@ -171,7 +171,8 @@ class _SearchState extends State<Search> {
                 ),
               )
             ];
-            return AlertDialog(title: "hi");
+            //print('test');
+            //return Text('hi');
           }
 
           List<UserResult> searchUsersResult = [];
@@ -181,7 +182,19 @@ class _SearchState extends State<Search> {
             searchUsersResult.add(userResult);
           }
 
-          return ListView(children: searchUsersResult);
+          if(searchUsersResult.isEmpty) {
+            return Container(
+              // TODO-BG change asset for no friends searched
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: new ExactAssetImage("images/thrive.png"),
+                    fit: BoxFit.fitWidth,
+                  )
+              ),
+            );
+          } else {
+            return ListView(children: searchUsersResult);
+          }
         });
   }
 

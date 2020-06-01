@@ -32,11 +32,10 @@ class _RequestState extends State<Request> {
   AppBar searchPageHeader() {
     if (i == 0) {
       getFriends();
-      //print(i);
       i++;
     }
     return AppBar(
-      title: Text("Friend Requests", style: ThriveFonts.HEADING),
+      title: Text("Friend Requests", style: ThriveFonts.HEADING,),
       centerTitle: true,
       backgroundColor: ThriveColors.DARK_GREEN,
     );
@@ -109,7 +108,7 @@ class _RequestState extends State<Request> {
                 ),
               )
             ];
-            return displayNoSearchResultsScreen();
+            return children[0];
           }
 
           List<UserResult> searchUsersResult = [];
@@ -119,32 +118,39 @@ class _RequestState extends State<Request> {
             searchUsersResult.add(userResult);
           }
 
-          return ListView(children: searchUsersResult);
+          if(searchUsersResult.isEmpty) {
+            return Container(
+              // TODO-BG change asset for no friends searched
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: new ExactAssetImage("images/thrive.png"),
+                    fit: BoxFit.fitWidth,
+                  )
+              ),
+            );
+          } else {
+            return ListView(children: searchUsersResult);
+          }
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    //print("hi");
-    getFriends();
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
-      body: displayUsersFoundScreen(),
+      body: friends == null
+          ? displayNoSearchResultsScreen()
+          : displayUsersFoundScreen(),
       //Button to signout and return to signin page
     );
   }
 }
 
-class UserResult extends StatefulWidget {
+class UserResult extends StatelessWidget {
   final TempUser eachUser; // TODO: replace friend with user
   UserResult(this.eachUser);
 
-  @override
-  _UserResultState createState() => _UserResultState();
-}
-
-class _UserResultState extends State<UserResult> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -207,7 +213,7 @@ class _UserResultState extends State<UserResult> {
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
-                  widget.eachUser.name,
+                  eachUser.name,
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
                 trailing:
@@ -279,12 +285,9 @@ class _UserResultState extends State<UserResult> {
                         String requestingUID =
                         await _db.getUsername(result.uid);
 
-                        _db.addFriend(widget.eachUser.name, requestingUID);
-                        _db.addFriend(requestingUID, widget.eachUser.name);
-                        _db.deleteFriend(requestingUID, widget.eachUser.name);
-                        setState() {
-
-                        }
+                        _db.addFriend(eachUser.name, requestingUID);
+                        _db.addFriend(requestingUID, eachUser.name);
+                        _db.deleteFriend(requestingUID, eachUser.name);
 
                         //Navigator.of(context).pop(false);
                       },
@@ -303,11 +306,7 @@ class _UserResultState extends State<UserResult> {
                         String requestingUID =
                         await _db.getUsername(result.uid);
 
-                        _db.deleteFriend(requestingUID, widget.eachUser.name);
-
-                        setState() {
-
-                        }
+                        _db.deleteFriend(requestingUID, eachUser.name);
                         //Navigator.of(context).pop(false);
                       },
                     ),
