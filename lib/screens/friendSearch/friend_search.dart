@@ -171,7 +171,7 @@ class _SearchState extends State<Search> {
                 ),
               )
             ];
-            return children[0];
+            return AlertDialog(title: "hi");
           }
 
           List<UserResult> searchUsersResult = [];

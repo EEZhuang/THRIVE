@@ -27,14 +27,14 @@ class _RequestState extends State<Request> {
   final DatabaseService _db = DatabaseService();
   final PageStorageBucket bucket = PageStorageBucket();
   Future<List<TempUser>> friends;
-  //int i = 0;
+  int i = 0;
 
   AppBar searchPageHeader() {
-    //if (i == 0) {
-      //getFriends();
+    if (i == 0) {
+      getFriends();
       //print(i);
-      //i++;
-   // }
+      i++;
+    }
     return AppBar(
       title: Text("Friend Requests", style: ThriveFonts.HEADING),
       centerTitle: true,
@@ -109,7 +109,7 @@ class _RequestState extends State<Request> {
                 ),
               )
             ];
-            return children[0];
+            return displayNoSearchResultsScreen();
           }
 
           List<UserResult> searchUsersResult = [];
@@ -130,9 +130,7 @@ class _RequestState extends State<Request> {
     return Scaffold(
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
       appBar: searchPageHeader(),
-      body: friends == null
-          ? displayNoSearchResultsScreen()
-          : displayUsersFoundScreen(),
+      body: displayUsersFoundScreen(),
       //Button to signout and return to signin page
     );
   }
