@@ -111,7 +111,8 @@ class _CreateCollabState extends State<Collaborators> {
               }
             }
 
-            return Container(
+
+            return  Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
               child: Column(
                 children: <Widget>[
