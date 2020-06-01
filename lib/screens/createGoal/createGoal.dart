@@ -68,7 +68,6 @@ class _CreateGoalState extends State<CreateGoal> {
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       backgroundColor: ThriveColors.TRANSPARENT_BLACK,
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Form(
           key: _formKey,
