@@ -73,7 +73,7 @@ class _GoalTileState extends State<GoalTile> {
                       children: builder,
                     );
                    return Container(
-                     width: 65,
+                    width: 65,
                      child: avs,
                   );},
                 ),
