@@ -49,40 +49,9 @@ class GoalTile extends StatelessWidget {
                       children: builder,
                     );
 
-
                    return Container(
                     width: 65,
-                    //child: avatars[0],
                      child: avs,
-                        /*
-                    Stack(
-                      alignment: (avatars.length > 1) ? Alignment.centerLeft : Alignment.center,
-                      children: <Widget>[
-                        Positioned (
-                          left: 14.0,
-                          //bottom: 30,
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: ThriveColors.DARK_GRAY,
-                          ),
-                        ),
-                        Positioned (
-                          left: 7.0,
-                          //bottom: -10,
-                          //top: 15,
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: ThriveColors.LIGHT_GREEN,
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: ThriveColors.LIGHT_ORANGE,
-                        ),
-                      ],
-                    ),
-
-                         */
                   );},
                 ),
                 title: Column (
