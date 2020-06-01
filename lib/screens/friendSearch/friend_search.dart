@@ -2,18 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:thrive/models/user.dart';
+import 'package:thrive/screens/wrapper.dart';
 import 'package:thrive/services/auth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 import 'package:thrive/services/database.dart';
 import 'package:thrive/screens/friendSearch/friend_requests.dart';
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:thrive/formats/colors.dart' as ThriveColors;
+import 'package:tuple/tuple.dart';
+import 'package:thrive/formats/avatar.dart';
 
 class Search extends StatefulWidget {
-  final Function toggleHome;
-  final Function toggleState;
-  Search({this.toggleHome, this.toggleState});
+  //final Function toggleHome;
+  //final Function toggleState;
+  final Function togglePage;
+  Search({this.togglePage});
 
   @override
   _SearchState createState() => _SearchState();
@@ -51,8 +56,7 @@ class _SearchState extends State<Search> {
     usernames.remove(requestingUID);
 
     for (int i = 0; i < usernames.length; i++) {
-      tempUsers.add(new TempUser(usernames[i],
-          "https://www.siliconera.com/wp-content/uploads/2020/04/super-smash-bros-sans-undertale.jpg"));
+      tempUsers.add(new TempUser(usernames[i], 0, 0));
     }
 
     List<TempUser> queryTempUsers = [];
@@ -61,6 +65,9 @@ class _SearchState extends State<Search> {
       String tempName = tempUser.name.toLowerCase();
       String tempStr = str.toLowerCase();
       if (str != "" && tempName.contains(tempStr)) {
+        Tuple2<int, int> result = await _db.getUserAvatar(usernames[i]);
+        tempUser.colorIndex = result.item1;
+        tempUser.iconIndex = result.item2;
         queryTempUsers.add(tempUser);
       }
     }
@@ -181,7 +188,7 @@ class _SearchState extends State<Search> {
           List<UserResult> searchUsersResult = [];
           for (int i = 0; i < snapshot.data.length; i++) {
             TempUser eachTempUser = snapshot.data[i];
-            UserResult userResult = UserResult(eachTempUser, friendsList);
+            UserResult userResult = UserResult(eachTempUser, friendsList, widget.togglePage);
             searchUsersResult.add(userResult);
           }
 
@@ -241,7 +248,8 @@ class _SearchState extends State<Search> {
 class UserResult extends StatelessWidget {
   final TempUser eachUser; // TODO: replace friend with user
   final List<String> friendsList;
-  UserResult(this.eachUser, this.friendsList);
+  final Function togglePage;
+  UserResult(this.eachUser, this.friendsList, this.togglePage);
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +263,8 @@ class UserResult extends StatelessWidget {
             GestureDetector(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: ThriveColors.LIGHTEST_GREEN,
+                  backgroundColor: AVATAR_COLORS[eachUser.colorIndex],
+                  child: AVATAR_ICONS[eachUser.iconIndex],
                   //backgroundImage: NetworkImage(eachUser.imageUrl),
                 ),
                 title: Text(
@@ -269,7 +278,49 @@ class UserResult extends StatelessWidget {
                    */
                   style: ThriveFonts.SUBHEADING_WHITE,
                 ),
-                trailing: (friendsList == null || friendsList.contains(eachUser.name)) ? null : IconButton(
+
+                trailing: (friendsList == null)? null : (friendsList.contains(eachUser.name) ? IconButton(
+                  icon: Icon(Icons.clear),
+                  color: ThriveColors.DARK_ORANGE,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => new AlertDialog(
+                          title: new Text('Delete Friend'),
+                          content: new Text(
+                              'Do you want to delete this user from your friends list?'),
+                          actions: <Widget>[
+                            new FlatButton(
+                              onPressed: () =>
+                                  Navigator.of(context).pop(false),
+                              child: new Text('No'),
+                            ),
+                            new FlatButton(
+                              onPressed: () async {
+                                final AuthService _auth = AuthService();
+                                final DatabaseService _db =
+                                DatabaseService();
+                                // TODO: pass user as parameter from Wrapper()
+                                FirebaseUser result =
+                                await _auth.getCurrentUser();
+                                String requestingUID =
+                                await _db.getUsername(result.uid);
+
+                                //TODO: call delete friends
+                                bool set = await _db.removeFriend(requestingUID, eachUser.name);
+                                set = await _db.removeFriend(eachUser.name, requestingUID);
+                                Navigator.of(context).pop(false);
+                                this.togglePage(5);
+                                await new Future.delayed(const Duration(milliseconds : 250));
+                                this.togglePage(3);
+
+                              },
+                              child: new Text('Yes'),
+                            ),
+                          ],
+                        ));
+                  }, // TODO: profile page can go here
+                ) : IconButton(
                   icon: Icon(Icons.person_add),
                   color: ThriveColors.LIGHT_GREEN,
                   onPressed: () {
@@ -296,17 +347,23 @@ class UserResult extends StatelessWidget {
                                     String requestingUID =
                                         await _db.getUsername(result.uid);
 
-                                    _db.linkFriends(
-                                        requestingUID, eachUser.name, "false");
+
+                                          _db.linkFriends(requestingUID,
+                                              eachUser.name, "false");
+
 
                                     Navigator.of(context).pop(false);
+                                    this.togglePage(5);
+                                    await new Future.delayed(const Duration(milliseconds : 250));
+                                    this.togglePage(3);
                                   },
                                   child: new Text('Yes'),
                                 ),
                               ],
                             ));
                   }, // TODO: profile page can go here
-                ),
+                )),
+
               ),
             ),
           ],
@@ -318,8 +375,10 @@ class UserResult extends StatelessWidget {
 
 class TempUser {
   final String name;
-  final String imageUrl;
-  TempUser(this.name, this.imageUrl);
+  //final String imageUrl;
+  int colorIndex;
+  int iconIndex;
+  TempUser(this.name, this.colorIndex, this.iconIndex);
 
   Widget getName(BuildContext context) {
     return Text(

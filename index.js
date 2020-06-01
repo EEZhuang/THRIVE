@@ -41,6 +41,15 @@ app.post('/delete_goal', function(req, res) {
 
 })
 
+app.post('/remove_friend', function(req, res) {
+  //console.log(req.body('uid'));
+
+    var goal = db.collection('usernames').doc(req.body.username).collection("friends").doc(req.body.friend).delete()
+    res.send(JSON.stringify('done'));
+
+
+})
+
 
 app.post('/delete_connection', function(req, res) {
 
