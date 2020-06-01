@@ -70,9 +70,11 @@ class _GoalTileState extends State<GoalTile> {
 
                     Stack avs = new Stack(
                       alignment: (builder.length > 1) ? Alignment.centerLeft : Alignment.center,
+                      //alignment: Alignment.centerLeft,
                       children: builder,
                     );
                    return Container(
+                     //alignment: Alignment.center,
                     width: 65,
                      child: avs,
                   );},
