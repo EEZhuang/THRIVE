@@ -426,6 +426,7 @@ class DatabaseService {
     //check if user exists then delete
     bool exists = await likeExists(username,goalID);
     if (exists){
+      print("hello");
       http.Response response = await http.post(
         'http://10.0.2.2:3000/delete_like',
         headers: <String, String>{

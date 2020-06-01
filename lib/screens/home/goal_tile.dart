@@ -139,10 +139,11 @@ class _GoalTileState extends State<GoalTile> {
                       alignment: Alignment.bottomLeft,
                       child: IconButton(
                           icon: liked ? Icon(Icons.favorite, color: ThriveColors.WHITE) :  Icon(Icons.favorite_border, color: ThriveColors.WHITE),
-                          onPressed: () {
-                            setState(() async {
+                          onPressed: () async {
+                            bool set = await _db.toggleLike(widget.username, widget.goalID);
+                            setState(()  {
                               
-                              bool set = await _db.toggleLike(username, goalID)
+                              //bool set = await _db.toggleLike(widget.username, widget.goalID);
                               if (liked){
                                 likes--;
                               } else {

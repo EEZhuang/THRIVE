@@ -100,7 +100,7 @@ class _SocialListState extends State<SocialList> {
                     children: <Widget>[
                       Flexible(
                           fit: FlexFit.loose,
-                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index], currUser: username, goalID: goalIDs[index])
+                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index], username: username, goalID: goalIDs[index])
                       ),
                       SizedBox(
                         height: 10,
