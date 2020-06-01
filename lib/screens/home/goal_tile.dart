@@ -3,14 +3,17 @@ import 'package:thrive/models/goal.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:thrive/services/database.dart';
 
 class GoalTile extends StatefulWidget {
   final Goal goal;
   final String users;
   final String date;
   final List<CircleAvatar> avatars;
+  final String username;
+  final String goalID;
 
-  GoalTile({this.goal, this.users, this.date, this.avatars});
+  GoalTile({this.goal, this.users, this.date, this.avatars, this.username, this.goalID});
 
   @override
   _GoalTileState createState() => _GoalTileState();
@@ -19,6 +22,7 @@ class GoalTile extends StatefulWidget {
 class _GoalTileState extends State<GoalTile> {
   bool liked = false;
   int likes = 100;
+  DatabaseService _db = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +140,9 @@ class _GoalTileState extends State<GoalTile> {
                       child: IconButton(
                           icon: liked ? Icon(Icons.favorite, color: ThriveColors.WHITE) :  Icon(Icons.favorite_border, color: ThriveColors.WHITE),
                           onPressed: () {
-                            setState(() {
+                            setState(() async {
+                              
+                              bool set = await _db.toggleLike(username, goalID)
                               if (liked){
                                 likes--;
                               } else {

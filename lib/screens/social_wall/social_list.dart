@@ -42,15 +42,17 @@ class _SocialListState extends State<SocialList> {
   var goalMap = [];
   var isExpandedList = [];
   var dates = [];
+  var goalIDs = [];
+  String username = "";
 
   //var counter = 0;
   // List<double> progressList = [];
   // List<TextEditingController> progressController =
   //   List<TextEditingController>();
 
-  Future<List<Tuple3<Goal, String, String>>> localGoalMap() async {
-    String username = await _db.getUsername(widget.currUser.uid);
-    List<Tuple3<Goal, String, String>> wall = await _db.wallMap(username);
+  Future<List<Tuple4<Goal, String, String, String>>> localGoalMap() async {
+    username = await _db.getUsername(widget.currUser.uid);
+    List<Tuple4<Goal, String, String, String>> wall = await _db.wallMap(username);
     return wall;
     //print("size:");
     //print("size:" + wall.length.toString());
@@ -72,6 +74,7 @@ class _SocialListState extends State<SocialList> {
               ids = [];
               goalMap = [];
               dates = [];
+              goalIDs = [];
               //print("BEFORE SNAP HAS DATA");
 
               if (snapshot.hasData) {
@@ -80,6 +83,7 @@ class _SocialListState extends State<SocialList> {
                   goals.add(f.item1);
                   ids.add(f.item2);
                   dates.add(f.item3);
+                  goalIDs.add(f.item4);
                   //print("AFTER SNAP HAS DATA ");
                   //print(f.toString());
                 }
@@ -96,7 +100,7 @@ class _SocialListState extends State<SocialList> {
                     children: <Widget>[
                       Flexible(
                           fit: FlexFit.loose,
-                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index])
+                          child: new GoalTile(goal: goals[index], users: ids[index], date: dates[index], currUser: username, goalID: goalIDs[index])
                       ),
                       SizedBox(
                         height: 10,

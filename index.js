@@ -41,6 +41,35 @@ app.post('/delete_goal', function(req, res) {
 
 })
 
+app.post('/delete_like', function(req, res) {
+  //console.log(req.body('uid'));
+
+    var goal = db.collection('goals').doc(req.body.goalID).collection("likes").doc(req.body.username).delete()
+    res.send(JSON.stringify('done'));
+
+
+})
+
+app.post('/like_exists', function(req, res) {
+  //console.log(req.body('uid'));
+    var goal = db.collection('goals').doc(req.body.goalID).collection("likes").doc(req.body.username).get().then(querySnapshot => {
+        if(querySnapshot.size > 0){
+            res.send(JSON.stringify(status:'1'));
+        } else{
+            res.send(JSON.stringify(status:'0'));
+        }
+      })
+
+
+
+})
+
+app.post('/add_like', function(req, res) {
+  //console.log(req.body('uid'));
+  var goal = db.collection('goals').doc(req.body.goalID).collection("likes").doc(req.body.username).set({})
+
+})
+
 app.post('/remove_friend', function(req, res) {
   //console.log(req.body('uid'));
 
