@@ -11,7 +11,6 @@ import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 import 'profile_goal_tile.dart';
-// import 'package:thrive/formats/custom_expansion_tile.dart' as custom;
 
 class GoalList extends StatefulWidget {
   final FirebaseUser currUser;
