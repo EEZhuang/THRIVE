@@ -141,7 +141,7 @@ class _SocialListState extends State<SocialList> {
                     child: Column(
                       children: <Widget>[
                         Expanded(
-                          flex: 5,
+                          flex: 7,
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
@@ -155,12 +155,12 @@ class _SocialListState extends State<SocialList> {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            "Seems like no one has a goal",
+                            "Seems like no one has a goal!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: ThriveColors.LIGHT_ORANGE,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 30.0),
+                                fontSize: 20.0),
                           ),
                         )
                       ],
