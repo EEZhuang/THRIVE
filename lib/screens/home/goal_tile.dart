@@ -3,6 +3,7 @@ import 'package:thrive/models/goal.dart';
 import 'package:thrive/formats/colors.dart' as ThriveColors;
 import 'package:thrive/formats/fonts.dart' as ThriveFonts;
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:thrive/screens/profile/profile_goal_list.dart';
 import 'package:thrive/services/database.dart';
 
 class GoalTile extends StatefulWidget {
@@ -14,16 +15,20 @@ class GoalTile extends StatefulWidget {
   final String goalID;
   final bool likeStatus;
   final int count;
+
   GoalTile({this.goal, this.users, this.date, this.avatars, this.username, this.goalID, this.likeStatus, this.count});
 
   @override
-  _GoalTileState createState() => _GoalTileState();
+  _GoalTileState createState() => _GoalTileState(avatars);
 }
 
 class _GoalTileState extends State<GoalTile> {
+  List<CircleAvatar> avatars;
   bool liked = false;
   int likes = 0;
   DatabaseService _db = DatabaseService();
+
+  _GoalTileState(this.avatars);
 
   @protected
   @mustCallSuper
@@ -45,35 +50,65 @@ class _GoalTileState extends State<GoalTile> {
             children: <Widget>[
               ListTile(
                 contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                leading: Container(
-                  width: 65,
-                  child: Stack(
-                    alignment: (widget.users.contains(" ")) ? Alignment.centerLeft : Alignment.center,
-                    children: <Widget>[
-                      Positioned (
-                        left: 14.0,
-                        //bottom: 30,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: ThriveColors.DARK_GRAY,
-                        ),
-                      ),
-                      Positioned (
-                        left: 7.0,
-                        //bottom: -10,
-                        //top: 15,
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: ThriveColors.LIGHT_GREEN,
-                        ),
-                      ),
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: ThriveColors.LIGHT_ORANGE,
-                      ),
-                    ],
+                leading: FutureBuilder (
+                  builder: (context, snapshot) {
+                    List<Widget> builder = [];
+                    //List<Widget> builder = [avatars[0]];
+                    //for (var a in avatars) {
+                    for (int i = avatars.length - 1; i >= 0; i--) {
+                      Widget a = avatars[i];
 
-                  ),
+                      if (i != 0) {
+                        a = new Positioned(
+                            left: i * 7.0,
+                            //right: i * 7.0,
+                            child: a,
+                        );
+                      }
+
+                      builder.add(a);
+                    }
+
+                    Stack avs = new Stack(
+                      alignment: (builder.length > 1) ? Alignment.centerLeft : Alignment.center,
+                      children: builder,
+                    );
+
+
+                   return Container(
+                    width: 65,
+                    //child: avatars[0],
+                     child: avs,
+                        /*
+                    Stack(
+                      alignment: (avatars.length > 1) ? Alignment.centerLeft : Alignment.center,
+                      children: <Widget>[
+                        Positioned (
+                          left: 14.0,
+                          //bottom: 30,
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: ThriveColors.DARK_GRAY,
+                          ),
+                        ),
+                        Positioned (
+                          left: 7.0,
+                          //bottom: -10,
+                          //top: 15,
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: ThriveColors.LIGHT_GREEN,
+                          ),
+                        ),
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundColor: ThriveColors.LIGHT_ORANGE,
+                        ),
+                      ],
+                    ),
+
+                         */
+                  );},
                 ),
                 title: Column (
                   children: <Widget>[

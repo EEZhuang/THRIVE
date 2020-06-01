@@ -90,7 +90,7 @@ class _ProfileState extends State<Profile> {
                               //child: Container(
                               child: CircleAvatar(
                                 backgroundColor: AVATAR_COLORS[avatar.item1],
-                                child: AVATAR_ICONS[avatar.item2],
+                                child: AVATAR_ICONS_PROFILE[avatar.item2],
                               ),
                               //  ),
                             ),
