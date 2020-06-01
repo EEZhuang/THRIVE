@@ -88,13 +88,35 @@ class _SocialListState extends State<SocialList> {
               }
               return goals.isEmpty ?
               Container(
-                  // TODO-BG change asset for social wall
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: new ExactAssetImage("images/thrive.png"),
-                      fit: BoxFit.fitWidth,
+                // TODO-BG change asset for social wall
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: new ExactAssetImage("images/thrive.png"),
+                              fit: BoxFit.fitWidth,
+                            )
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                      "Seems like no one has a goal",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: ThriveColors.LIGHT_ORANGE,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30.0),
+                      ),
                     )
-                  ),
+                  ],
+                )
+
               ) :
               ListView.builder(
                 itemCount: goals.length,

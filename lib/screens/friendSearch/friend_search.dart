@@ -126,30 +126,33 @@ class _SearchState extends State<Search> {
         ]);
   }
 
-  Container displayNoSearchResultsScreen() {
+  Scaffold displayNoSearchResultsScreen() {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return Container(
-      color: ThriveColors.TRANSPARENT_BLACK,
-      child: Center(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Icon(
-              Icons.group,
-              color: ThriveColors.LIGHT_ORANGE,
-              size: 200.0,
-            ),
-            Text(
-              "Search Users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: ThriveColors.LIGHT_ORANGE,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 50.0),
-            ),
-          ],
+    return Scaffold(
+
+      body: Container(
+        color: ThriveColors.TRANSPARENT_BLACK,
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Icon(
+                Icons.group,
+                color: ThriveColors.LIGHT_ORANGE,
+                size: 200.0,
+              ),
+              Text(
+                "Search Users",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: ThriveColors.LIGHT_ORANGE,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 50.0),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -184,13 +187,36 @@ class _SearchState extends State<Search> {
 
           if(searchUsersResult.isEmpty) {
             return Container(
-              // TODO-BG change asset for no friends searched
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: new ExactAssetImage("images/thrive.png"),
-                    fit: BoxFit.fitWidth,
-                  )
-              ),
+              color: ThriveColors.TRANSPARENT_BLACK,
+              // TODO-BG change asset for friend search
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: new ExactAssetImage("images/thrive.png"),
+                              fit: BoxFit.fitWidth,
+                            )
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        "That username doesn't exist",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: ThriveColors.LIGHT_ORANGE,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 30.0),
+                      ),
+                    )
+                  ],
+                )
+
             );
           } else {
             return ListView(children: searchUsersResult);
@@ -222,7 +248,7 @@ class UserResult extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(3.0),
       child: Container(
-        color: Colors.transparent,
+        color: ThriveColors.TRANSPARENT_BLACK,
         //color: ThriveColors.TRANSPARENT_BLACK,
         child: Column(
           children: <Widget>[

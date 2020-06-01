@@ -110,51 +110,72 @@ class _CreateCollabState extends State<Collaborators> {
               }
             }
 
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-
-                      child: friends.isEmpty ?
-                      Container(
-                        // TODO-BG change asset for collab
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: new ExactAssetImage("images/thrive.png"),
-                            fit: BoxFit.fitWidth,
-                          )
-                        ),
-                      ) :
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: friends.length,
-                        itemBuilder: (context, index) {
-                          final friend = friends[index];
-                          print("Length: " + friends.length.toString());
-
-                          return ListTile(
-                            title: new FlatButton(
-                              textColor: ThriveColors.DARK_GRAY,
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(
-                                      30.0)),
-                              onPressed: () {
-                                setState(() {
-                                  friendToggle[index] = !friendToggle[index];
-                                });
-                              },
-                              child: friend.getName(context),
-                              color: friendToggle[index]
-                                  ? ThriveColors.LIGHT_GREEN
-                                  : ThriveColors.LIGHTEST_GREEN,
+            return Scaffold(
+              body: friends.isEmpty ?
+                Container(
+                  // TODO-BG change asset for collabs
+                    color: ThriveColors.TRANSPARENT_BLACK,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: new ExactAssetImage("images/thrive.png"),
+                                  fit: BoxFit.fitWidth,
+                                )
                             ),
-                          );
-                        },
-                    ),
-                  ),
-                ],
+                          ),
+                        ),
+
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Seems like you have no friends :(",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: ThriveColors.LIGHT_ORANGE,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 30.0),
+                          ),
+                        )
+                      ],
+                    )
+
+                ) :
+
+                Container(
+                  decoration: BoxDecoration(color: ThriveColors.TRANSPARENT_BLACK),
+                  //color: ThriveColors.TRANSPARENT_BLACK,
+                  child: ListView.builder(
+
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: friends.length,
+                    itemBuilder: (context, index) {
+                      final friend = friends[index];
+                      print("Length: " + friends.length.toString());
+
+                      return ListTile(
+                        title: new FlatButton(
+                          textColor: ThriveColors.DARK_GRAY,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(
+                                  30.0)),
+                          onPressed: () {
+                            setState(() {
+                              friendToggle[index] = !friendToggle[index];
+                            });
+                          },
+                          child: friend.getName(context),
+                          color: friendToggle[index]
+                              ? ThriveColors.LIGHT_GREEN
+                              : ThriveColors.LIGHTEST_GREEN,
+                        ),
+                      );
+                    },
+                ),
               ),
             );
           },

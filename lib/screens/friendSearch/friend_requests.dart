@@ -92,14 +92,40 @@ class _RequestState extends State<Request> {
           }
 
           if(searchUsersResult.isEmpty) {
-            return Container(
-              // TODO-BG change asset for no friends searched
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: new ExactAssetImage("images/thrive.png"),
-                    fit: BoxFit.fitWidth,
+            return Scaffold(
+
+              body: Container(
+                  color: ThriveColors.TRANSPARENT_BLACK,
+                // TODO-BG change asset for friend requests
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: new ExactAssetImage("images/thrive.png"),
+                                fit: BoxFit.fitWidth,
+                              )
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "No friend requests",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: ThriveColors.LIGHT_ORANGE,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 30.0),
+                        ),
+                      )
+                    ],
                   )
-              ),
+
+              )
             );
           } else {
             return ListView(children: searchUsersResult);
@@ -127,7 +153,7 @@ class UserResult extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(3.0),
       child: Container(
-        color: Colors.transparent,
+        color: ThriveColors.TRANSPARENT_BLACK,
         child: Column(
           children: <Widget>[
             GestureDetector(
