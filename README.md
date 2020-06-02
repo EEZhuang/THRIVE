@@ -67,6 +67,8 @@ Email: firstfriend@gmail.com
 Password: password
 
 ** Needs these two accounts to be friends
+** Needs secondfriend to be a friend of testergoal
+** Needs some goal on firstfriend so testergoal can like it.
 
 =======================================
 
@@ -84,6 +86,8 @@ Password: password
 Account #2
 ** Needs goal with name of "premade goal" & deadline "June 1st, 2020" & Units "0/10" already created 
 ** Needs goal with name of "premade goal2" & deadline "June 1st, 2020" & Units "0/1" already created 
+** Needs goal with name of "premade goal3" & Units "5/10" already created
+** Needs goal with name of "premade goal4" & Units "3/10" already created
 ** Needs goal with name of "delete this goal" & deadline "June 1st, 2020" & Units "0/1" already created
 
 =======================================
