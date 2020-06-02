@@ -22,7 +22,6 @@ class _WrapperState extends State<Wrapper> {
   Future getCurrentUser() async {
     FirebaseUser user = await _auth.getCurrentUser();
     currUser = user;
-    print("getCurrUser finished");
   }
 
   //Fires state change
@@ -44,7 +43,6 @@ class _WrapperState extends State<Wrapper> {
     return FutureBuilder<dynamic>(
         future: getCurrentUser(),
         builder: (context, snapshot) {
-
           // Shows home if current user is logged in
           // Shows login page otherwise
           if (currUser != null) {
@@ -52,6 +50,6 @@ class _WrapperState extends State<Wrapper> {
           } else {
             return Authenticate(toggleHome: toggleHome);
           }
-    });
+        });
   }
 }

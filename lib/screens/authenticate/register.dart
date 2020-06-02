@@ -190,7 +190,7 @@ class _RegisterState extends State<Register> {
                                     return "Enter a username that has not been used";
                                   } else if (val.isEmpty) {
                                     return "Enter a username";
-                                  } else if (val.contains(" ")){
+                                  } else if (val.contains(" ")) {
                                     return "Cannot create username with a space character";
                                   }
                                   return null;
@@ -252,10 +252,6 @@ class _RegisterState extends State<Register> {
                                   error = 'Please provide a valid email';
                                 });
                               } else {
-                                print(username +
-                                    firstname +
-                                    lastname +
-                                    birthdate);
                                 bool set = await _db.setUserInfo(result.uid,
                                     username, firstname, lastname, birthdate);
                                 var rng = new Random();

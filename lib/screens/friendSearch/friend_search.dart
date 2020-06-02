@@ -120,7 +120,6 @@ class _SearchState extends State<Search> {
               size: 30,
             ),
             onPressed: () {
-              print("page");
               //body: PageStorage(
               //  child: Request(),
               //  bucket: bucket,
@@ -180,8 +179,6 @@ class _SearchState extends State<Search> {
                 ),
               )
             ];
-            //print('test');
-            //return Text('hi');
           }
 
           List<UserResult> searchUsersResult = [];

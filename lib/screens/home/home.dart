@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
 
   void togglePage(int index) {
     setState(() {
-      if (index == 5){
+      if (index == 5) {
         index = 3;
         loading = true;
         _selectedIndex = index;
@@ -115,10 +115,12 @@ class _HomeState extends State<Home> {
     ];
 
     return Scaffold(
-      body: loading ? Loading() : PageStorage(
-        child: pages[_selectedIndex],
-        bucket: bucket,
-      ),
+      body: loading
+          ? Loading()
+          : PageStorage(
+              child: pages[_selectedIndex],
+              bucket: bucket,
+            ),
 
       // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
@@ -154,18 +156,6 @@ class _HomeState extends State<Home> {
         //onTap: (int index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
       ),
-
-      // Button to signout and return to signin page
-
-      /*
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _auth.signOut();
-          //widget.toggleState(0);
-          widget.toggleHome();
-          //print(_auth.getCurrentUser());
-        },
-      ),*/
     );
   }
 }

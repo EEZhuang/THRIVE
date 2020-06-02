@@ -120,9 +120,6 @@ class _EditGoalProgressState extends State<EditGoalProgress> {
                                                 goalProgress =
                                                     tmpProg.toString();
                                                 if (result != null) {
-                                                  print(result.uid);
-                                                  print(goal_name);
-                                                  print(goalUnits);
                                                   _db.postGoal(
                                                       goal_name,
                                                       widget.id,

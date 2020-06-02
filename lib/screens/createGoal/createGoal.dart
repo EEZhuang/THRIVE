@@ -230,7 +230,6 @@ class _CreateGoalState extends State<CreateGoal> {
                                 return null;
                               }
 
-                              //print(int.tryParse(value) != null);
                               if (int.tryParse(value) != null) {
                                 goalUnits =
                                     value; //assigns goal units for posting
@@ -314,9 +313,6 @@ class _CreateGoalState extends State<CreateGoal> {
                             color: ThriveColors.DARK_ORANGE,
                             tooltip: 'Add friends as collaborators',
                             onPressed: () {
-                              //print(collabText.text);
-                              //print(collabList);
-
                               collabWidgets.clear();
 
                               _getCollaborators(context);
@@ -366,7 +362,6 @@ class _CreateGoalState extends State<CreateGoal> {
                                     if (result != null) {
                                       String username =
                                           await _db.getUsername(result.uid);
-                                      print(result.uid);
                                       _db.linkUserGoal(username, goalID);
                                       bool done = await _db.postGoal(
                                           goal,
@@ -382,7 +377,6 @@ class _CreateGoalState extends State<CreateGoal> {
 
                                       widget.togglePage(1);
                                     }
-                                    print(goal);
                                     Navigator.of(context).pop(true);
                                     //Navigator.of(context, rootNavigator: true).pop('dialog');
                                   },

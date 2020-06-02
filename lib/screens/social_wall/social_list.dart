@@ -46,9 +46,8 @@ class _SocialListState extends State<SocialList> {
 
   Future<List<Tuple4<Goal, String, String, String>>> localGoalMap() async {
     username = await _db.getUsername(widget.currUser.uid);
-    List<Tuple4<Goal, String, String, String>> wall = await _db.wallMap(
-        username);
-
+    List<Tuple4<Goal, String, String, String>> wall =
+        await _db.wallMap(username);
 
     //wall.asMap().forEach((i, goal) async {
     for (int i = 0; i < wall.length; i++) {
@@ -90,72 +89,60 @@ class _SocialListState extends State<SocialList> {
         num = num + 1;
       }
 
-      print("LENGTH OF AVFORTILE " + avForTile.length.toString());
-
       avatars.add(avForTile);
 
       //});
     }
 
-    print("LENGTH OF AVATARS" + avatars.length.toString());
-
     return wall;
   }
 
-    Future<Tuple2<int, int>> getAvatar() async {
-      String username = await _db.getUsername(widget.currUser.uid);
-      return await _db.getUserAvatar(username);
-    }
+  Future<Tuple2<int, int>> getAvatar() async {
+    String username = await _db.getUsername(widget.currUser.uid);
+    return await _db.getUserAvatar(username);
+  }
 
-    @override
-    Widget build(BuildContext context) {
-      var deviceSize = MediaQuery
-          .of(context)
-          .size;
+  @override
+  Widget build(BuildContext context) {
+    var deviceSize = MediaQuery.of(context).size;
 
-      return Scaffold(
-          backgroundColor: Colors.transparent,
-          body: FutureBuilder<dynamic>(
-              future: this.localGoalMap(),
-              builder: (context, snapshot) {
-                goals = [];
-                ids = [];
-                goalMap = [];
-                dates = [];
-                goalIDs = [];
-                //print("BEFORE SNAP HAS DATA");
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: FutureBuilder<dynamic>(
+            future: this.localGoalMap(),
+            builder: (context, snapshot) {
+              goals = [];
+              ids = [];
+              goalMap = [];
+              dates = [];
+              goalIDs = [];
 
-                if (snapshot.hasData) {
-                  goalMap = snapshot.data;
-                  for (var f in goalMap) {
-                    goals.add(f.item1);
-                    ids.add(f.item2);
-                    dates.add(f.item3);
-                    goalIDs.add(f.item4);
-                    //print(f.toString());
-                  }
-                  print("AFTER SNAP HAS DATA ");
-
-                } else {
-                  return Loading();
+              if (snapshot.hasData) {
+                goalMap = snapshot.data;
+                for (var f in goalMap) {
+                  goals.add(f.item1);
+                  ids.add(f.item2);
+                  dates.add(f.item3);
+                  goalIDs.add(f.item4);
                 }
-                return goals.isEmpty ?
-                Container(
-                  // TODO-BG change asset for social wall
-                    child: Column(
+              } else {
+                return Loading();
+              }
+              return goals.isEmpty
+                  ? Container(
+                      // TODO-BG change asset for social wall
+                      child: Column(
                       children: <Widget>[
                         Expanded(
                           flex: 7,
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: new ExactAssetImage("images/thrive.png"),
-                                  fit: BoxFit.fitWidth,
-                                )
-                            ),
+                              image: new ExactAssetImage("images/thrive.png"),
+                              fit: BoxFit.fitWidth,
+                            )),
                           ),
                         ),
-
                         Expanded(
                           flex: 2,
                           child: Text(
@@ -168,40 +155,39 @@ class _SocialListState extends State<SocialList> {
                           ),
                         )
                       ],
-                    )
-
-                ) :
-                ListView.builder(
-                  itemCount: goals.length,
-                  itemBuilder: (context, index) {
-
-                    return new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: new GoalTile(goal: goals[index],
-                              users: ids[index],
-                              date: dates[index],
-                              avatars: avatars[index],
-                              username: username,
-                              goalID: goalIDs[index],
-                              likeStatus: hasLiked[index],
-                              count: likeCount[index]),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: null,
-                        )
-                      ],
+                    ))
+                  : ListView.builder(
+                      itemCount: goals.length,
+                      itemBuilder: (context, index) {
+                        return new Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: new GoalTile(
+                                  goal: goals[index],
+                                  users: ids[index],
+                                  date: dates[index],
+                                  avatars: avatars[index],
+                                  username: username,
+                                  goalID: goalIDs[index],
+                                  likeStatus: hasLiked[index],
+                                  count: likeCount[index]),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: null,
+                            )
+                          ],
+                        );
+                      },
                     );
-                  },
-                );
-              }));
-    }
+            }));
   }
+}

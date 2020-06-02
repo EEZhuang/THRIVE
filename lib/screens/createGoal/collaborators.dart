@@ -49,13 +49,9 @@ class _CreateCollabState extends State<Collaborators> {
 
   _CreateCollabState(this.friendList, this.friendString, this.friendToggle);
 
-  Future<List<String>> localFriendList() async{
+  Future<List<String>> localFriendList() async {
     FirebaseUser result = await _auth.getCurrentUser();
     String username = await _db.getUsername(result.uid);
-    //List<Tuple2<Goal, String>> wall = await _db.wallMap(username);
-    //print("size:");
-    //print("size:" + wall.length.toString());
-    //Map<String, Goal> goalMap = await _db.getAllUserGoals(username);
     return await _db.getAllFriends(username);
   }
 
@@ -105,44 +101,36 @@ class _CreateCollabState extends State<Collaborators> {
                   friends.add(Friend(f));
                 }
               }
-
-              for (var f in friends) {
-                print(f.name);
-              }
             }
 
-
-            return  Container(
+            return Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
               child: Column(
                 children: <Widget>[
                   Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: friends.length,
-                        itemBuilder: (context, index) {
-                          final friend = friends[index];
-                          print("Length: " + friends.length.toString());
-
-                          return ListTile(
-                            title: new FlatButton(
-                              textColor: ThriveColors.DARK_GRAY,
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(
-                                      30.0)),
-                              onPressed: () {
-                                setState(() {
-                                  friendToggle[index] = !friendToggle[index];
-                                });
-                              },
-                              child: friend.getName(context),
-                              color: friendToggle[index]
-                                  ? ThriveColors.LIGHT_GREEN
-                                  : ThriveColors.LIGHTEST_GREEN,
-                            ),
-                          );
-                        },
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: friends.length,
+                      itemBuilder: (context, index) {
+                        final friend = friends[index];
+                        return ListTile(
+                          title: new FlatButton(
+                            textColor: ThriveColors.DARK_GRAY,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(30.0)),
+                            onPressed: () {
+                              setState(() {
+                                friendToggle[index] = !friendToggle[index];
+                              });
+                            },
+                            child: friend.getName(context),
+                            color: friendToggle[index]
+                                ? ThriveColors.LIGHT_GREEN
+                                : ThriveColors.LIGHTEST_GREEN,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
