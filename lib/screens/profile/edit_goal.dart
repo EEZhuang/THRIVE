@@ -161,7 +161,6 @@ class _EditGoalState extends State<EditGoal> {
                                       onChanged: (value) {
                                         setState(() {
                                           _selectedRepeat = value;
-                                          print(_selectedRepeat);
                                           goalRepeat = value;
                                         });
                                       },
@@ -197,9 +196,6 @@ class _EditGoalState extends State<EditGoal> {
 
                                                     // If there is a current user logged in, make HTTP request
                                                     if (result != null) {
-                                                      print(result.uid);
-                                                      print(goal_name);
-                                                      print(goalUnits);
                                                       _db.postGoal(
                                                           goal_name,
                                                           widget.id,

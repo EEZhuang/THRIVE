@@ -45,20 +45,6 @@ class _SignInState extends State<SignIn> {
                   //end: Alignment(1.05, -.5),
                 ),
               ),
-              /*
-        child: RaisedButton(
-          child: Text('Sign in anon'),
-          onPressed: () async {
-            dynamic result = await _auth.signInAnon();
-            if (result == null){
-              print('error signing in anon');
-
-            } else {
-              print('signed in');
-              print(result);
-            }
-          }
-        )*/
               padding: EdgeInsets.symmetric(vertical: 100, horizontal: 50),
               child: Form(
                 key: _formKey,
@@ -143,7 +129,6 @@ class _SignInState extends State<SignIn> {
                                     dynamic result =
                                         await _auth.signInWithEmailAndPassword(
                                             email, password);
-                                    //print("result here" + result);
                                     if (result == null) {
                                       setState(() {
                                         loading = false;
@@ -151,9 +136,7 @@ class _SignInState extends State<SignIn> {
                                             'Could not sign in with those credentials';
                                       });
                                     } else {
-                                      //print("here");
                                       widget.toggleHome();
-                                      //print("home toggled");
                                     }
                                   }
                                 }),

@@ -45,9 +45,6 @@ class DatabaseService {
       body:
           jsonEncode(<String, String>{'myuid': myuid, 'frienduid': frienduid}),
     );
-    print(myuid);
-    print(frienduid);
-    print("before returning true");
     return true;
   }
 
@@ -60,7 +57,6 @@ class DatabaseService {
       body:
           jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
     );
-    print("before returning true");
     return true;
   }
 
@@ -334,16 +330,16 @@ class DatabaseService {
         }
       });
     }
-    print(collabMap);
     return collabMap;
   }
 
-  Future<List<Tuple4<Goal, String, String, String>>> wallMap(String username) async {
+  Future<List<Tuple4<Goal, String, String, String>>> wallMap(
+      String username) async {
     List<Tuple3<int, Goal, String>> tempReturn =
         new List<Tuple3<int, Goal, String>>();
 
     List<String> friends = await getAllFriends(username);
-    List<Tuple4<Goal, String, String,String>> returnList =
+    List<Tuple4<Goal, String, String, String>> returnList =
         new List<Tuple4<Goal, String, String, String>>();
     Map<String, String> userMap = {};
 
@@ -358,7 +354,6 @@ class DatabaseService {
         } else {
           userMap[ids[i]] = friends[f];
           int timestamp = await getTimestamp(ids[i]);
-          //print("HERE" + timestamp.toString());
           tempReturn.add(new Tuple3(timestamp, goals[i], ids[i]));
         }
       }
@@ -371,17 +366,15 @@ class DatabaseService {
           new DateTime.fromMillisecondsSinceEpoch(tempReturn[p].item1);
       //print(date);
       var dateString = DateFormat("MMMM dd, yyyy").format(date);
-      print(dateString);
-      returnList.add(new Tuple4(
-          tempReturn[p].item2, userMap[tempReturn[p].item3], dateString, tempReturn[p].item3));
-      print("PLS WORK" + tempReturn[p].item2.goal);
+      returnList.add(new Tuple4(tempReturn[p].item2,
+          userMap[tempReturn[p].item3], dateString, tempReturn[p].item3));
     }
 
     return returnList;
   }
 
   //get size of likes collection
-  Future<int> getLikeCount (String goalID) async{
+  Future<int> getLikeCount(String goalID) async {
     http.Response response = await http.get(
       'http://10.0.2.2:3000/get_like_count',
       headers: <String, String>{
@@ -389,15 +382,13 @@ class DatabaseService {
         'goalID': goalID,
       },
     );
-    print('i am here');
     Map<String, dynamic> json = jsonDecode(response.body);
     //print("HERE"+int.parse(json['timestamp']).toString());
-    print(json['count']+"HERHEHHRHRHRHEHHE");
     return int.parse(json['count']);
   }
 
   //get whether user exists in likes collection
-  Future<bool> likeExists (String username, String goalID) async {
+  Future<bool> likeExists(String username, String goalID) async {
     http.Response response = await http.get(
       'http://10.0.2.2:3000/like_exists',
       headers: <String, String>{
@@ -409,40 +400,35 @@ class DatabaseService {
     Map<String, dynamic> json = jsonDecode(response.body);
     //print("HERE"+int.parse(json['timestamp']).toString());
     int status = int.parse(json['status']);
-    if(status == 1){
+    if (status == 1) {
       return true;
     }
     return false;
-
   }
-
 
   //post toggle: if user has liked, then delete user doc. if user hasn't liked, then add user doc
   Future<bool> toggleLike(String username, String goalID) async {
     //check if user exists then delete
-    bool exists = await likeExists(username,goalID);
-    if (exists){
-      print("hello");
+    bool exists = await likeExists(username, goalID);
+    if (exists) {
       http.Response response = await http.post(
         'http://10.0.2.2:3000/delete_like',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body:
-        jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+        body: jsonEncode(
+            <String, String>{'username': username, 'goalID': goalID}),
       );
-      print("before returning true");
     } else {
       http.Response response = await http.post(
         'http://10.0.2.2:3000/add_like',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body:
-        jsonEncode(<String, String>{'username': username, 'goalID': goalID}),
+        body: jsonEncode(
+            <String, String>{'username': username, 'goalID': goalID}),
       );
     }
     return true;
   }
-
 }

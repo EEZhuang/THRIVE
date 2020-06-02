@@ -78,8 +78,6 @@ class _GoalListState extends State<GoalList> {
     _db.getUsername(widget.currUser.uid).then((String name) {
       username = name;
     });
-    print("username:");
-    print(username);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -140,15 +138,11 @@ class _GoalListState extends State<GoalList> {
                   goals.add(v);
                   collabs.add(collabMap[k]);
                   isExpandedList.add(false);
-                  //print("2232");
                   progressList.add(0);
                   progressController.add(TextEditingController());
                 });
 
-                //counter++;
                 goalMap.forEach((k, v) => ids.add(k));
-                //print("TESASDSD" + goals.length.toString());
-                //if(counter >= 0) {
                 return SingleChildScrollView(
                   child: Container(
                     color: ThriveColors.DARK_GREEN,
@@ -382,7 +376,6 @@ class _GoalListState extends State<GoalList> {
                                                       progressController[index]
                                                           .text)) <
                                               0) {
-                                            //print("TRUE");
                                             progressController[index].text =
                                                 "-" + myGoal.goalProgress;
                                             progressList[index] = -1 *
@@ -396,7 +389,6 @@ class _GoalListState extends State<GoalList> {
                                                     .TRANSPARENT_GREEN,
                                                 transitionBuilder:
                                                     (context, a1, a2, widget) {
-                                                  //print("te2233");
                                                   return Stack(
                                                     children: <Widget>[
                                                       GestureDetector(
@@ -490,9 +482,6 @@ class _GoalListState extends State<GoalList> {
                     ),
                   ),
                 );
-                //} else {
-                //  return Loading();
-                //}
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               } else {
@@ -532,12 +521,6 @@ class _CircleState extends State<Circles> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    /*
-    loadImageAsset("images/thrive.png").then((result) {
-      tempImage = result;
-      print("Loading image");
-    });*/
 
     circles = List<Circle>();
 
