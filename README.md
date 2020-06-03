@@ -161,7 +161,7 @@ Installation Instruction:
 =======================================
 We will be providing the application APK's as per the submission instructions.
 
-Install using adb install
+Install using adb install path/to/apk. Make sure that an emulator is running.
 
 ==============================================================================
 
