@@ -1,7 +1,8 @@
 THRIVE
 
 Introduction:
-
+**
+=======================================
 Our project is an application that’s main focus is to allow its users to focus on and keep track of
 goals that they create within the app. Furthermore, our project is unique in that it adds an
 additional aspect of sharing the users’ goals and progress with their friends in the app. Our
@@ -16,7 +17,7 @@ intensity of a goal. Overall, through our unique social approach to goal setting
 convenience and a motivator for those who have goals they want to achieve allowing them to keep
 track of their progress, gain encouragement from friends, and finally start seeing results.
 
-====================================================================================================
+==============================================================================
 
 Login credentials/Accounts for test cases:
 ** 
@@ -140,10 +141,11 @@ Password: password
 
 ** acc1 and acc2 must not be friends
 
-====================================================================================================
+==============================================================================
 
 Requirements:
-
+**
+=======================================
 Android device
 
 Minimum Specifications:
@@ -152,25 +154,28 @@ Minimum Specifications:
 Average Specifications:
 1536 MB of RAM, we used the Nexus 6 API 28 emulator device from android studio.
 
-====================================================================================================
+==============================================================================
 
 Installation Instruction:
-
+**
+=======================================
 We will be providing the application APK's as per the submission instructions.
 
 Install using adb install
 
-====================================================================================================
+==============================================================================
 
 How to Run:
-
+**
+=======================================
 To be able to run our application on an emulator, you would have to run "node index.js" within your
 terminal. Therefore, you would need to have node js installed.  https://nodejs.org/en/
 
-====================================================================================================
+==============================================================================
 
 Known Bugs:
-
+**
+=======================================
 1. There is pixel overflow if you try to create a goal without a name nor a date. However, this
    should not affect the functionality of the code.
 
