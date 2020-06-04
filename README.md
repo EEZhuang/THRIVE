@@ -161,8 +161,8 @@ Installation Instruction:
 =======================================
 We will be providing the application APK's as per the submission instructions.
 
-Install using adb install build\app\outputs\apk\debug\app-debug.apk.
 Make sure that an emulator is running.
+Install using adb install build\app\outputs\apk\debug\app-debug.apk.
 
 ==============================================================================
 
