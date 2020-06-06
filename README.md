@@ -23,12 +23,15 @@ Login credentials/Accounts for test cases:
 ** 
 =======================================
 
+TC-LOG-1: Sign Up for Account
 TC-LOG-2: Log In to Account
 TC-LOG-3: Log Out of Account
 
+(Created during TC-LOG-1)
 Email: thrivetest@gmail.com
 Password: password
 
+** Account with the email "thriving2@gmail.com" exists
 ** Account with the email “bademail@gmail.com” does not exist
 ** Account with email “goodemail@gmail.com” exists and the password is not “password”
 ** Account with the username "used" exists
@@ -46,7 +49,7 @@ Email: testerunique@gmail.com
 Password: password
 
 Account #2:
-Email: gary@gmail.com
+Email: gary2@gmail.com
 Password: password
 
 Account #3:
