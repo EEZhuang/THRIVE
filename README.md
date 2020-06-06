@@ -126,6 +126,7 @@ Account #2:
 Email: commentmain@gmail.com
 Password: password
 
+** The two accounts are friends
 ** commentmain must have a goal created
 
 =======================================
