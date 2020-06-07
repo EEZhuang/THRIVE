@@ -166,8 +166,13 @@ Installation Instruction:
 We will be providing the application APK's as per the submission instructions. It will be on our
 github repository https://github.com/EEZhuang/THRIVE.
 
+Clone the repository to a new Android Studio Project.
+
 Make sure that an emulator is running.
-Install using adb install build\app\outputs\apk\debug\app-debug.apk.
+
+Go to the home directory and install using adb install build\app\outputs\apk\debug\app-debug.apk.
+If adb path is not set up, use C:\Users\"user"\Appdata\Local\Android\sdk\platform-tools\adb.exe
+instead of adb.
 
 ==============================================================================
 
