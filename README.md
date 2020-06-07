@@ -75,16 +75,16 @@ TC-SOW-1: Commenting on Friend’s Goals
 TC-SOW-2: Reacting to Friend’s Goals
 
 Account #1
-Email: testergoal@gmail.com
+Email: testgoal@gmail.com
 Password: password
 
 Account #2
-Email: firstfriend@gmail.com
+Email: friend1@gmail.com
 Password: password
 
 ** Needs these two accounts to be friends
-** Needs secondfriend to be a friend of testergoal
-** Needs some goal on firstfriend so testergoal can like it.
+** Needs friend2 to be a friend of testgoal
+** Needs some goal on friend1 so testgoal can like it.
 
 =======================================
 
@@ -195,3 +195,8 @@ Known Bugs:
 3. During change password and after entering current credentials, if the user enters different
    passwords in the new password and confirm password section, no warning will pop up and the
    password will not be changed.
+   
+4. Delete collaborator goals does not properly delete for collaborators. The goal will delete fine
+   for the user, however, the goal gets deleted by the database but the user still seems to have a
+   reference to it. It causes the social wall and profile to load infinitely for the collaborators
+   who's goal got deleted.
