@@ -382,7 +382,7 @@ class _GoalListState extends State<GoalList> {
                                                 double.parse(
                                                     myGoal.goalProgress);
                                           }
-
+                                          setState(() {});
                                           if (goalComplete) {
                                             return showGeneralDialog(
                                                 barrierColor: ThriveColors
@@ -432,7 +432,7 @@ class _GoalListState extends State<GoalList> {
                                                 pageBuilder: (context,
                                                     animation1, animation2) {});
                                           }
-                                          setState(() {});
+
                                         },
                                         child: new Icon(
                                           Icons.check,
