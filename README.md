@@ -169,7 +169,9 @@ github repository https://github.com/EEZhuang/THRIVE.
 Clone the repository by going to "Get from Version Control".
 Enter https://github.com/EEZhuang/THRIVE.
 
-Make sure that an emulator is running.
+Follow the instructions to create a new AndroidProject.
+
+After creating the project, create an Android emulator from AVD manager.
 
 In the project directory, install using adb install build\app\outputs\apk\debug\app-debug.apk.
 If adb path is not set up, use C:\Users\"user"\Appdata\Local\Android\sdk\platform-tools\adb.exe
