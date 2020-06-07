@@ -211,8 +211,13 @@ How to install onto local machine:
 How to Run:
 **
 =======================================
-To be able to run our application on an emulator, you would have to run "node index.js" within your
+Before running the application on an emulator, you would have to run "node index.js" within your
 terminal. Therefore, you would need to have node js installed.  https://nodejs.org/en/
+
+Now, with your emulator open, locate the 'thrive' app and press on the app icon
+to start the app. If the app is not visible on the home screen, swipe up from
+the bottom of the home screen to open the app drawer, where you can scroll
+through the emulator's apps to find 'thrive'.
 
 ==============================================================================
 
