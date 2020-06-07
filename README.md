@@ -167,7 +167,7 @@ We will be providing the application APK's as per the submission instructions. I
 github repository https://github.com/EEZhuang/THRIVE.
 
 How to install onto local machine: 
-1. Clone the repo
+1. Clone the repo<br/>
    Run the command in your desired directory: git clone https://github.com/EEZhuang/THRIVE.git
 
 2. Open the project in Android Studio
@@ -199,7 +199,7 @@ How to install onto local machine:
          
          
 
-5. Launch node
+5. Launch node<br/>
    Run the command: node index.js
 
 6. View your emulator and navigate through its apps and click on 'thrive' with a Flutter icon
