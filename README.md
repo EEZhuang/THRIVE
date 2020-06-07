@@ -184,7 +184,7 @@ How to install onto local machine:
    i. If your adb path is set up, simply run adb install build\app\outputs\apk\debug\app-debug.apk<br/>
       If your adb path is not set up, you must specify the path to run adb<br/>
       
-      For Windows Users run: C:\Users\[user]\Appdata\Local\Android\sdk\platform-tools\adb.exe install          build\app\outputs\apk\debug\app-debug.apk<br/>
+      For Windows Users run: C:\Users\\[user]\Appdata\Local\Android\sdk\platform-tools\adb.exe install          build\app\outputs\apk\debug\app-debug.apk<br/>
       For Mac Users run: /Users/[user]/Library/Android/sdk/platform-tools/adb* install build/app/outputs/apk/debug/app-debug.apk<br/>
       Substitute your local username for [user]
       
