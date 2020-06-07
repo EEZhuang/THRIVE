@@ -30,20 +30,6 @@ class _ChangePasswordState extends State<ChangePass> {
   // Indicated which screen is selected
   int _selectedIndex = 1;
 
-  // Makes HTTP request passing uid and goal in body
-  void postUserGoal(String uid, String goal) async {
-    http.Response response = await http.post(
-      'http://10.0.2.2:3000/goals',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'uid': uid,
-        'goal': goal,
-      }),
-    );
-  }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -106,13 +92,18 @@ class _ChangePasswordState extends State<ChangePass> {
                   FirebaseUser user = await _auth.getCurrentUser();
 
                   // If there is a current user logged in, make HTTP request
-                  if (password1 == password2) {
+                  if (password1 == password2 && password1 != "") {
                     user.updatePassword(password1).then((_) {
                       Navigator.of(context).pop(false);
                       Navigator.of(context).pop(false);
                     }).catchError((error) {
                       print("Password cannot be changed" + error.toString());
                       //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+                    });
+                  } else {
+                    setState(() {
+                      loading = false;
+                      error = 'Passwords do not match, try again';
                     });
                   }
                 },
@@ -121,31 +112,6 @@ class _ChangePasswordState extends State<ChangePass> {
               Text(error, style: TextStyle(color: Colors.red)),
             ])),
       ),
-      // Bottom Navigation Bar
-      /*bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            title: Text('Add Goal'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-      ),*/
     );
   }
 }
