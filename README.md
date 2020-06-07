@@ -159,7 +159,8 @@ Average Specifications:
 Installation Instruction:
 **
 =======================================
-We will be providing the application APK's as per the submission instructions.
+We will be providing the application APK's as per the submission instructions. It will be on our
+github repository https://github.com/EEZhuang/THRIVE.
 
 Make sure that an emulator is running.
 Install using adb install build\app\outputs\apk\debug\app-debug.apk.
@@ -181,3 +182,7 @@ Known Bugs:
    should not affect the functionality of the code.
 
 2. Potentially, it may take a while for the social wall or profile page to load.
+
+3. During change password and after entering current credentials, if the user enters different
+   passwords in the new password and confirm password section, no warning will pop up and the
+   password will not be changed.
