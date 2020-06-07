@@ -229,11 +229,7 @@ Known Bugs:
 
 2. Potentially, it may take a while for the social wall or profile page to load.
 
-3. During change password and after entering current credentials, if the user enters different
-   passwords in the new password and confirm password section, no warning will pop up and the
-   password will not be changed.
-   
-4. Delete collaborator goals does not properly delete for collaborators. The goal will delete fine
+3. Delete collaborator goals does not properly delete for collaborators. The goal will delete fine
    for the user, however, the goal gets deleted by the database but the user still seems to have a
    reference to it. It causes the social wall and profile to load infinitely for the collaborators
    who's goal got deleted.
