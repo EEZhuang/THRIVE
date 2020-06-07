@@ -170,22 +170,22 @@ How to install onto local machine:
 1. Clone the repo<br/>
    Run the command in your desired directory: git clone https://github.com/EEZhuang/THRIVE.git
 
-2. Open the project in Android Studio
-   i. Open Android Studio
-   ii. Select 'Open an existing Android Studio project'
-   iii. Navigate to the directory in which you cloned the repo
-   iv. Select 'THRIVE' and press 'Open'
+2. Open the project in Android Studio<br/>
+   i. Open Android Studio<br/>
+   ii. Select 'Open an existing Android Studio project'<br/>
+   iii. Navigate to the directory in which you cloned the repo<br/>
+   iv. Select 'THRIVE' and press 'Open'<br/>
 
-3. Within Android Studio, run an emulator with the proper specifications outlined in the section above
-   i. Open your AVD Manager
-   ii. Press the green play button to run your desired emulator
+3. Within Android Studio, run an emulator with the proper specifications outlined in the section above<br/>
+   i. Open your AVD Manager<br/>
+   ii. Press the green play button to run your desired emulator<br/>
 
-4. Install the apk by running the following commands in your terminal
-   i. If your adb path is set up, simply run adb install build\app\outputs\apk\debug\app-debug.apk
-      If your adb path is not set up, you must specify the path to run adb
+4. Install the apk by running the following commands in your terminal<br/>
+   i. If your adb path is set up, simply run adb install build\app\outputs\apk\debug\app-debug.apk<br/>
+      If your adb path is not set up, you must specify the path to run adb<br/>
       
-      For Windows Users run: C:\Users\[user]\Appdata\Local\Android\sdk\platform-tools\adb.exe install          build\app\outputs\apk\debug\app-debug.apk
-      For Mac Users run: /Users/[user]/Library/Android/sdk/platform-tools/adb* install build/app/outputs/apk/debug/app-debug.apk
+      For Windows Users run: C:\Users\[user]\Appdata\Local\Android\sdk\platform-tools\adb.exe install          build\app\outputs\apk\debug\app-debug.apk<br/>
+      For Mac Users run: /Users/[user]/Library/Android/sdk/platform-tools/adb* install build/app/outputs/apk/debug/app-debug.apk<br/>
       Substitute your local username for [user]
       
       After a successful installation,  ‘Performing Streamed Install. Success’ should print to your terminal.
