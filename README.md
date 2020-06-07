@@ -166,21 +166,58 @@ Installation Instruction:
 We will be providing the application APK's as per the submission instructions. It will be on our
 github repository https://github.com/EEZhuang/THRIVE.
 
-Clone the repository to a new Android Studio Project.
+How to install onto local machine: 
+1. Clone the repo<br/>
+   Run the command in your desired directory: git clone https://github.com/EEZhuang/THRIVE.git
 
-Make sure that an emulator is running.
+2. Open the project in Android Studio<br/>
+   i. Open Android Studio<br/>
+   ii. Select 'Open an existing Android Studio project'<br/>
+   iii. Navigate to the directory in which you cloned the repo<br/>
+   iv. Select 'THRIVE' and press 'Open'<br/>
 
-Go to the home directory and install using adb install build\app\outputs\apk\debug\app-debug.apk.
-If adb path is not set up, use C:\Users\"user"\Appdata\Local\Android\sdk\platform-tools\adb.exe
-instead of adb.
+3. Within Android Studio, run an emulator with the proper specifications outlined in the section above<br/>
+   i. Open your AVD Manager<br/>
+   ii. Press the green play button to run your desired emulator<br/>
+
+4. Install the apk by running the following commands in your terminal<br/>
+   i. If your adb path is set up, simply run adb install build\app\outputs\apk\debug\app-debug.apk<br/>
+      If your adb path is not set up, you must specify the path to run adb<br/>
+      
+      For Windows Users run: C:\Users\\[user]\Appdata\Local\Android\sdk\platform-tools\adb.exe install          build\app\outputs\apk\debug\app-debug.apk<br/>
+      For Mac Users run: /Users/[user]/Library/Android/sdk/platform-tools/adb* install build/app/outputs/apk/debug/app-debug.apk<br/>
+      Substitute your local username for [user]
+      
+      After a successful installation,  ‘Performing Streamed Install. Success’ should print to your terminal.
+      
+      ****
+      If you receive the failure message: adb: failed to install build/app/outputs/apk/debug/app-debug.apk: Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE: Package com.example.thrivejs signatures do not match previously installed version; ignoring!]
+      
+      You must run the command adb uninstall "com.example.thrivejs"
+      (Again, if your adb path is not specified you must run this command with the paths specified above)
+      ***
+         
+         
+
+5. Launch node<br/>
+   Run the command: node index.js
+
+6. View your emulator and navigate through its apps and click on 'thrive' with a Flutter icon
+
+7. Now you're ready to start THRIVING!
 
 ==============================================================================
 
 How to Run:
 **
 =======================================
-To be able to run our application on an emulator, you would have to run "node index.js" within your
+Before running the application on an emulator, you would have to run "node index.js" within your
 terminal. Therefore, you would need to have node js installed.  https://nodejs.org/en/
+
+Now, with your emulator open, locate the 'thrive' app and press on the app icon
+to start the app. If the app is not visible on the home screen, swipe up from
+the bottom of the home screen to open the app drawer, where you can scroll
+through the emulator's apps to find 'thrive'.
 
 ==============================================================================
 
