@@ -223,7 +223,3 @@ Known Bugs:
    should not affect the functionality of the code.
 
 2. Potentially, it may take a while for the social wall or profile page to load.
-
-3. During change password and after entering current credentials, if the user enters different
-   passwords in the new password and confirm password section, no warning will pop up and the
-   password will not be changed.
