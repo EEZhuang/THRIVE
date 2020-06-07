@@ -174,7 +174,7 @@ Follow the instructions to create a new AndroidProject.
 After creating the project, create an Android emulator from AVD manager.
 
 In the project directory, install using adb install build\app\outputs\apk\debug\app-debug.apk.
-If adb path is not set up, use C:\Users\"user"\Appdata\Local\Android\sdk\platform-tools\adb.exe
+If adb path is not set up, use C:\Users\\"user"\Appdata\Local\Android\sdk\platform-tools\adb.exe
 instead of adb.
 
 ==============================================================================
